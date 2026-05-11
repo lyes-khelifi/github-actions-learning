@@ -1,40 +1,61 @@
 package org.example.service;
 
-import org.example.model.User;
+import org.example.entity.UserEntity;
+import org.example.model.UserDTO;
 import org.example.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl {
-    @Autowired
-    private UserRepository userRepository;
+public class UserServiceImpl implements UserService {
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public User getUser(Long id) {
-        return userRepository.findById(id).orElseThrow(() ->
-            new RuntimeException("User not found: " + id));
+    @Override
+    public UserDTO createUser(UserDTO userDTO) {
+        UserEntity entity = new UserEntity();
+        entity.setUsername(userDTO.getUsername());
+        entity.setEmail(userDTO.getEmail());
+        // For simplicity, we are not handling password here; in a real app, you would hash it.
+        UserEntity saved = userRepository.save(entity);
+        return new UserDTO(saved.getId(), saved.getUsername(), saved.getEmail());
     }
 
-    public List<User> getAllUsers() {
+    @Override
+    public UserDTO getUserById(Long id) {
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        return new UserDTO(entity.getId(), entity.getUsername(), entity.getEmail());
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
-            .collect(Collectors.toList());
+                .map(entity -> new UserDTO(entity.getId(), entity.getUsername(), entity.getEmail()))
+                .collect(Collectors.toList());
     }
 
-    public User updateUser(Long id, User userDetails) {
-        User user = getUser(id);
-        user.setEmail(userDetails.getEmail());
-        user.setUsername(userDetails.getUsername());
-        return userRepository.save(user);
+    @Override
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        entity.setUsername(userDTO.getUsername());
+        entity.setEmail(userDTO.getEmail());
+        UserEntity updated = userRepository.save(entity);
+        return new UserDTO(updated.getId(), updated.getUsername(), updated.getEmail());
     }
 
+    @Override
     public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
         userRepository.deleteById(id);
     }
 }
