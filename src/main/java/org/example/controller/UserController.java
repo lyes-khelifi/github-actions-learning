@@ -1,10 +1,10 @@
 package org.example.controller;
 
-import org.example.model.User;
+import org.example.model.UserDTO;
 import org.example.security.AuthenticationRequest;
 import org.example.security.AuthenticationResponse;
 import org.example.security.JwtUtil;
-import org.example.service.UserServiceImpl;
+import org.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +21,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -33,8 +33,8 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+        UserDTO createdUser = userService.createUser(userDTO);
         return ResponseEntity.ok(createdUser);
     }
 
@@ -55,20 +55,20 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        User user = userService.getUser(id);
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+        UserDTO user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
     @GetMapping("")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        User updatedUser = userService.updateUser(id, userDetails);
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDetails) {
+        UserDTO updatedUser = userService.updateUser(id, userDetails);
         return ResponseEntity.ok(updatedUser);
     }
 
