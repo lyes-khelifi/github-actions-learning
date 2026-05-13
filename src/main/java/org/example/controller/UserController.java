@@ -12,7 +12,14 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -32,12 +39,25 @@ public class UserController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * Registers a new user
+     *
+     * @param userDTO User data transfer object
+     * @return Response with created user
+     */
     @PostMapping("/register")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         UserDTO createdUser = userService.createUser(userDTO);
         return ResponseEntity.ok(createdUser);
     }
 
+    /**
+     * Authenticates a user and returns a JWT token
+     *
+     * @param authRequest Authentication credentials
+     * @return Response with JWT token
+     * @throws Exception if authentication fails
+     */
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest) throws Exception {
         try {
@@ -54,12 +74,23 @@ public class UserController {
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
+        /**
+     * Gets a user by ID
+     *
+     * @param id the user ID
+     * @return ResponseEntity containing the user DTO
+     */
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
         UserDTO user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
+    /**
+     * Gets all users
+     *
+     * @return ResponseEntity containing list of all user DTOs
+     */
     @GetMapping("")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers();

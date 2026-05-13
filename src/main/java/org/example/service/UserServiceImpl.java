@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service implementation for user operations.
+ */
 @Service
 public class UserServiceImpl implements UserService {
 

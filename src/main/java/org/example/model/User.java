@@ -1,7 +1,20 @@
 package org.example.model;
 
+/**
+ * Simple user representation.
+ */
+
+/**
+ * Simple user representation.
+ */
 public class User {
+    /**
+     * The username.
+     */
     private String username;
+    /**
+     * The email address.
+     */
     private String email;
 
     public User(String username, String email) {
