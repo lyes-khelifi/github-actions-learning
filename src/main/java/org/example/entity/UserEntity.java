@@ -14,7 +14,14 @@ import jakarta.validation.constraints.Size;
  */
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public final class UserEntity {
+
+    // Constants for validation
+    private static final int MIN_USERNAME_LENGTH = 3;
+    private static final int MAX_USERNAME_LENGTH = 50;
+    private static final int MAX_EMAIL_LENGTH = 100;
+    private static final int MIN_PASSWORD_LENGTH = 6;
+    private static final int MAX_PASSWORD_LENGTH = 100;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -17,8 +17,17 @@ import java.io.IOException;
 /**
  * Filter for JWT authentication.
  */
+/**
+ * Filter for JWT authentication.
+ */
 @Component
 public final class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    /**
+     * Length of "Bearer " prefix in Authorization header.
+     */
+    private static final int BEARER_PREFIX_LENGTH = 7;
+
     /**
      * JWT utility for token operations.
      */
@@ -41,7 +50,8 @@ public final class JwtAuthenticationFilter extends OncePerRequestFilter {
      * @throws ServletException if a servlet error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain chain)
+    protected void doFilterInternal(final HttpServletRequest request,
+            final HttpServletResponse response, final FilterChain chain)
             throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         String token = null;

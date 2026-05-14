@@ -8,8 +8,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "org.example.repository")
 @ComponentScan(basePackages = "org.example")
-public class Application {
-    public static void main(String[] args) {
+public final class Application {
+
+    private Application() {
+    }
+
+    public static void main(final String[] args) {
         SpringApplication.run(Application.class, args);
     }
 }

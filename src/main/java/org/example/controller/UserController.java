@@ -31,13 +31,10 @@ import java.util.List;
 public final class UserController {
 
     /**
-     * Java doc
-     */
-    @Autowired
-    /**
      * The UserService for handling user operations.
      */
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
