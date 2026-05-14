@@ -1,11 +1,11 @@
 # Build stage
-FROM maven:3.9.9-eclipse-temurin-26 AS build
+FROM maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 COPY . /app
 RUN mvn -B package -DskipTests
 
 # Runtime stage
-FROM openjdk:26-jdk
+FROM openjdk:17-jdk
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080

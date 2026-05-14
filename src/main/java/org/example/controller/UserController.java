@@ -34,7 +34,10 @@ public final class UserController {
      * Java doc
      */
     @Autowired
-    private UserService userService;
+    /**
+     * The UserService for handling user operations.
+     */
+    private final UserService userService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -52,7 +55,7 @@ public final class UserController {
      * @return Response with created user
      */
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody final UserDTO userDTO) {
         UserDTO createdUser = userService.createUser(userDTO);
         return ResponseEntity.ok(createdUser);
     }

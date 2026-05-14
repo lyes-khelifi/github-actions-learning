@@ -11,8 +11,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Utility class for JWT token operations.
+ */
 @Component
-public class JwtUtil {
+public final class JwtUtil {
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long EXPIRATION_TIME = 3600_000; // 1 hour
 

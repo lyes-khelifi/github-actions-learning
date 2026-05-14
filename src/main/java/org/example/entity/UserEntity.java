@@ -24,7 +24,7 @@ public class UserEntity {
      * The username of the user.
      */
     @NotBlank
-    @Size(min = 3, max = 50)
+    @Size(min = MIN_USERNAME_LENGTH, max = MAX_USERNAME_LENGTH)
     private String username;
 
     /**
@@ -32,14 +32,14 @@ public class UserEntity {
      */
     @NotBlank
     @Email
-    @Size(max = 100)
+    @Size(max = MAX_EMAIL_LENGTH)
     private String email;
 
     /**
      * The password of the user.
      */
     @NotBlank
-    @Size(min = 6, max = 100)
+    @Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
     private String password;
 
     // Constructors
