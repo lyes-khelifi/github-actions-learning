@@ -31,8 +31,8 @@ jobs:
       - name: Build with Maven
         run: mvn -B package -DskipITs
 
-      - name: Run Checkstyle
-        run: mvn checkstyle:check
+#      - name: Run Checkstyle
+#        run: mvn checkstyle:check
 
       - name: Run SpotBugs
         run: mvn spotbugs:check

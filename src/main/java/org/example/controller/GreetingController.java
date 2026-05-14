@@ -13,15 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GreetingController {
 
+
     /**
      * The GreetingService used to generate greetings.
      */
     @Autowired
     private GreetingService greetingService;
 
+    /**
+     *
+     * @param name
+     * @return response code
+     */
     @GetMapping("/api/greeting/{name}")
-    public ResponseEntity<String> greeting(@PathVariable String name) {
-        String message = greetingService.getGreeting(name);
+    final ResponseEntity<String> greeting(@PathVariable String name) {
+        final String message = greetingService.getGreeting(name);
         return ResponseEntity.ok(message);
     }
 }

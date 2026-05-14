@@ -12,16 +12,27 @@ import java.util.stream.Collectors;
  * Service implementation for user operations.
  */
 @Service
-public class UserServiceImpl implements UserService {
+public final class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    /**
+     * Constructor for UserServiceImpl.
+     *
+     * @param userRepository the user repository
+     */
+    public UserServiceImpl(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public UserDTO createUser(UserDTO userDTO) {
+    /**
+     * Creates a new user.
+     *
+     * @param userDTO the user data transfer object
+     * @return the created user DTO
+     */
+    public UserDTO createUser(final UserDTO userDTO) {
         UserEntity entity = new UserEntity();
         entity.setUsername(userDTO.getUsername());
         entity.setEmail(userDTO.getEmail());

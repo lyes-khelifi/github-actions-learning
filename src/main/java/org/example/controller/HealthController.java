@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controller for handling health check endpoints.
+ */
 @RestController
 @RequestMapping("/api")
-public class HealthController implements HealthIndicator {
+public final class HealthController implements HealthIndicator {
 
     @Override
     @GetMapping("/health")
@@ -22,6 +25,10 @@ public class HealthController implements HealthIndicator {
                 .build();
     }
 
+    /**
+     *
+     * @return metrics
+     */
     @GetMapping("/metrics")
     public Map<String, Object> getMetrics() {
         Map<String, Object> metrics = new HashMap<>();

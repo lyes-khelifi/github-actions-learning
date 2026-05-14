@@ -23,10 +23,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * REST controller for user operations.
+ */
 @RestController
 @RequestMapping("/api/users")
-public class UserController {
+public final class UserController {
 
+    /**
+     * Java doc
+     */
     @Autowired
     private UserService userService;
 
