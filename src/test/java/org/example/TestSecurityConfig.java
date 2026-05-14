@@ -21,8 +21,8 @@ public class TestSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .authorizeHttpRequests(authz -> authz
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
                 .anyRequest().permitAll()
             )
             .httpBasic(org.springframework.security.config.Customizer.withDefaults());
