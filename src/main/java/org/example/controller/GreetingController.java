@@ -21,12 +21,13 @@ public class GreetingController {
     private GreetingService greetingService;
 
     /**
+     * Returns a greeting message for the provided name.
      *
-     * @param name
-     * @return response code
+     * @param name the name to greet
+     * @return the greeting message
      */
     @GetMapping("/api/greeting/{name}")
-    final ResponseEntity<String> greeting(@PathVariable String name) {
+    final ResponseEntity<String> greeting(@PathVariable final String name) {
         final String message = greetingService.getGreeting(name);
         return ResponseEntity.ok(message);
     }

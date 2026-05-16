@@ -337,11 +337,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <tags>
-                        <tag>type:acceptance</tag>
-                        <tag>type:regression</tag>
-                        <tag>type:smoke</tag>
-                    </tags>
+                    <tags>acceptance,regression,smoke</tags>
                     <reports>target/site/serenity/index.html</reports>
                 </configuration>
             </plugin>

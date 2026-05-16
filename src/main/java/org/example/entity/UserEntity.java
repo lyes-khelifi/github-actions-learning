@@ -1,10 +1,6 @@
 package org.example.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -59,7 +55,7 @@ public final class UserEntity {
      * @param email the email address
      * @param password the password
      */
-    public UserEntity(String username, String email, String password)
+    public UserEntity(final String username, final String email, final String password)
     {
         this.username = username;
         this.email = email;
@@ -67,12 +63,22 @@ public final class UserEntity {
     }
 
     // Getters and setters
+    /**
+     * Returns the user ID.
+     *
+     * @return the user ID
+     */
     public Long getId()
     {
         return id;
     }
 
-    public void setId(Long id)
+    /**
+     * Sets the id.
+     *
+     * @param id the id to set
+     */
+    public void setId(final Long id)
     {
         this.id = id;
     }
@@ -82,27 +88,52 @@ public final class UserEntity {
         return username;
     }
 
-    public void setUsername(String username)
+    /**
+     * Sets the username.
+     *
+     * @param username the username to set
+     */
+    public void setUsername(final String username)
     {
         this.username = username;
     }
 
+    /**
+     * Returns the email.
+     *
+     * @return the email
+     */
     public String getEmail()
     {
         return email;
     }
 
-    public void setEmail(String email)
+    /**
+     * Sets the email.
+     *
+     * @param email the email to set
+     */
+    public void setEmail(final String email)
     {
         this.email = email;
     }
 
+    /**
+     * Returns the password.
+     *
+     * @return the password
+     */
     public String getPassword()
     {
         return password;
     }
 
-    public void setPassword(String password)
+    /**
+     * Sets the password.
+     *
+     * @param password the password to set
+     */
+    public void setPassword(final String password)
     {
         this.password = password;
     }

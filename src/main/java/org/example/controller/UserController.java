@@ -12,14 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -64,8 +57,15 @@ public final class UserController {
      * @return Response with JWT token
      * @throws Exception if authentication fails
      */
+    /**
+     * Authenticates a user and returns a JWT token.
+     *
+     * @param authRequest authentication request containing credentials
+     * @return JWT token in response
+     * @throws Exception if authentication fails
+     */
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody final AuthenticationRequest authRequest) throws Exception {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
@@ -87,7 +87,13 @@ public final class UserController {
      * @return ResponseEntity containing the user DTO
      */
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+    /**
+     * Returns a user by ID
+     *
+     * @param id the user ID
+     * @return ResponseEntity containing the user DTO
+     */
+    public ResponseEntity<UserDTO> getUser(@PathVariable final Long id) {
         UserDTO user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
@@ -97,20 +103,38 @@ public final class UserController {
      *
      * @return ResponseEntity containing list of all user DTOs
      */
+    /**
+     * Gets all users.
+     *
+     * @return ResponseEntity containing list of all user DTOs
+     */
     @GetMapping("")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
+    /**
+     * Updates a user.
+     *
+     * @param id the ID of the user to update
+     * @param userDetails the new user details
+     * @return the updated user DTO
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDetails) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable final Long id, @RequestBody final UserDTO userDetails) {
         UserDTO updatedUser = userService.updateUser(id, userDetails);
         return ResponseEntity.ok(updatedUser);
     }
 
+    /**
+     * Deletes a user.
+     *
+     * @param id the ID of the user to delete
+     * @return ResponseEntity with no content
+     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable final Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

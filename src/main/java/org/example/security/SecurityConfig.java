@@ -25,7 +25,8 @@ public final class SecurityConfig {
     public SecurityFilterChain filterChain(final HttpSecurity http)
             throws Exception {
         http.csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/users/login")
                 .permitAll()
@@ -36,6 +37,11 @@ public final class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Creates a password encoder bean.
+     *
+     * @return BCrypt password encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

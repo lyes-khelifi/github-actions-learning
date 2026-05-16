@@ -10,9 +10,17 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = "org.example")
 public class Application {
 
-    public Application() {
-    }
+    /**
+ * Private constructor to prevent instantiation.
+ */
+public Application() {
+}
 
+    /**
+     * Main method to start the Spring Boot application.
+     *
+     * @param args command-line arguments
+     */
     public static void main(final String[] args) {
         SpringApplication.run(Application.class, args);
     }
