@@ -315,6 +315,37 @@
 <!--            </plugin>-->
 
             
+            <!-- Serenity Report Generation -->
+            <plugin>
+                <groupId>net.serenity-bdd.maven.plugins</groupId>
+                <artifactId>serenity-maven-plugin</artifactId>
+                <version>${serenity.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.serenity-bdd</groupId>
+                        <artifactId>serenity-core</artifactId>
+                        <version>${serenity.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>serenity-reports</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <tags>
+                        <tag>type:acceptance</tag>
+                        <tag>type:regression</tag>
+                        <tag>type:smoke</tag>
+                    </tags>
+                    <reports>target/site/serenity/index.html</reports>
+                </configuration>
+            </plugin>
+
             <!-- Archive Serenity Report -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
