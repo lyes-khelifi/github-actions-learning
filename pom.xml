@@ -38,7 +38,6 @@
     </properties>
 
     <dependencies>
-
         <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -159,7 +158,6 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
-
 
         <!-- Serenity -->
         <dependency>
