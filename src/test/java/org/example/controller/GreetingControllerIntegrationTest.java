@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import net.serenitybdd.junit5.SerenityTest;
 import org.example.TestSecurityConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import({GreetingController.class, TestSecurityConfig.class})
+@SerenityTest
 public class GreetingControllerIntegrationTest {
 
     @Autowired
