@@ -24,11 +24,9 @@
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
         <flyway.version>10.18.0</flyway.version>
         <testcontainers.version>1.20.1</testcontainers.version>
-        <serenity.version>5.0.0</serenity.version>
-
+        <serenity.version>4.0.15</serenity.version>
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
         <maven.failsafe.plugin.version>3.2.5</maven.failsafe.plugin.version>
@@ -330,7 +328,7 @@
                 <executions>
                     <execution>
                         <id>serenity-reports</id>
-                        <phase>post-integration-test</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>aggregate</goal>
                         </goals>
