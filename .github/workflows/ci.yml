@@ -47,6 +47,16 @@ jobs:
           path: target/site/jacoco/
           retention-days: 7
 
+      - name: Generate Serenity HTML report
+        run: mvn serenity:aggregate
+
+      - name: Upload Serenity report
+        uses: actions/upload-artifact@v4
+        with:
+          name: serenity-report
+          path: target/site/serenity/
+          retention-days: 7
+
   deploy:
     needs: build
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'

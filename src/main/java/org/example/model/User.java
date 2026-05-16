@@ -3,11 +3,7 @@ package org.example.model;
 /**
  * Simple user representation.
  */
-
-/**
- * Simple user representation.
- */
-public class User {
+public final class User {
     /**
      * The username.
      */
@@ -17,19 +13,40 @@ public class User {
      */
     private String email;
 
-    public User(String username, String email) {
+    /**
+     * Constructs a {@code User} with the specified username and email.
+     *
+     * @param username the username
+     * @param email the email address
+     */
+    public User(final String username, final String email) {
         this.username = username;
         this.email = email;
     }
 
+    /**
+     * Returns the username.
+     *
+     * @return the username
+     */
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    /**
+     * Sets the username.
+     *
+     * @param username the username to set
+     */
+    public void setUsername(final String username) {
         this.username = username;
     }
 
+    /**
+     * Returns the email.
+     *
+     * @return the email
+     */
     public String getEmail() {
         return email;
     }

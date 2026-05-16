@@ -1,11 +1,11 @@
 package org.example.service;
 
-import org.example.model.UserDTO;
 import org.example.entity.UserEntity;
+import org.example.model.UserDTO;
 import org.example.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 /**
  * Data transfer object for user information.
  */
-public class UserDTO
+public final class UserDTO
 {
     private Long id;
 

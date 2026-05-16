@@ -14,7 +14,13 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Object> handleRuntimeException(RuntimeException ex, WebRequest request) {
+    /**
+     * Handles runtime exceptions and returns an appropriate error response.
+     *
+     * @param ex the exception that occurred
+     * @param request the web request context
+     */
+    public ResponseEntity<Object> handleRuntimeException(final RuntimeException ex, final WebRequest request) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("message", ex.getMessage());
