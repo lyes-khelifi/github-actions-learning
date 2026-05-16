@@ -3,7 +3,7 @@ package org.example.model;
 /**
  * Simple DTO representing a greeting message.
  */
-public class Greeting {
+public final class Greeting {
     /**
      * The greeting message.
      */
@@ -13,8 +13,13 @@ public class Greeting {
         this.message = message;
     }
 
+        /**
+     * Returns the message.
+     *
+     * @return the message
+     */
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     public void setMessage(String message) {
