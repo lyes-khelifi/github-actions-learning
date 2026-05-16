@@ -365,18 +365,7 @@
                                             pattern="dd-MM-yyyy-HH-mm-ss"/>
                                 </tstamp>
                                 <mkdir dir="${project.build.directory}/site/htmlReports"/>
-                                <copy
-                                        file="${project.basedir}/src/main/resources/serenity-example1-report.html"
-                                        tofile="${project.build.directory}/site/htmlReports/serenity-reference-${timestamp}.html"
-                                        failonerror="false"/>
-                                <copy
-                                        tofile="${project.build.directory}/site/htmlReports/index-${timestamp}.html"
-                                        failonerror="false">
-                                    <fileset dir="${project.build.directory}/site/serenity/">
-                                        <include name="*.html"/>
-                                    </fileset>
-                                </copy>
-                            </target>
+                                                            </target>
                         </configuration>
                     </execution>
                 </executions>
