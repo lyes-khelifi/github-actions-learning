@@ -1,10 +1,12 @@
 package org.example.service;
 
+import net.serenitybdd.annotations.WithTagValuesOf;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.example.entity.UserEntity;
 import org.example.model.UserDTO;
 import org.example.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -12,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SerenityJUnit5Extension.class)
+@Tag("unit")
+@WithTagValuesOf({"unit", "user"})
 public class UserServiceTest {
 
     private UserRepository userRepository;

@@ -1,12 +1,16 @@
 package org.example;
 
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.annotations.WithTagValuesOf;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.example.steps.ApiSteps;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(SerenityJUnit5Extension.class)
+@Tag("unit")
+@WithTagValuesOf({"unit", "api"})
 public class SampleTest {
 
     @Steps
