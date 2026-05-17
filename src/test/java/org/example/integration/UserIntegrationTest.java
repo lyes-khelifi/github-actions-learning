@@ -44,19 +44,23 @@ public class UserIntegrationTest {
     @Test
     void createUserTest() {
         apiSteps.createUserStep();
+        apiSteps.failTestExample();
     }
 
     @Test
     void getUserTest() {
         apiSteps.getUserStep();
+        apiSteps.failTestExample();
     }
 
     @Test
     void deleteUserTest() {
         apiSteps.deleteUserStep();
+        apiSteps.failTestExample();
     }
 
     @Test
     void contextLoads() {
+        apiSteps.failTestExample();
     }
 }
