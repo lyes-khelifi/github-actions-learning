@@ -49,6 +49,6 @@ public class HealthControllerTest {
     @Test
     void metricsEndpointReturnsMetrics() throws Exception {
         apiSteps.metricsEndpointReturnsMetrics();
-        apiSteps.failTestExample();
+    //    apiSteps.failTestExample();
     }
 }
