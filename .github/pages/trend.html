@@ -1,29 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Test Trend</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 2rem; background: #f0f2f5; color: #24292f; }
-    h1  { margin: 0 0 1.5rem; font-size: 1.6rem; }
-    .summary { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
-    .card { background: #fff; border-radius: 8px; padding: 1rem 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,.12); min-width: 110px; text-align: center; }
-    .card .val { font-size: 2rem; font-weight: 700; line-height: 1.1; }
-    .card .lbl { font-size: .78rem; color: #57606a; margin-top: .3rem; text-transform: uppercase; letter-spacing: .05em; }
-    .green { color: #1a7f3c; }
-    .red   { color: #c42b2b; }
-    .blue  { color: #0969da; }
-    .chart-wrap { background: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,.12); max-width: 1040px; }
-    .back { display: inline-block; margin-top: 1.5rem; color: #0969da; text-decoration: none; font-size: .9rem; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+           margin: 0; padding: 1.5rem; background: #f0f2f5; color: #24292f; }
+    h1  { margin: 0 0 1rem; font-size: 1.5rem; }
+    h2  { margin: 1.5rem 0 .6rem; font-size: 1rem; font-weight: 600; color: #444; }
+
+    .summary { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .card { background: #fff; border-radius: 8px; padding: .8rem 1.1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,.1); min-width: 100px; text-align: center; }
+    .card .val { font-size: 1.8rem; font-weight: 700; line-height: 1; }
+    .card .lbl { font-size: .72rem; color: #57606a; margin-top: .3rem;
+                 text-transform: uppercase; letter-spacing: .05em; }
+    .green { color: #1a7f3c; } .red { color: #c42b2b; } .blue { color: #0969da; }
+
+    .chart-wrap { background: #fff; border-radius: 8px; padding: 1.2rem 1.5rem;
+                  box-shadow: 0 1px 3px rgba(0,0,0,.1); max-width: 900px; margin-bottom: 1.5rem; }
+
+    .controls { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; margin-top: .6rem; }
+    .controls input[type=search] {
+      padding: .35rem .75rem; border: 1px solid #d0d7de; border-radius: 6px;
+      font-size: .88rem; width: 260px; outline: none; }
+    .controls input[type=search]:focus { border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,.1); }
+    .controls label { display: flex; align-items: center; gap: .4rem; font-size: .88rem; cursor: pointer; }
+    .badge { font-size: .72rem; background: #ffebe9; color: #c42b2b;
+             border-radius: 12px; padding: .05rem .45rem; margin-left: .2rem; font-weight: 600; }
+    .info-text { font-size: .8rem; color: #57606a; margin-left: auto; }
+
+    .table-wrap { overflow: auto; max-height: 65vh; border-radius: 8px;
+                  box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    table { border-collapse: collapse; background: #fff; font-size: .82rem; }
+    th, td { padding: 5px 9px; border-bottom: 1px solid #e1e4e8;
+             border-right: 1px solid #e1e4e8; white-space: nowrap; }
+    td:last-child, th:last-child { border-right: none; }
+
+    thead th { position: sticky; top: 0; background: #f6f8fa; font-weight: 600;
+               z-index: 2; border-bottom: 2px solid #d0d7de; }
+
+    th.c-cls, td.c-cls {
+      position: sticky; left: 0; z-index: 1; background: #fafbfc;
+      width: 220px; min-width: 220px; max-width: 220px;
+      overflow: hidden; text-overflow: ellipsis;
+      border-right: 2px solid #d0d7de; }
+    thead th.c-cls { z-index: 3; }
+
+    th.c-name, td.c-name {
+      position: sticky; left: 220px; z-index: 1; background: #fafbfc;
+      min-width: 300px; max-width: 420px;
+      overflow: hidden; text-overflow: ellipsis;
+      border-right: 2px solid #d0d7de; }
+    thead th.c-name { z-index: 3; }
+
+    td.pass { background: #dafbe1; color: #116329; text-align: center; }
+    td.fail { background: #ffebe9; color: #82071e; text-align: center; font-weight: 700; }
+    td.skip { background: #fff8c5; color: #735c0f; text-align: center; }
+    td.na   { background: #f6f8fa; color: #ccc;    text-align: center; }
+    tr:hover td { filter: brightness(.96); }
+    tr.hidden { display: none; }
+
+    th.c-run { text-align: center; min-width: 56px; padding: 0; }
+    th.c-run a { display: block; padding: 5px 6px; text-decoration: none; color: inherit; }
+    th.c-run a:hover { background: rgba(9,105,218,.07); }
+    th.c-run .rn { display: block; color: #0969da; font-size: .78rem; }
+    th.c-run .rd { display: block; color: #57606a; font-size: .66rem; font-weight: 400; }
+    th.c-run .rp { display: block; color: #1a7f3c; font-size: .68rem; font-weight: 600; }
+
+    .back { display: inline-block; margin-top: 1.5rem; color: #0969da; text-decoration: none; font-size: .85rem; }
     .back:hover { text-decoration: underline; }
     .empty { background: #fff; border-radius: 8px; padding: 2rem; text-align: center; color: #57606a; max-width: 420px; }
   </style>
 </head>
 <body>
-  <h1>Test Trend</h1>
+  <h1>Test Trend <span style="font-size:.85rem;font-weight:400;color:#57606a">— last 30 days</span></h1>
   <div id="root"></div>
   <a class="back" href="index.html">← Back to Serenity Report</a>
 
@@ -33,16 +87,20 @@
       .then(data => render(data.runs || []))
       .catch(() => render([]));
 
+    const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const fmtDate = iso => { const d = new Date(iso); return MON[d.getMonth()] + ' ' + d.getDate(); };
+    const passRate = r => r.total > 0 ? (r.passed * 100 / r.total).toFixed(0) + '%' : '—';
+
     function render(runs) {
       const root = document.getElementById('root');
-
       if (!runs.length) {
-        root.innerHTML = '<div class="empty"><p>No trend data yet — push to master at least once to populate this chart.</p></div>';
+        root.innerHTML = '<div class="empty"><p>No trend data yet — push to master to populate this page.</p></div>';
         return;
       }
 
-      const last = runs[runs.length - 1];
-      const rate = last.total > 0 ? (last.passed * 100 / last.total).toFixed(1) : '—';
+      const last  = runs[runs.length - 1];
+      const rate  = last.total > 0 ? (last.passed * 100 / last.total).toFixed(1) : '—';
+      const dRuns = [...runs].reverse(); // newest first for the table
 
       root.innerHTML = `
         <div class="summary">
@@ -51,46 +109,119 @@
           <div class="card"><div class="val">${last.skipped}</div><div class="lbl">Skipped</div></div>
           <div class="card"><div class="val">${last.total}</div><div class="lbl">Total</div></div>
           <div class="card"><div class="val blue">${rate}%</div><div class="lbl">Pass Rate</div></div>
-          <div class="card"><div class="val" style="font-size:1rem;padding-top:.4rem">#${last.run}</div><div class="lbl">${last.date.slice(0,10)}</div></div>
+          <div class="card"><div class="val" style="font-size:1rem;padding-top:.35rem">#${last.run}</div>
+                            <div class="lbl">${last.date.slice(0,10)}</div></div>
         </div>
-        <div class="chart-wrap"><canvas id="chart"></canvas></div>`;
+        <div class="chart-wrap"><canvas id="chart" height="75"></canvas></div>
+        <h2>Test Case History</h2>
+        <div class="table-wrap" id="tblWrap"></div>
+        <div class="controls">
+          <input type="search" id="filter" placeholder="Filter by class or test name…">
+          <label><input type="checkbox" id="failOnly"> Failures only
+            <span class="badge" id="failBadge">0</span></label>
+          <span class="info-text" id="rowCount"></span>
+        </div>`;
 
-      const labels = runs.map(r => `#${r.run} · ${r.date.slice(0, 10)}`);
-      const rates  = runs.map(r => r.total > 0 ? +(r.passed * 100 / r.total).toFixed(1) : null);
-
+      /* ── chart ── */
       new Chart(document.getElementById('chart'), {
-        data: {
-          labels,
-          datasets: [
-            { type: 'bar',  label: 'Passed',       data: runs.map(r => r.passed),  backgroundColor: 'rgba(26,127,60,.75)',  yAxisID: 'count', order: 2 },
-            { type: 'bar',  label: 'Failed',        data: runs.map(r => r.failed),  backgroundColor: 'rgba(196,43,43,.75)',  yAxisID: 'count', order: 2 },
-            { type: 'bar',  label: 'Skipped',       data: runs.map(r => r.skipped), backgroundColor: 'rgba(140,140,140,.5)', yAxisID: 'count', order: 2 },
-            { type: 'line', label: 'Pass Rate (%)', data: rates, borderColor: '#0969da', backgroundColor: 'rgba(9,105,218,.08)',
-              tension: .35, yAxisID: 'rate', order: 1, pointRadius: 4, pointHoverRadius: 6 }
-          ]
-        },
+        data: { labels: runs.map(r => '#' + r.run), datasets: [
+          { type:'bar',  label:'Passed',       data: runs.map(r => r.passed),
+            backgroundColor:'rgba(26,127,60,.75)',   yAxisID:'cnt', order:2 },
+          { type:'bar',  label:'Failed',        data: runs.map(r => r.failed),
+            backgroundColor:'rgba(196,43,43,.75)',   yAxisID:'cnt', order:2 },
+          { type:'bar',  label:'Skipped',       data: runs.map(r => r.skipped),
+            backgroundColor:'rgba(140,140,140,.45)', yAxisID:'cnt', order:2 },
+          { type:'line', label:'Pass Rate (%)',
+            data: runs.map(r => r.total > 0 ? +(r.passed * 100 / r.total).toFixed(1) : null),
+            borderColor:'#0969da', backgroundColor:'rgba(9,105,218,.07)',
+            tension:.35, yAxisID:'rate', order:1, pointRadius:3, fill:true }
+        ]},
         options: {
           responsive: true,
-          interaction: { mode: 'index', intersect: false },
-          plugins: {
-            legend: { position: 'top' },
-            tooltip: {
-              callbacks: {
-                label: ctx => ctx.dataset.label === 'Pass Rate (%)'
-                  ? ` Pass Rate: ${ctx.raw}%`
-                  : ` ${ctx.dataset.label}: ${ctx.raw}`
-              }
-            }
-          },
+          interaction: { mode:'index', intersect:false },
+          plugins: { legend: { position:'top' } },
           scales: {
-            x:     { stacked: true, ticks: { maxRotation: 45 } },
-            count: { stacked: true, beginAtZero: true, title: { display: true, text: 'Test Count' } },
-            rate:  { position: 'right', min: 0, max: 100,
-                     title: { display: true, text: 'Pass Rate (%)' },
-                     grid: { drawOnChartArea: false } }
+            x:    { stacked:true },
+            cnt:  { stacked:true, beginAtZero:true, title:{ display:true, text:'Tests' } },
+            rate: { position:'right', min:0, max:100,
+                    title:{ display:true, text:'Pass Rate (%)' },
+                    grid:{ drawOnChartArea:false } }
           }
         }
       });
+
+      /* ── collect all unique tests across every run ── */
+      const testMap = new Map(); // "cls||name" → { cls, name, everFailed }
+      for (const run of runs) {
+        for (const t of (run.tests || [])) {
+          const k = t.class + '||' + t.name;
+          if (!testMap.has(k)) testMap.set(k, { cls: t.class, name: t.name, everFailed: false });
+          if (t.status === 'failed') testMap.get(k).everFailed = true;
+        }
+      }
+
+      // Sort by class then test name
+      const testList = [...testMap.entries()].sort(([,a],[,b]) =>
+        a.cls.localeCompare(b.cls) || a.name.localeCompare(b.name));
+
+      // Lookup map per run (newest-first order = dRuns)
+      const rlookup = dRuns.map(run => {
+        const m = new Map();
+        for (const t of (run.tests || [])) m.set(t.class + '||' + t.name, t.status);
+        return m;
+      });
+
+      document.getElementById('failBadge').textContent =
+        testList.filter(([,v]) => v.everFailed).length;
+
+      /* ── thead — run headers link to archived report ── */
+      let thead = '<thead><tr><th class="c-cls">Class</th><th class="c-name">Test</th>';
+      for (const r of dRuns)
+        thead += `<th class="c-run"><a href="./runs/${r.run}/" target="_blank"><span class="rn">#${r.run}</span><span class="rd">${fmtDate(r.date)}</span><span class="rp">${passRate(r)}</span></a></th>`;
+      thead += '</tr></thead>';
+
+      /* ── tbody ── */
+      const icon  = { passed:'✓', failed:'✗', skipped:'~' };
+      const tdCls = { passed:'pass', failed:'fail', skipped:'skip' };
+
+      let tbody = '<tbody>';
+      for (const [k, v] of testList) {
+        tbody += `<tr data-k="${(v.cls + ' ' + v.name).toLowerCase()}" data-f="${v.everFailed}">`;
+        tbody += `<td class="c-cls" title="${v.cls}">${v.cls}</td>`;
+        tbody += `<td class="c-name" title="${v.name}">${v.name}</td>`;
+        for (const rl of rlookup) {
+          const st = rl.get(k);
+          tbody += st
+            ? `<td class="${tdCls[st]}" title="${st}">${icon[st]}</td>`
+            : '<td class="na">·</td>';
+        }
+        tbody += '</tr>';
+      }
+      tbody += '</tbody>';
+
+      document.getElementById('tblWrap').innerHTML = `<table>${thead}${tbody}</table>`;
+
+      /* ── filter ── */
+      const allRows     = [...document.querySelectorAll('#tblWrap tbody tr')];
+      const rowCountEl  = document.getElementById('rowCount');
+      const filterInput = document.getElementById('filter');
+      const failOnlyBox = document.getElementById('failOnly');
+
+      function applyFilter() {
+        const q  = filterInput.value.toLowerCase();
+        const fo = failOnlyBox.checked;
+        let vis = 0;
+        for (const row of allRows) {
+          const show = (!q || row.dataset.k.includes(q)) && (!fo || row.dataset.f === 'true');
+          row.classList.toggle('hidden', !show);
+          if (show) vis++;
+        }
+        rowCountEl.textContent = vis + ' of ' + allRows.length + ' tests';
+      }
+
+      filterInput.addEventListener('input', applyFilter);
+      failOnlyBox.addEventListener('change', applyFilter);
+      applyFilter();
     }
   </script>
 </body>
