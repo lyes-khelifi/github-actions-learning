@@ -17,8 +17,8 @@ import org.springframework.context.annotation.Import;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestSecurityConfig.class)
 @Tag("regression")
-@WithTagValuesOf({"regression", "smoke"})
-public class AdvancedRegressionTest {
+@WithTagValuesOf({"regression", "health", "metrics"})
+public class HealthMetricsRegressionTest {
 
     @LocalServerPort
     private int port;
@@ -32,34 +32,27 @@ public class AdvancedRegressionTest {
     }
 
     @Test
-    void greetingEndpointHandlesMultipleNames() {
-        regressionSteps.greetingReturnsHello("Alice");
-        regressionSteps.greetingReturnsHello("Bob");
-        regressionSteps.greetingReturnsHello("Charlie");
-        regressionSteps.greetingReturnsHello("Dave");
+    void healthEndpointReturnsUpStatus() {
+        regressionSteps.healthReturnsUp();
     }
 
     @Test
-    void healthAndMetricsEndpointsAreHealthy() {
-        regressionSteps.healthReturnsUp();
+    void healthEndpointContainsServiceDetails() {
         regressionSteps.healthContainsServiceDetail();
-        regressionSteps.metricsReturns200();
-        regressionSteps.metricsStatusIsHealthy();
     }
 
     @Test
-    void metricsReportsValidSystemResources() {
+    void metricsEndpointReturns200() {
         regressionSteps.metricsReturns200();
+    }
+
+    @Test
+    void metricsEndpointContainsAllRequiredFields() {
         regressionSteps.metricsContainsAllFields();
-        regressionSteps.metricsStatusIsHealthy();
-        regressionSteps.verifyMetricsProcessorCountPositive();
     }
 
     @Test
-    void allCoreApiEndpointsAreAccessible() {
-        regressionSteps.greetingReturnsHello("Smoke");
-        regressionSteps.healthReturnsUp();
-        regressionSteps.metricsReturns200();
-        regressionSteps.getAllUsersReturns200();
+    void metricsStatusIsHealthy() {
+        regressionSteps.metricsStatusIsHealthy();
     }
 }

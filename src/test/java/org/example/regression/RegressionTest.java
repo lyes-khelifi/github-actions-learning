@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Import;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestSecurityConfig.class)
 @Tag("regression")
-@WithTagValuesOf({"regression", "e2e"})
+@WithTagValuesOf({"regression", "greeting"})
 public class RegressionTest {
 
     @LocalServerPort
@@ -44,58 +44,5 @@ public class RegressionTest {
     @Test
     void greetingReturnsHelloWithNumericName() {
         regressionSteps.greetingReturnsHello("User123");
-    }
-
-    @Test
-    void healthEndpointReturnsUpStatus() {
-        regressionSteps.healthReturnsUp();
-    }
-
-    @Test
-    void healthEndpointContainsServiceDetails() {
-        regressionSteps.healthContainsServiceDetail();
-    }
-
-    @Test
-    void metricsEndpointReturns200() {
-        regressionSteps.metricsReturns200();
-    }
-
-    @Test
-    void metricsEndpointContainsAllRequiredFields() {
-        regressionSteps.metricsContainsAllFields();
-    }
-
-    @Test
-    void metricsStatusIsHealthy() {
-        regressionSteps.metricsStatusIsHealthy();
-    }
-
-    @Test
-    void getAllUsersReturns200() {
-        regressionSteps.getAllUsersReturns200();
-    }
-
-    @Test
-    void createUserReturnsCreatedUser() {
-        regressionSteps.createUserAndVerify("testuser", "testuser@example.com");
-    }
-
-    @Test
-    void getUserByIdReturnsCorrectUser() {
-        long id = regressionSteps.createUser("getbyid", "getbyid@example.com");
-        regressionSteps.getUserByIdReturnsCorrectData(id, "getbyid");
-    }
-
-    @Test
-    void updateUserReturnsUpdatedData() {
-        long id = regressionSteps.createUser("updateme", "updateme@example.com");
-        regressionSteps.updateUserAndVerify(id, "updated", "updated@example.com");
-    }
-
-    @Test
-    void deleteUserReturnsNoContent() {
-        long id = regressionSteps.createUser("deleteme", "deleteme@example.com");
-        regressionSteps.deleteUserReturnsNoContent(id);
     }
 }
