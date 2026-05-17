@@ -1,231 +1,157 @@
 # GitHub Actions Learning Project
 
-A comprehensive example project demonstrating modern Java development practices with Spring Boot, thorough testing, and automated CI/CD with GitHub Actions.
+A Spring Boot project demonstrating modern Java development practices — REST APIs, JWT security, BDD testing with Serenity, and a full CI/CD pipeline using GitHub Actions.
 
-## 🎯 Learning Objectives
+## Tech Stack
 
-1. **Spring Boot Fundamentals**
-   - REST API design with Spring Web MVC
-   - Dependency injection with Spring Boot
-   - Application structure and best practices
+| Layer | Technology |
+|---|---|
+| Framework | Spring Boot 3.2.5 |
+| Language | Java 17 |
+| Build | Maven |
+| Security | Spring Security + JWT |
+| Database | H2 (in-memory) + Flyway migrations |
+| Testing | JUnit 5, Serenity BDD, REST Assured, MockMvc |
+| Coverage | JaCoCo |
+| Static analysis | SpotBugs |
+| Containerisation | Docker + GitHub Container Registry |
+| CI/CD | GitHub Actions |
+| Test reports | Serenity HTML (published to GitHub Pages) |
 
-2. **Testing Methodologies**
-   - Unit testing with JUnit 5
-   - Integration testing with SpringBootTest
-   - Test-driven development (TDD) patterns
-
-3. **CI/CD Implementation**
-   - GitHub Actions workflows for CI and CD
-   - Code quality enforcement (Checkstyle, SpotBugs)
-   - Docker image automation
-   - Test coverage reporting with JaCoCo
-
-4. **Containerization**
-   - Docker multi-stage builds
-   - Application packaging as executable JAR
-   - Container deployment patterns
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/main/java/org/example/
-├── Application.java               # Main application entry point
-├── service/
-│   └── GreetingService.java       # Business logic
+├── Application.java
 ├── controller/
-│   └── GreetingController.java    # REST API endpoints
-├── model/
-│   └── Greeting.java              # Data transfer object
-├── util/
-│   └── Constants.java             # Constants and configuration keys
+│   ├── GreetingController.java
+│   ├── HealthController.java
+│   └── UserController.java
+├── service/
+│   ├── GreetingService.java
+│   └── UserService.java
+├── entity/
+│   └── UserEntity.java
+├── repository/
+│   └── UserRepository.java
+├── dto/
+│   └── UserDTO.java
+├── security/
+│   ├── AuthenticationRequest.java
+│   ├── JwtAuthenticationFilter.java
+│   ├── JwtUtil.java
+│   └── SecurityConfig.java
+└── util/
+    └── Constants.java
 
 src/test/java/org/example/
-├── service/
-│   └── GreetingServiceTest.java   # Unit tests
+├── SampleTest.java
 ├── controller/
-│   └── GreetingControllerIntegrationTest.java  # Integration tests
-├── util/
-│   └── ConstantsTest.java         # Constants validation tests
+│   ├── GreetingControllerIntegrationTest.java
+│   └── HealthControllerTest.java
+├── integration/
+│   └── UserIntegrationTest.java
+├── security/
+│   └── JwtUtilTest.java
+├── service/
+│   ├── GreetingServiceTest.java
+│   └── UserServiceTest.java
+├── steps/
+│   └── ApiSteps.java          # Serenity @Step definitions
+└── util/
+    └── ConstantsTest.java
 
-.github/workflows/ci.yml           # GitHub Actions CI/CD pipeline
-Dockerfile                         # Multi-stage Docker build configuration
-pom.xml                            # Maven project configuration
+.github/workflows/
+├── test-gate.yml              # PR quality gate
+└── build-deploy.yml           # Build, deploy, and publish report
 ```
 
-## 🛠️ Getting Started
+## Getting Started
 
-### Local Development
 ```bash
-# 1. Clone the repository
-git clone https://github.com/yourusername/github-actions-learning.git
+# Clone and build
+git clone <repo-url>
 cd github-actions-learning
-
-# 2. Build and run locally
 mvn spring-boot:run
 
-# 3. Access the API endpoint
-GET http://localhost:8080/api/greeting/World
-
-# 4. Run unit tests
+# Run tests
 mvn test
 
-# 5. Run integration tests
-mvn verify
+# View Serenity report locally (serve via HTTP to avoid browser restrictions)
+cd target/site/serenity
+python -m http.server 8000
+# Open http://localhost:8000
 ```
 
-### Code Quality Checks
+## API Endpoints
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/api/greeting/{name}` | Returns a personalised greeting |
+| GET | `/api/health` | Returns service health status |
+| GET | `/api/metrics` | Returns system metrics |
+| POST | `/api/users` | Create a user |
+| GET | `/api/users/{id}` | Get a user by ID |
+| DELETE | `/api/users/{id}` | Delete a user |
+
+## Testing
+
+The project uses **Serenity BDD** on top of JUnit 5 to produce structured, readable test reports. Step methods are annotated with `@Step` and injected into test classes via `@Steps`, so each test shows a full breakdown of what was executed.
+
+```
+src/test/java/org/example/steps/ApiSteps.java   # Reusable @Step methods
+```
+
+Test classes use `@ExtendWith(SerenityJUnit5Extension.class)` and `@SpringBootTest` together, with MockMvc for controller-level tests and REST Assured for HTTP-based steps.
+
+### Running quality checks locally
+
 ```bash
-# Check for code style violations
-mvn checkstyle:check
-
-# Run static security analysis
-mvn spotbugs:check
-
-# View JaCoCo coverage report
-open target/site/jacoco/index.html
+mvn spotbugs:check      # Static analysis
+mvn jacoco:report       # Code coverage report (target/site/jacoco/index.html)
+mvn serenity:aggregate  # Regenerate Serenity HTML report from last test run
 ```
 
-## 🤖 CI/CD Pipeline: `.github/workflows/ci.yml`
+## CI/CD Pipelines
 
-The pipeline performs comprehensive quality checks and automated deployments:
+### `test-gate.yml` — runs on every Pull Request
 
-1. **Build Stage**
-   - Checks out repository and sets up JDK 26
-   - Runs full Maven verification with test coverage
-   - Enforces code quality standards
+| Step | Details |
+|---|---|
+| Build & test | `mvn package -Dmaven.test.failure.ignore=true` |
+| SpotBugs | Static analysis, fails the job if issues found |
+| JaCoCo | Coverage report uploaded as artifact |
+| Serenity report | HTML report uploaded as artifact |
+| **Pass rate check** | Parses Surefire XML — blocks merge if pass rate < 80% |
 
-2. **Testing Stage**
-   - Executes unit and integration tests
-   - Generates JaCoCo code coverage report
-   - Uploads coverage report as artifact
+The `check-pass-rate` job is the required status check enforced by branch protection. A PR cannot be merged into master unless at least 80% of tests pass.
 
-3. **Quality Assurance**
-   - Checkstyle configuration validation
-   - SpotBugs security vulnerability detection
+### `build-deploy.yml` — runs on every push to master
 
-4. **Deployment Stage**
-   - Package application as optimized JAR
-   - Build multi-stage Docker images
-   - Deploy to GitHub Container Registry
-   - Automatic deployment on pushes to main/master
+| Step | Details |
+|---|---|
+| Build JAR | `mvn package -DskipTests` |
+| Docker build & push | Pushes image to GitHub Container Registry |
+| Publish Serenity report | Runs tests, generates report, deploys to GitHub Pages |
 
-## 📊 GitHub Actions Status
+## Serenity Test Report
 
-[![CI](https://github.com/yourusername/github-actions-learning/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/github-actions-learning/actions/workflows/ci.yml)
-[![GitHub Container Registry](https://img.shields.io/badge/GitHub%20Container%20Registry-available-blue)](https://ghcr.io/yourusername/github-actions-learning)
+The full Serenity BDD report is published to GitHub Pages after every merge to master. It shows test results, step-by-step execution, and failure details.
 
-## 🏗️ Docker Integration
+> Enable GitHub Pages in repo Settings → Pages → Source: **GitHub Actions** to activate this.
 
-The project includes a production-ready Docker setup using multi-stage builds:
+## Docker
 
-### Build Process
 ```bash
-# Build from repository root
-docker build -t my-app:latest .
+# Pull the latest image
+docker pull ghcr.io/<org>/<repo>:master
+
+# Run locally
+docker run -p 8080:8080 ghcr.io/<org>/<repo>:master
 ```
 
-### Run Application
-```bash
-docker run -p 8080:8080 my-app:latest
-```
+The Dockerfile uses a two-stage build: Maven compiles and packages the JAR in the build stage, and a slim JDK image runs it in the runtime stage.
 
-### Access Endpoints
-```bash
-# Health check
-GET http://localhost:8080/actuator/health
+## Branch Protection
 
-# Greeting API
-GET http://localhost:8080/api/greeting/World
-
-# Improved greeting with message customization
-POST /api/greeting
-{
-  "name": "World",
-  "message": "Custom greeting format"
-}
-```
-
-## 📁 Dockerfile Breakdown
-
-```dockerfile
-# Build stage (maven:3.9.9-eclipse-temurin-26 AS build)
-FROM maven:3.9.9-eclipse-temurin-26 AS build
-WORKDIR /app
-COPY . /app
-RUN mvn -B package -DskipTests  # Build JAR without running tests in container
-
-# Runtime stage (openjdk:26-jdk)
-FROM openjdk:26-jdk
-WORKDIR /app
-COPY --from=bui $$app/target/*.jar app.jar  # Copy built JAR from build stage
-EXPOSE 8080                                 # Expose Spring Boot port
-ENTRYPOINT ["java", "-jar", "app.jar"]      # Execute Spring Boot application
-```
-
-## 📈 Best Practices Demonstrated
-
-1. **Separation of Concerns**
-   - Strict separation between service, controller, and model layers
-   - Clear dependency boundaries
-
-2. **Test Automation**
-   - Test coverage enforcement through Maven lifecycle
-   - Integration testing with Spring context
-
-3. **Production Readiness**
-   - Multi-stage Docker builds minimizing final image size
-   - Proper JAR packaging for Spring Boot
-   - Executable application configuration
-
-4. **Pipeline Robustness**
-   - Comprehensive test automation
-   - Tooling for code quality enforcement
-   - Versioned artifact deployment
-   - Health check endpoints
-
-## 🤔 Advanced Topics to Explore
-
-1. **Microservices Architecture Patterns**
-   - Service discovery with Consul/Eureka
-   - Configuration management with Spring Cloud ConfigServer
-   - Circuit breaker patterns with Resilience4j
-
-2. **Continuous Deployment**
-   - Blue-green deployment strategies
-   - Canary release configurations
-   - Kubernetes deployment automation
-
-3. **Performance Optimization**
-   - Application profiling with Micrometer
-   - Load testing with JMeter
-   - Connection pooling configuration
-
-4. **Security Enhancements**
-   - JWT authentication implementation
-   - Secret management with HashiCorp Vault
-   - Dynamic security policy routing
-
-5. **Event-Driven Architecture**
-   - Spring Integration for messaging patterns
-   - Message brokering with RabbitMQ/Kafka
-   - Event sourcing architecture patterns
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit pull requests that:
-- Add new learning examples
-- Demonstrate alternative architectural patterns
-- Improve test coverage
-- Enhance CI/CD pipelines with new configurations
-
-## 📚 Resources for Further Learning
-
-- [Spring Boot Documentation](https://docs.spring.io/spring-boot/)
-- [GitHub Actions Official Guide](https://docs.github.com/en/actions)
-- [Effective Java (Joshua Bloch)](https://amzn.to/3QLMGaJ)
-- [Martin Fowler's Patterns of Enterprise Application Architecture](https://patterns.arrange.org/)
-- [Continuous Delivery (Jez Humble)](https://leanpub.com/continuousdeliver)
-
----
-
-This project serves as a complete template for understanding modern Java application development with enterprise-grade practices. Each component demonstrates specific patterns and technologies commonly used in professional software engineering environments.
+The `master` branch requires the `check-pass-rate` status check to pass before any PR can be merged. This is enforced via GitHub branch protection rules (Settings → Branches → master → Require status checks).
