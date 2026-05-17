@@ -164,8 +164,8 @@
       const testList = [...testMap.entries()].sort(([,a],[,b]) =>
         a.cls.localeCompare(b.cls) || a.name.localeCompare(b.name));
 
-      // Lookup map per run (newest-first order = dRuns)
-      const rlookup = dRuns.map(run => {
+      // Lookup map per run (oldest-first = runs order, newest on right)
+      const rlookup = runs.map(run => {
         const m = new Map();
         for (const t of (run.tests || [])) m.set(t.class + '||' + t.name, t.status);
         return m;
@@ -176,7 +176,7 @@
 
       /* ── thead — run headers link to archived report ── */
       let thead = '<thead><tr><th class="c-cls">Class</th><th class="c-name">Test</th>';
-      for (const r of dRuns)
+      for (const r of runs)
         thead += `<th class="c-run"><a href="./runs/${r.run}/" target="_blank"><span class="rn">#${r.run}</span><span class="rd">${fmtDate(r.date)}</span><span class="rp">${passRate(r)}</span></a></th>`;
       thead += '</tr></thead>';
 
