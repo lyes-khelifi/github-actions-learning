@@ -1,12 +1,1 @@
-{
-  "runs": [
-    {
-      "date": "2026-05-17T20:58:41Z",
-      "run": 23,
-      "total": 20,
-      "passed": 20,
-      "failed": 0,
-      "skipped": 0
-    }
-  ]
-}
+{"runs":[{"date":"2026-05-17T20:58:41Z","run":23,"total":20,"passed":20,"failed":0,"skipped":0},{"date":"2026-05-17T21:18:16Z","run":26,"total":20,"passed":20,"failed":0,"skipped":0,"tests":[{"class":"ConstantsTest","name":"testConstantsExist","status":"passed"},{"class":"ConstantsTest","name":"testGreetingKeyValue","status":"passed"},{"class":"GreetingControllerTest","name":"greetingEndpointReturnsMessage","status":"passed"},{"class":"GreetingServiceTest","name":"testGreetingWithEmptyName","status":"passed"},{"class":"GreetingServiceTest","name":"testGreetingWithSpecialCharacters","status":"passed"},{"class":"GreetingServiceTest","name":"testGreeting","status":"passed"},{"class":"HealthControllerTest","name":"healthEndpointReturnsOk","status":"passed"},{"class":"HealthControllerTest","name":"metricsEndpointReturnsMetrics","status":"passed"},{"class":"JwtUtilTest","name":"testTokenExpiration","status":"passed"},{"class":"JwtUtilTest","name":"testGenerateAndExtractUsername","status":"passed"},{"class":"SampleTest","name":"sampleApiTest2","status":"passed"},{"class":"SampleTest","name":"sampleApiTest5","status":"passed"},{"class":"SampleTest","name":"sampleApiTest","status":"passed"},{"class":"SampleUserOpsTest","name":"sampleApiTest3","status":"passed"},{"class":"SampleUserOpsTest","name":"sampleApiTest4","status":"passed"},{"class":"SampleUserOpsTest","name":"sampleApiTest6","status":"passed"},{"class":"UserServiceTest","name":"testGetUser","status":"passed"},{"class":"UserServiceTest","name":"testCreateUser","status":"passed"},{"class":"UserServiceTest","name":"testDeleteUser","status":"passed"},{"class":"UserServiceTest","name":"testUserAlreadyExists","status":"passed"}]}]}
