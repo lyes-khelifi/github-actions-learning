@@ -195,6 +195,14 @@ jobs:
           destination_dir: unit-tests
           keep_files: true
 
+      - name: Archive run report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: serenity-report/
+          destination_dir: unit-tests/runs/${{ github.run_number }}
+          keep_files: true
+
       - name: Print report URL
         run: |
           echo "Serenity report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/unit-tests/"

@@ -23,17 +23,17 @@
     .chart-wrap { background: #fff; border-radius: 8px; padding: 1.2rem 1.5rem;
                   box-shadow: 0 1px 3px rgba(0,0,0,.1); max-width: 900px; margin-bottom: 1.5rem; }
 
-    .controls { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; margin-bottom: .5rem; }
+    .controls { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; margin-top: .6rem; }
     .controls input[type=search] {
       padding: .35rem .75rem; border: 1px solid #d0d7de; border-radius: 6px;
-      font-size: .88rem; width: 240px; outline: none; }
+      font-size: .88rem; width: 260px; outline: none; }
     .controls input[type=search]:focus { border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,.1); }
     .controls label { display: flex; align-items: center; gap: .4rem; font-size: .88rem; cursor: pointer; }
     .badge { font-size: .72rem; background: #ffebe9; color: #c42b2b;
              border-radius: 12px; padding: .05rem .45rem; margin-left: .2rem; font-weight: 600; }
     .info-text { font-size: .8rem; color: #57606a; margin-left: auto; }
 
-    .table-wrap { overflow: auto; max-height: 62vh; border-radius: 8px;
+    .table-wrap { overflow: auto; max-height: 65vh; border-radius: 8px;
                   box-shadow: 0 1px 3px rgba(0,0,0,.1); }
     table { border-collapse: collapse; background: #fff; font-size: .82rem; }
     th, td { padding: 5px 9px; border-bottom: 1px solid #e1e4e8;
@@ -45,14 +45,14 @@
 
     th.c-cls, td.c-cls {
       position: sticky; left: 0; z-index: 1; background: #fafbfc;
-      width: 150px; min-width: 150px; max-width: 150px;
+      width: 220px; min-width: 220px; max-width: 220px;
       overflow: hidden; text-overflow: ellipsis;
       border-right: 2px solid #d0d7de; }
     thead th.c-cls { z-index: 3; }
 
     th.c-name, td.c-name {
-      position: sticky; left: 150px; z-index: 1; background: #fafbfc;
-      min-width: 230px; max-width: 290px;
+      position: sticky; left: 220px; z-index: 1; background: #fafbfc;
+      min-width: 300px; max-width: 420px;
       overflow: hidden; text-overflow: ellipsis;
       border-right: 2px solid #d0d7de; }
     thead th.c-name { z-index: 3; }
@@ -64,9 +64,12 @@
     tr:hover td { filter: brightness(.96); }
     tr.hidden { display: none; }
 
-    th.c-run { text-align: center; min-width: 46px; padding: 5px 4px; }
+    th.c-run { text-align: center; min-width: 56px; padding: 0; }
+    th.c-run a { display: block; padding: 5px 6px; text-decoration: none; color: inherit; }
+    th.c-run a:hover { background: rgba(9,105,218,.07); }
     th.c-run .rn { display: block; color: #0969da; font-size: .78rem; }
-    th.c-run .rd { display: block; color: #57606a; font-size: .68rem; font-weight: 400; }
+    th.c-run .rd { display: block; color: #57606a; font-size: .66rem; font-weight: 400; }
+    th.c-run .rp { display: block; color: #1a7f3c; font-size: .68rem; font-weight: 600; }
 
     .back { display: inline-block; margin-top: 1.5rem; color: #0969da; text-decoration: none; font-size: .85rem; }
     .back:hover { text-decoration: underline; }
@@ -86,6 +89,7 @@
 
     const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const fmtDate = iso => { const d = new Date(iso); return MON[d.getMonth()] + ' ' + d.getDate(); };
+    const passRate = r => r.total > 0 ? (r.passed * 100 / r.total).toFixed(0) + '%' : '—';
 
     function render(runs) {
       const root = document.getElementById('root');
@@ -110,13 +114,13 @@
         </div>
         <div class="chart-wrap"><canvas id="chart" height="75"></canvas></div>
         <h2>Test Case History</h2>
+        <div class="table-wrap" id="tblWrap"></div>
         <div class="controls">
           <input type="search" id="filter" placeholder="Filter by class or test name…">
           <label><input type="checkbox" id="failOnly"> Failures only
             <span class="badge" id="failBadge">0</span></label>
           <span class="info-text" id="rowCount"></span>
-        </div>
-        <div class="table-wrap" id="tblWrap"></div>`;
+        </div>`;
 
       /* ── chart ── */
       new Chart(document.getElementById('chart'), {
@@ -170,10 +174,10 @@
       document.getElementById('failBadge').textContent =
         testList.filter(([,v]) => v.everFailed).length;
 
-      /* ── thead ── */
+      /* ── thead — run headers link to archived report ── */
       let thead = '<thead><tr><th class="c-cls">Class</th><th class="c-name">Test</th>';
       for (const r of dRuns)
-        thead += `<th class="c-run"><span class="rn">#${r.run}</span><span class="rd">${fmtDate(r.date)}</span></th>`;
+        thead += `<th class="c-run"><a href="./runs/${r.run}/" target="_blank"><span class="rn">#${r.run}</span><span class="rd">${fmtDate(r.date)}</span><span class="rp">${passRate(r)}</span></a></th>`;
       thead += '</tr></thead>';
 
       /* ── tbody ── */
