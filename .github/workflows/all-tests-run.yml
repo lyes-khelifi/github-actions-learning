@@ -73,7 +73,7 @@ jobs:
                           status = 'skipped'
                       else:
                           status = 'passed'
-                      tests.append({'class': cn.split('.')[-1], 'name': name, 'status': status})
+                      tests.append({'class': cn.split('.')[-1], 'name': name, 'status': status, 'time': round(float(tc.get('time') or 0), 3)})
               except Exception as ex:
                   print(f"Warning: {f}: {ex}")
 
