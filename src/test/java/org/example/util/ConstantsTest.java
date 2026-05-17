@@ -1,10 +1,13 @@
 package org.example.util;
 
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ExtendWith(SerenityJUnit5Extension.class)
 public class ConstantsTest {
     @Test
     void testConstantsExist() {

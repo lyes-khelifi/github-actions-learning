@@ -1,30 +1,62 @@
 package org.example.integration;
 
-import org.example.controller.UserController;
+import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import org.example.TestSecurityConfig;
+import org.example.steps.ApiSteps;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(SerenityJUnit5Extension.class)
 @SpringBootTest
-@ActiveProfiles("test")
+@AutoConfigureMockMvc
+@Import({TestSecurityConfig.class})
 public class UserIntegrationTest {
 
     @Autowired
-    private UserController userController;
-
     private MockMvc mockMvc;
 
+    @MockBean
+    private AuthenticationManager authenticationManager;
+
+    @Steps
+    ApiSteps apiSteps;
+
+    @BeforeEach
+    void setUp() {
+        when(authenticationManager.authenticate(any()))
+                .thenReturn(new UsernamePasswordAuthenticationToken("john", "john"));
+        apiSteps.setMockMvc(mockMvc);
+    }
+
     @Test
-    void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
+    void createUserTest() {
+        apiSteps.createUserStep();
+    }
+
+    @Test
+    void getUserTest() {
+        apiSteps.getUserStep();
+    }
+
+    @Test
+    void deleteUserTest() {
+        apiSteps.deleteUserStep();
     }
 
     @Test
     void contextLoads() {
-        // This test ensures the Spring context loads correctly
-        // with all the required beans and configurations
     }
 }
