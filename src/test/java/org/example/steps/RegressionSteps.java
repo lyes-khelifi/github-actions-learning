@@ -179,4 +179,84 @@ public class RegressionSteps {
         Assertions.assertThat(response.statusCode()).isEqualTo(200);
         Assertions.assertThat(processors).isGreaterThan(0);
     }
+
+    @Step("Verify user {0} has email '{1}'")
+    public void verifyUserEmailMatches(long id, String expectedEmail) {
+        log.info("Verifying email for user id={}, expected: {}", id, expectedEmail);
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/users/" + id);
+        String actualEmail = response.jsonPath().getString("email");
+        log.info("User id={} email: {}", id, actualEmail);
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+        Assertions.assertThat(actualEmail).isEqualTo(expectedEmail);
+    }
+
+    @Step("Verify user {0} has username '{1}' and email '{2}'")
+    public void verifyUserFullDetails(long id, String expectedUsername, String expectedEmail) {
+        log.info("Verifying full details for user id={}", id);
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/users/" + id);
+        String actualUsername = response.jsonPath().getString("username");
+        String actualEmail = response.jsonPath().getString("email");
+        log.info("User id={} username={}, email={}", id, actualUsername, actualEmail);
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+        Assertions.assertThat(actualUsername).isEqualTo(expectedUsername);
+        Assertions.assertThat(actualEmail).isEqualTo(expectedEmail);
+    }
+
+    @Step("Verify users list is not empty")
+    public void verifyUsersListIsNotEmpty() {
+        log.info("Verifying users list is not empty");
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/users");
+        int size = response.jsonPath().getList("$").size();
+        log.info("Users list size: {}", size);
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+        Assertions.assertThat(size).isGreaterThan(0);
+    }
+
+    @Step("Verify health response includes service name 'github-actions-learning'")
+    public void verifyHealthServiceName() {
+        log.info("Verifying health endpoint service name detail");
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/health");
+        String serviceName = response.jsonPath().getString("details.service");
+        log.info("Health service name: {}", serviceName);
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+        Assertions.assertThat(serviceName).isEqualTo("github-actions-learning");
+    }
+
+    @Step("Verify health response includes version detail")
+    public void verifyHealthVersionDetail() {
+        log.info("Verifying health endpoint version detail");
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/health");
+        String version = response.jsonPath().getString("details.version");
+        log.info("Health version: {}", version);
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+        Assertions.assertThat(version).isNotNull();
+    }
+
+    @Step("Verify metrics uptime is a positive value")
+    public void verifyMetricsUptimeIsPositive() {
+        log.info("Verifying metrics uptime is positive");
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/metrics");
+        long uptime = response.jsonPath().getLong("uptime");
+        log.info("Metrics uptime: {}", uptime);
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+        Assertions.assertThat(uptime).isGreaterThan(0L);
+    }
+
+    @Step("Verify metrics memory usage is non-negative")
+    public void verifyMetricsMemoryIsNonNegative() {
+        log.info("Verifying metrics memory is non-negative");
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/metrics");
+        long memory = response.jsonPath().getLong("memory");
+        log.info("Metrics memory: {}", memory);
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+        Assertions.assertThat(memory).isGreaterThanOrEqualTo(0L);
+    }
+
+    @Step("Verify greeting endpoint returns 200 for '{0}'")
+    public void verifyGreetingReturns200(String name) {
+        log.info("Verifying greeting returns 200 for name: {}", name);
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/greeting/" + name);
+        log.info("Greeting response status for {}: {}", name, response.statusCode());
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+    }
 }

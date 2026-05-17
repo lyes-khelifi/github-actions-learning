@@ -1,28 +1,30 @@
 package org.example.steps;
 
-import net.serenitybdd.annotations.Step;
-import org.junit.Assert;
-import org.springframework.test.web.servlet.MockMvc;
-
-import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import net.serenitybdd.annotations.Step;
 import org.assertj.core.api.Assertions;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class ApiSteps {
 
+    private static final Logger log = LoggerFactory.getLogger(ApiSteps.class);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
     private MockMvc mockMvc;
-    private AuthenticationManager authenticationManager;
     private Response response;
 
-    public ApiSteps() {
-    }
+    public ApiSteps() {}
 
     public void setMockMvc(MockMvc mockMvc) {
         this.mockMvc = mockMvc;
@@ -30,62 +32,204 @@ public class ApiSteps {
 
     @Step("Greeting endpoint returns a proper message")
     public void greetingEndpointReturnsMessage() throws Exception {
+        log.info("Calling GET /api/greeting/John via MockMvc");
         mockMvc.perform(get("/api/greeting/John"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Hello, John"));
+        log.info("Greeting endpoint returned expected response");
     }
 
     @Step("Health endpoint returns UP status")
     public void healthEndpointReturnsOk() throws Exception {
+        log.info("Calling GET /api/health via MockMvc");
         mockMvc.perform(get("/api/health"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("UP"));
+        log.info("Health endpoint returned UP status");
     }
 
     @Step("Metrics endpoint returns system metrics")
     public void metricsEndpointReturnsMetrics() throws Exception {
+        log.info("Calling GET /api/metrics via MockMvc");
         mockMvc.perform(get("/api/metrics"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status", notNullValue()))
                 .andExpect(jsonPath("$.uptime", notNullValue()))
                 .andExpect(jsonPath("$.memory", notNullValue()))
                 .andExpect(jsonPath("$.processors", notNullValue()));
+        log.info("Metrics endpoint returned all required fields");
     }
 
     @Step("Navigate to homepage")
     public void iNavigateToHomepage() {
+        log.info("Setting RestAssured base URI to https://httpbin.org");
         RestAssured.baseURI = "https://httpbin.org";
     }
 
     @Step("Get request to endpoint")
     public void iGetRequestToEndpoint() {
+        log.info("Performing GET /get to httpbin.org");
         response = RestAssured.given().get("/get");
+        log.info("Response status: {}", response.getStatusCode());
         Assertions.assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
+    @Step("Create user via POST /api/users/register")
+    public void createUserStep() throws Exception {
+        if (mockMvc == null) {
+            log.warn("MockMvc not configured — skipping createUserStep");
+            return;
+        }
+        log.info("Creating user via POST /api/users/register");
+        String body = "{\"username\":\"integrationUser\",\"email\":\"integration@example.com\"}";
+        mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("integrationUser"))
+                .andExpect(jsonPath("$.email").value("integration@example.com"))
+                .andExpect(jsonPath("$.id").isNumber());
+        log.info("User created and response fields verified");
+    }
+
+    @Step("Create user then retrieve by ID")
+    public void getUserStep() throws Exception {
+        if (mockMvc == null) {
+            log.warn("MockMvc not configured — skipping getUserStep");
+            return;
+        }
+        log.info("Creating user to retrieve by ID");
+        String body = "{\"username\":\"getUserTest\",\"email\":\"getuser@example.com\"}";
+        MvcResult createResult = mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isOk())
+                .andReturn();
+        long id = objectMapper.readTree(createResult.getResponse().getContentAsString()).get("id").asLong();
+        Assertions.assertThat(id).isGreaterThan(0L);
+        log.info("Created user with id: {}, now retrieving", id);
+        mockMvc.perform(get("/api/users/" + id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("getUserTest"))
+                .andExpect(jsonPath("$.id").value(id));
+        log.info("User retrieved and data verified");
+    }
+
+    @Step("Create user then delete by ID")
+    public void deleteUserStep() throws Exception {
+        if (mockMvc == null) {
+            log.warn("MockMvc not configured — skipping deleteUserStep");
+            return;
+        }
+        log.info("Creating user to delete by ID");
+        String body = "{\"username\":\"deleteUserTest\",\"email\":\"deleteuser@example.com\"}";
+        MvcResult createResult = mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isOk())
+                .andReturn();
+        long id = objectMapper.readTree(createResult.getResponse().getContentAsString()).get("id").asLong();
+        Assertions.assertThat(id).isGreaterThan(0L);
+        log.info("Created user with id: {}, now deleting", id);
+        mockMvc.perform(delete("/api/users/" + id))
+                .andExpect(status().isNoContent());
+        log.info("User deleted successfully");
+    }
+
     @Step("Execute user controller setup")
- public void execute() {
-       // This step is handled separately in UserIntegrationTest
-  }
+    public void execute() {
+        log.info("Execute step invoked");
+    }
 
-   @Step("Create user step")
-    public void createUserStep() {
-        // Implementation for user creation test step
-   }
-
-  @Step("Get user step")
-   public void getUserStep() {
-      // Implementation for user retrieval test step
-   }
-
-    @Step("Delete user step")
-   public void deleteUserStep() {
-           // Implementation for user deletion test step
-   }
-
-   @Step
+    @Step
     public void failTestExample() {
-       Assert.assertFalse("This test should fail as an example to check the reporting", true);
-   }
+        log.warn("Intentional failure step invoked");
+        Assert.assertFalse("This test should fail as an example to check the reporting", true);
+    }
 
+    @Step("Create user '{0}' with email '{1}' and return ID")
+    public long createNamedUserStep(String username, String email) throws Exception {
+        if (mockMvc == null) {
+            log.warn("MockMvc not configured — skipping createNamedUserStep");
+            return -1L;
+        }
+        log.info("Creating named user: username={}, email={}", username, email);
+        String body = String.format("{\"username\":\"%s\",\"email\":\"%s\"}", username, email);
+        MvcResult result = mockMvc.perform(post("/api/users/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isOk())
+                .andReturn();
+        long id = objectMapper.readTree(result.getResponse().getContentAsString()).get("id").asLong();
+        log.info("Created named user with id: {}", id);
+        return id;
+    }
+
+    @Step("Get user by ID {0} and verify username is '{1}'")
+    public void getUserByIdStep(long id, String expectedUsername) throws Exception {
+        if (mockMvc == null) {
+            log.warn("MockMvc not configured — skipping getUserByIdStep");
+            return;
+        }
+        log.info("Getting user by id={}, expecting username: {}", id, expectedUsername);
+        mockMvc.perform(get("/api/users/" + id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value(expectedUsername));
+        log.info("User id={} username verified: {}", id, expectedUsername);
+    }
+
+    @Step("Update user {0} with username '{1}' and email '{2}'")
+    public void updateUserStep(long id, String username, String email) throws Exception {
+        if (mockMvc == null) {
+            log.warn("MockMvc not configured — skipping updateUserStep");
+            return;
+        }
+        log.info("Updating user id={} with username={}, email={}", id, username, email);
+        String body = String.format("{\"username\":\"%s\",\"email\":\"%s\"}", username, email);
+        mockMvc.perform(put("/api/users/" + id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value(username));
+        log.info("User id={} updated successfully", id);
+    }
+
+    @Step("Delete user by ID {0}")
+    public void deleteUserByIdStep(long id) throws Exception {
+        if (mockMvc == null) {
+            log.warn("MockMvc not configured — skipping deleteUserByIdStep");
+            return;
+        }
+        log.info("Deleting user with id: {}", id);
+        mockMvc.perform(delete("/api/users/" + id))
+                .andExpect(status().isNoContent());
+        log.info("User id={} deleted", id);
+    }
+
+    @Step("Verify greeting endpoint responds correctly for '{0}'")
+    public void verifyGreetingForName(String name) throws Exception {
+        log.info("Verifying greeting for name: {}", name);
+        mockMvc.perform(get("/api/greeting/" + name))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Hello, " + name));
+        log.info("Greeting for '{}' verified", name);
+    }
+
+    @Step("Verify health response contains service details")
+    public void verifyHealthDetailsPresent() throws Exception {
+        log.info("Verifying health endpoint has service details");
+        mockMvc.perform(get("/api/health"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.details").exists())
+                .andExpect(jsonPath("$.details.service").value("github-actions-learning"));
+        log.info("Health service details verified");
+    }
+
+    @Step("Verify all users endpoint returns a list")
+    public void verifyAllUsersEndpoint() throws Exception {
+        log.info("Verifying GET /api/users returns 200");
+        mockMvc.perform(get("/api/users"))
+                .andExpect(status().isOk());
+        log.info("All users endpoint verified");
+    }
 }

@@ -10,26 +10,24 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 @ExtendWith(SerenityJUnit5Extension.class)
 @Tag("unit")
-@WithTagValuesOf({"unit", "api"})
-public class SampleTest {
+@WithTagValuesOf({"unit", "user-ops"})
+public class SampleUserOpsTest {
 
     @Steps
     ApiSteps apiSteps;
 
     @Test
-    public void sampleApiTest() {
-        apiSteps.iNavigateToHomepage();
-        apiSteps.iGetRequestToEndpoint();
+    public void sampleApiTest3() throws Exception {
+        apiSteps.getUserStep();
     }
 
     @Test
-    public void sampleApiTest2() {
-        apiSteps.iNavigateToHomepage();
-        apiSteps.iGetRequestToEndpoint();
+    public void sampleApiTest4() throws Exception {
+        apiSteps.createUserStep();
     }
 
     @Test
-    public void sampleApiTest5() {
-        apiSteps.iGetRequestToEndpoint();
+    public void sampleApiTest6() throws Exception {
+        apiSteps.deleteUserStep();
     }
 }

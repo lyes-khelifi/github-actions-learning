@@ -334,6 +334,30 @@
 <!--            </plugin>-->
 
             
+            <!-- Wipe stale Serenity JSON results before each run so the report only reflects the current run -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>clean-serenity-results</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                            <filesets>
+                                <fileset>
+                                    <directory>${project.build.directory}/site/serenity</directory>
+                                    <followSymlinks>false</followSymlinks>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Serenity Report Generation -->
             <plugin>
                 <groupId>net.serenity-bdd.maven.plugins</groupId>
