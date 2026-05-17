@@ -53,6 +53,7 @@ jobs:
           from datetime import datetime, timezone, timedelta
 
           total = passed = failed = skipped = 0
+          duration = 0.0
           tests = []
           for f in sorted(glob.glob('target/surefire-reports/TEST-*.xml')):
               try:
@@ -61,6 +62,7 @@ jobs:
                   fa = int(root.get('failures', 0))
                   e  = int(root.get('errors', 0))
                   s  = int(root.get('skipped', 0))
+                  duration += float(root.get('time', 0))
                   total += t; failed += fa + e; skipped += s; passed += t - fa - e - s
                   for tc in root.findall('testcase'):
                       cn   = tc.get('classname', '')
@@ -77,15 +79,16 @@ jobs:
 
           now = datetime.now(timezone.utc)
           entry = {
-              'date':    now.strftime('%Y-%m-%dT%H:%M:%SZ'),
-              'run':     int(os.environ.get('GITHUB_RUN_NUMBER', 0)),
-              'total':   total,
-              'passed':  passed,
-              'failed':  failed,
-              'skipped': skipped,
-              'tests':   tests,
+              'date':     now.strftime('%Y-%m-%dT%H:%M:%SZ'),
+              'run':      int(os.environ.get('GITHUB_RUN_NUMBER', 0)),
+              'total':    total,
+              'passed':   passed,
+              'failed':   failed,
+              'skipped':  skipped,
+              'duration': round(duration, 1),
+              'tests':    tests,
           }
-          print(f"Trend entry: run={entry['run']} total={total} passed={passed} failed={failed} tests={len(tests)}")
+          print(f"Trend entry: run={entry['run']} total={total} passed={passed} failed={failed} duration={duration:.1f}s tests={len(tests)}")
 
           r = subprocess.run(
               ['git', 'show', 'origin/gh-pages:regression/trend-data.json'],
