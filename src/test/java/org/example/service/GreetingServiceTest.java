@@ -1,9 +1,12 @@
 package org.example.service;
 
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(SerenityJUnit5Extension.class)
 public class GreetingServiceTest {
     @Test
     void testGreeting() {

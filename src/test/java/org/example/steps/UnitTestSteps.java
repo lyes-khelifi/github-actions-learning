@@ -1,6 +1,6 @@
-package com.example.steps;
+package org.example.steps;
 
 /** @deprecated All step methods have been moved to ApiSteps. */
 @Deprecated
-public class SampleTestSteps {
+public class UnitTestSteps {
 }
