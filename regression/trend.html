@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test Trend</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 2rem; background: #f0f2f5; color: #24292f; }
+    h1  { margin: 0 0 1.5rem; font-size: 1.6rem; }
+    .summary { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .card { background: #fff; border-radius: 8px; padding: 1rem 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,.12); min-width: 110px; text-align: center; }
+    .card .val { font-size: 2rem; font-weight: 700; line-height: 1.1; }
+    .card .lbl { font-size: .78rem; color: #57606a; margin-top: .3rem; text-transform: uppercase; letter-spacing: .05em; }
+    .green { color: #1a7f3c; }
+    .red   { color: #c42b2b; }
+    .blue  { color: #0969da; }
+    .chart-wrap { background: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,.12); max-width: 1040px; }
+    .back { display: inline-block; margin-top: 1.5rem; color: #0969da; text-decoration: none; font-size: .9rem; }
+    .back:hover { text-decoration: underline; }
+    .empty { background: #fff; border-radius: 8px; padding: 2rem; text-align: center; color: #57606a; max-width: 420px; }
+  </style>
+</head>
+<body>
+  <h1>Test Trend</h1>
+  <div id="root"></div>
+  <a class="back" href="index.html">← Back to Serenity Report</a>
+
+  <script>
+    fetch('./trend-data.json')
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(data => render(data.runs || []))
+      .catch(() => render([]));
+
+    function render(runs) {
+      const root = document.getElementById('root');
+
+      if (!runs.length) {
+        root.innerHTML = '<div class="empty"><p>No trend data yet — push to master at least once to populate this chart.</p></div>';
+        return;
+      }
+
+      const last = runs[runs.length - 1];
+      const rate = last.total > 0 ? (last.passed * 100 / last.total).toFixed(1) : '—';
+
+      root.innerHTML = `
+        <div class="summary">
+          <div class="card"><div class="val green">${last.passed}</div><div class="lbl">Passed</div></div>
+          <div class="card"><div class="val red">${last.failed}</div><div class="lbl">Failed</div></div>
+          <div class="card"><div class="val">${last.skipped}</div><div class="lbl">Skipped</div></div>
+          <div class="card"><div class="val">${last.total}</div><div class="lbl">Total</div></div>
+          <div class="card"><div class="val blue">${rate}%</div><div class="lbl">Pass Rate</div></div>
+          <div class="card"><div class="val" style="font-size:1rem;padding-top:.4rem">#${last.run}</div><div class="lbl">${last.date.slice(0,10)}</div></div>
+        </div>
+        <div class="chart-wrap"><canvas id="chart"></canvas></div>`;
+
+      const labels = runs.map(r => `#${r.run} · ${r.date.slice(0, 10)}`);
+      const rates  = runs.map(r => r.total > 0 ? +(r.passed * 100 / r.total).toFixed(1) : null);
+
+      new Chart(document.getElementById('chart'), {
+        data: {
+          labels,
+          datasets: [
+            { type: 'bar',  label: 'Passed',       data: runs.map(r => r.passed),  backgroundColor: 'rgba(26,127,60,.75)',  yAxisID: 'count', order: 2 },
+            { type: 'bar',  label: 'Failed',        data: runs.map(r => r.failed),  backgroundColor: 'rgba(196,43,43,.75)',  yAxisID: 'count', order: 2 },
+            { type: 'bar',  label: 'Skipped',       data: runs.map(r => r.skipped), backgroundColor: 'rgba(140,140,140,.5)', yAxisID: 'count', order: 2 },
+            { type: 'line', label: 'Pass Rate (%)', data: rates, borderColor: '#0969da', backgroundColor: 'rgba(9,105,218,.08)',
+              tension: .35, yAxisID: 'rate', order: 1, pointRadius: 4, pointHoverRadius: 6 }
+          ]
+        },
+        options: {
+          responsive: true,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.dataset.label === 'Pass Rate (%)'
+                  ? ` Pass Rate: ${ctx.raw}%`
+                  : ` ${ctx.dataset.label}: ${ctx.raw}`
+              }
+            }
+          },
+          scales: {
+            x:     { stacked: true, ticks: { maxRotation: 45 } },
+            count: { stacked: true, beginAtZero: true, title: { display: true, text: 'Test Count' } },
+            rate:  { position: 'right', min: 0, max: 100,
+                     title: { display: true, text: 'Pass Rate (%)' },
+                     grid: { drawOnChartArea: false } }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
