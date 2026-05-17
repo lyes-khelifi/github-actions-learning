@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test Trend</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+           margin: 0; padding: 1.5rem; background: #f0f2f5; color: #24292f; }
+    h1  { margin: 0 0 1rem; font-size: 1.5rem; }
+    h2  { margin: 1.5rem 0 .6rem; font-size: 1rem; font-weight: 600; color: #444; }
+
+    /* ── summary cards ── */
+    .summary { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .card { background: #fff; border-radius: 8px; padding: .8rem 1.1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,.1); min-width: 100px; text-align: center; }
+    .card .val { font-size: 1.8rem; font-weight: 700; line-height: 1; }
+    .card .lbl { font-size: .72rem; color: #57606a; margin-top: .3rem;
+                 text-transform: uppercase; letter-spacing: .05em; }
+    .green { color: #1a7f3c; } .red { color: #c42b2b; }
+    .blue  { color: #0969da; } .amber { color: #9a6700; }
+
+    /* ── top failing ── */
+    .top-fail-list { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .top-fail-card { background: #fff; border-radius: 8px; padding: .7rem 1rem;
+                     box-shadow: 0 1px 3px rgba(0,0,0,.1); border-left: 3px solid #c42b2b;
+                     flex: 1 1 220px; max-width: 360px; min-width: 0; }
+    .tfc-name { font-size: .85rem; font-weight: 600; overflow: hidden;
+                text-overflow: ellipsis; white-space: nowrap; }
+    .tfc-cls  { font-size: .72rem; color: #57606a; margin: .15rem 0 .35rem; }
+    .tfc-stats { display: flex; gap: .5rem; flex-wrap: wrap; font-size: .78rem; align-items: center; }
+
+    /* ── charts ── */
+    .chart-wrap { background: #fff; border-radius: 8px; padding: 1.2rem 1.5rem;
+                  box-shadow: 0 1px 3px rgba(0,0,0,.1); max-width: 900px; margin-bottom: 1rem; }
+    .chart-wrap--sm { padding: .8rem 1.5rem; }
+
+    /* ── controls ── */
+    .controls { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; margin-top: .6rem; }
+    .controls input[type=search] {
+      padding: .35rem .75rem; border: 1px solid #d0d7de; border-radius: 6px;
+      font-size: .88rem; width: 260px; outline: none; }
+    .controls input[type=search]:focus { border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,.1); }
+    .controls label { display: flex; align-items: center; gap: .4rem; font-size: .88rem; cursor: pointer; }
+    .badge { font-size: .72rem; background: #ffebe9; color: #c42b2b;
+             border-radius: 12px; padding: .05rem .45rem; margin-left: .2rem; font-weight: 600; }
+    .badge-amber { background: #fff8c5; color: #9a6700; }
+    .info-text { font-size: .8rem; color: #57606a; margin-left: auto; }
+
+    /* ── table ── */
+    .table-wrap { overflow: auto; max-height: 65vh; border-radius: 8px;
+                  box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+    table { border-collapse: collapse; background: #fff; font-size: .82rem; }
+    th, td { padding: 5px 9px; border-bottom: 1px solid #e1e4e8;
+             border-right: 1px solid #e1e4e8; white-space: nowrap; }
+    td:last-child, th:last-child { border-right: none; }
+    thead th { position: sticky; top: 0; background: #f6f8fa; font-weight: 600;
+               z-index: 2; border-bottom: 2px solid #d0d7de; }
+
+    th.c-cls, td.c-cls {
+      position: sticky; left: 0; z-index: 1; background: #fafbfc;
+      width: 220px; min-width: 220px; max-width: 220px;
+      overflow: hidden; text-overflow: ellipsis; border-right: 2px solid #d0d7de; }
+    thead th.c-cls { z-index: 3; }
+
+    th.c-name, td.c-name {
+      position: sticky; left: 220px; z-index: 1; background: #fafbfc;
+      min-width: 300px; max-width: 420px;
+      overflow: hidden; text-overflow: ellipsis; border-right: 2px solid #d0d7de; }
+    thead th.c-name { z-index: 3; }
+
+    th.c-meta { text-align: center; min-width: 64px; font-size: .78rem; padding: 5px 6px; }
+    td.c-meta { text-align: center; padding: 5px 6px; }
+
+    td.pass { background: #dafbe1; color: #116329; text-align: center; }
+    td.fail { background: #ffebe9; color: #82071e; text-align: center; font-weight: 700; }
+    td.skip { background: #fff8c5; color: #735c0f; text-align: center; }
+    td.na   { background: #f6f8fa; color: #ccc;    text-align: center; }
+    tr:hover td { filter: brightness(.96); }
+    tr.hidden { display: none; }
+
+    th.c-run { text-align: center; min-width: 56px; padding: 0; }
+    th.c-run a { display: block; padding: 5px 6px; text-decoration: none; color: inherit; }
+    th.c-run a:hover { background: rgba(9,105,218,.07); }
+    th.c-run .rn { display: block; color: #0969da; font-size: .78rem; }
+    th.c-run .rd { display: block; color: #57606a; font-size: .66rem; font-weight: 400; }
+    th.c-run .rp { display: block; color: #1a7f3c; font-size: .68rem; font-weight: 600; }
+
+    /* ── stability / delta ── */
+    .stab-high { color: #1a7f3c; font-weight: 600; }
+    .stab-mid  { color: #9a6700; font-weight: 600; }
+    .stab-low  { color: #c42b2b; font-weight: 700; }
+    .delta-reg { color: #c42b2b; font-weight: 700; font-size: .9rem; }
+    .delta-fix { color: #1a7f3c; font-weight: 700; font-size: .9rem; }
+    .delta-new { color: #0969da; font-size: .9rem; }
+
+    .back { display: inline-block; margin-top: 1.5rem; color: #0969da;
+            text-decoration: none; font-size: .85rem; }
+    .back:hover { text-decoration: underline; }
+    .empty { background: #fff; border-radius: 8px; padding: 2rem;
+             text-align: center; color: #57606a; max-width: 420px; }
+  </style>
+</head>
+<body>
+  <h1>Test Trend <span style="font-size:.85rem;font-weight:400;color:#57606a">— last 30 days</span></h1>
+  <div id="root"></div>
+  <a class="back" href="index.html">← Back to Serenity Report</a>
+
+  <script>
+    fetch('./trend-data.json')
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(data => render(data.runs || []))
+      .catch(() => render([]));
+
+    const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const fmtDate  = iso => { const d = new Date(iso); return MON[d.getMonth()] + ' ' + d.getDate(); };
+    const passRate = r   => r.total > 0 ? (r.passed * 100 / r.total).toFixed(0) + '%' : '—';
+    const fmtSecs  = s   => s >= 60 ? Math.floor(s/60) + 'm ' + (s%60).toFixed(0) + 's' : s.toFixed(1) + 's';
+
+    function render(runs) {
+      const root = document.getElementById('root');
+      if (!runs.length) {
+        root.innerHTML = '<div class="empty"><p>No trend data yet — push to master to populate this page.</p></div>';
+        return;
+      }
+
+      const last = runs[runs.length - 1];
+      const rate = last.total > 0 ? (last.passed * 100 / last.total).toFixed(1) : '—';
+
+      /* ── pre-compute test map and per-run lookups ── */
+      const testMap = new Map();
+      for (const run of runs) {
+        for (const t of (run.tests || [])) {
+          const k = t.class + '||' + t.name;
+          if (!testMap.has(k)) testMap.set(k, { cls: t.class, name: t.name, everFailed: false });
+          if (t.status === 'failed') testMap.get(k).everFailed = true;
+        }
+      }
+
+      const testList = [...testMap.entries()].sort(([,a],[,b]) =>
+        a.cls.localeCompare(b.cls) || a.name.localeCompare(b.name));
+
+      const rlookup = runs.map(run => {
+        const m = new Map();
+        for (const t of (run.tests || [])) m.set(t.class + '||' + t.name, t.status);
+        return m;
+      });
+
+      const latestMap = rlookup[rlookup.length - 1];
+      const prevMap   = rlookup.length >= 2 ? rlookup[rlookup.length - 2] : null;
+
+      /* ── per-test stats: stability, fail count, delta ── */
+      const testStats = new Map();
+      for (const [k, v] of testList) {
+        let runCount = 0, failCount = 0;
+        for (const rl of rlookup) {
+          const st = rl.get(k);
+          if (st) { runCount++; if (st === 'failed') failCount++; }
+        }
+        const stability = runCount > 0 ? Math.round((runCount - failCount) * 100 / runCount) : null;
+
+        const latestSt = latestMap.get(k);
+        const prevSt   = prevMap ? prevMap.get(k) : null;
+        let delta = '';
+        if (latestSt === 'failed' && prevSt && prevSt !== 'failed') delta = 'regressed';
+        else if (latestSt === 'passed' && prevSt === 'failed')       delta = 'fixed';
+        else if (latestSt && !prevSt)                                delta = 'new';
+
+        testStats.set(k, { stability, failCount, delta, runCount });
+      }
+
+      /* ── summary counts ── */
+      const regressionCount = [...testStats.values()].filter(s => s.delta === 'regressed').length;
+      const flakyCount      = [...testStats.values()].filter(s =>
+        s.runCount >= 2 && s.failCount > 0 && s.failCount < s.runCount).length;
+      const failBadgeCount  = testList.filter(([,v]) => v.everFailed).length;
+      const hasDuration     = runs.some(r => r.duration != null);
+
+      /* ── top 3 failing tests ── */
+      const topFailing = [...testList]
+        .map(([k, v]) => ({ ...v, ...testStats.get(k) }))
+        .filter(t => t.failCount > 0)
+        .sort((a, b) => b.failCount - a.failCount)
+        .slice(0, 3);
+
+      const topFailHTML = topFailing.length === 0 ? '' : `
+        <h2>Top Failing Tests</h2>
+        <div class="top-fail-list">
+          ${topFailing.map(t => {
+            const sc = t.stability >= 90 ? 'stab-high' : t.stability >= 70 ? 'stab-mid' : 'stab-low';
+            return `<div class="top-fail-card">
+              <div class="tfc-name" title="${t.name}">${t.name}</div>
+              <div class="tfc-cls">${t.cls}</div>
+              <div class="tfc-stats">
+                <span class="red">${t.failCount} failure${t.failCount !== 1 ? 's' : ''}</span>
+                ${t.stability !== null ? `<span class="${sc}">${t.stability}% stable</span>` : ''}
+                ${t.delta === 'regressed' ? '<span class="delta-reg">↓ Regressed</span>' : ''}
+                ${t.delta === 'fixed'     ? '<span class="delta-fix">↑ Fixed</span>'     : ''}
+              </div>
+            </div>`;
+          }).join('')}
+        </div>`;
+
+      const durationChartHTML = hasDuration ? `
+        <h2>Suite Duration</h2>
+        <div class="chart-wrap chart-wrap--sm"><canvas id="durationChart" height="60"></canvas></div>` : '';
+
+      /* ── inject HTML ── */
+      root.innerHTML = `
+        <div class="summary">
+          <div class="card"><div class="val green">${last.passed}</div><div class="lbl">Passed</div></div>
+          <div class="card"><div class="val red">${last.failed}</div><div class="lbl">Failed</div></div>
+          <div class="card"><div class="val">${last.skipped}</div><div class="lbl">Skipped</div></div>
+          <div class="card"><div class="val">${last.total}</div><div class="lbl">Total</div></div>
+          <div class="card"><div class="val blue">${rate}%</div><div class="lbl">Pass Rate</div></div>
+          <div class="card"><div class="val ${regressionCount > 0 ? 'red' : 'green'}">${regressionCount}</div><div class="lbl">Regressions</div></div>
+          <div class="card"><div class="val ${flakyCount > 0 ? 'amber' : 'green'}">${flakyCount}</div><div class="lbl">Flaky</div></div>
+          <div class="card"><div class="val" style="font-size:1rem;padding-top:.35rem">#${last.run}</div>
+                            <div class="lbl">${last.date.slice(0,10)}</div></div>
+        </div>
+        ${topFailHTML}
+        <div class="chart-wrap"><canvas id="chart" height="75"></canvas></div>
+        ${durationChartHTML}
+        <h2>Test Case History</h2>
+        <div class="table-wrap" id="tblWrap"></div>
+        <div class="controls">
+          <input type="search" id="filter" placeholder="Filter by class or test name…">
+          <label><input type="checkbox" id="failOnly"> Failures only
+            <span class="badge" id="failBadge">${failBadgeCount}</span></label>
+          <label><input type="checkbox" id="regressedOnly"> Regressions
+            <span class="badge" id="regrBadge">${regressionCount}</span></label>
+          <label><input type="checkbox" id="flakyOnly"> Flaky
+            <span class="badge badge-amber" id="flakyBadge">${flakyCount}</span></label>
+          <span class="info-text" id="rowCount"></span>
+        </div>`;
+
+      /* ── pass rate trend chart ── */
+      new Chart(document.getElementById('chart'), {
+        data: { labels: runs.map(r => '#' + r.run), datasets: [
+          { type:'bar',  label:'Passed',  data: runs.map(r => r.passed),
+            backgroundColor:'rgba(26,127,60,.75)',   yAxisID:'cnt', order:2 },
+          { type:'bar',  label:'Failed',  data: runs.map(r => r.failed),
+            backgroundColor:'rgba(196,43,43,.75)',   yAxisID:'cnt', order:2 },
+          { type:'bar',  label:'Skipped', data: runs.map(r => r.skipped),
+            backgroundColor:'rgba(140,140,140,.45)', yAxisID:'cnt', order:2 },
+          { type:'line', label:'Pass Rate (%)',
+            data: runs.map(r => r.total > 0 ? +(r.passed * 100 / r.total).toFixed(1) : null),
+            borderColor:'#0969da', backgroundColor:'rgba(9,105,218,.07)',
+            tension:.35, yAxisID:'rate', order:1, pointRadius:3, fill:true }
+        ]},
+        options: {
+          responsive:true,
+          interaction:{ mode:'index', intersect:false },
+          plugins:{ legend:{ position:'top' } },
+          scales:{
+            x:    { stacked:true },
+            cnt:  { stacked:true, beginAtZero:true, title:{ display:true, text:'Tests' } },
+            rate: { position:'right', min:0, max:100,
+                    title:{ display:true, text:'Pass Rate (%)' },
+                    grid:{ drawOnChartArea:false } }
+          }
+        }
+      });
+
+      /* ── duration chart ── */
+      if (hasDuration) {
+        new Chart(document.getElementById('durationChart'), {
+          type:'line',
+          data:{ labels: runs.map(r => '#' + r.run), datasets:[{
+            label:'Duration (s)',
+            data: runs.map(r => r.duration ?? null),
+            borderColor:'#8250df', backgroundColor:'rgba(130,80,223,.07)',
+            tension:.35, pointRadius:3, fill:true, spanGaps:false
+          }]},
+          options:{
+            responsive:true,
+            plugins:{ legend:{ position:'top' },
+              tooltip:{ callbacks:{ label: ctx => ' ' + fmtSecs(ctx.parsed.y) } } },
+            scales:{ y:{ beginAtZero:true, title:{ display:true, text:'Seconds' } } }
+          }
+        });
+      }
+
+      /* ── build table ── */
+      const icon  = { passed:'✓', failed:'✗', skipped:'~' };
+      const tdCls = { passed:'pass', failed:'fail', skipped:'skip' };
+      const deltaIcon = {
+        regressed: '<span class="delta-reg" title="Regressed in latest run">↓</span>',
+        fixed:     '<span class="delta-fix" title="Fixed in latest run">↑</span>',
+        new:       '<span class="delta-new" title="New test">●</span>',
+      };
+
+      let thead = '<thead><tr><th class="c-cls">Class</th><th class="c-name">Test</th>';
+      thead += '<th class="c-meta" title="Pass rate across all tracked runs">Stability</th>';
+      thead += '<th class="c-meta" title="Total failures in last 30 days">Fails</th>';
+      thead += '<th class="c-meta" title="Change vs previous run">Δ</th>';
+      for (const r of runs)
+        thead += `<th class="c-run"><a href="./runs/${r.run}/" target="_blank"><span class="rn">#${r.run}</span><span class="rd">${fmtDate(r.date)}</span><span class="rp">${passRate(r)}</span></a></th>`;
+      thead += '</tr></thead>';
+
+      let tbody = '<tbody>';
+      for (const [k, v] of testList) {
+        const s  = testStats.get(k);
+        const sc = s.stability === null ? '' : s.stability >= 90 ? 'stab-high' : s.stability >= 70 ? 'stab-mid' : 'stab-low';
+        const isFlaky = s.runCount >= 2 && s.failCount > 0 && s.failCount < s.runCount;
+
+        tbody += `<tr data-k="${(v.cls + ' ' + v.name).toLowerCase()}" `
+               + `data-f="${v.everFailed}" `
+               + `data-r="${s.delta === 'regressed'}" `
+               + `data-fl="${isFlaky}">`;
+        tbody += `<td class="c-cls" title="${v.cls}">${v.cls}</td>`;
+        tbody += `<td class="c-name" title="${v.name}">${v.name}</td>`;
+        tbody += `<td class="c-meta ${sc}">${s.stability !== null ? s.stability + '%' : '—'}</td>`;
+        tbody += `<td class="c-meta">${s.failCount > 0 ? s.failCount : '—'}</td>`;
+        tbody += `<td class="c-meta">${deltaIcon[s.delta] || ''}</td>`;
+        for (const rl of rlookup) {
+          const st = rl.get(k);
+          tbody += st ? `<td class="${tdCls[st]}" title="${st}">${icon[st]}</td>` : '<td class="na">·</td>';
+        }
+        tbody += '</tr>';
+      }
+      tbody += '</tbody>';
+
+      document.getElementById('tblWrap').innerHTML = `<table>${thead}${tbody}</table>`;
+
+      /* ── filter ── */
+      const allRows        = [...document.querySelectorAll('#tblWrap tbody tr')];
+      const rowCountEl     = document.getElementById('rowCount');
+      const filterInput    = document.getElementById('filter');
+      const failOnlyBox    = document.getElementById('failOnly');
+      const regressedBox   = document.getElementById('regressedOnly');
+      const flakyBox       = document.getElementById('flakyOnly');
+
+      function applyFilter() {
+        const q  = filterInput.value.toLowerCase();
+        const fo = failOnlyBox.checked;
+        const ro = regressedBox.checked;
+        const fl = flakyBox.checked;
+        let vis = 0;
+        for (const row of allRows) {
+          const show = (!q  || row.dataset.k.includes(q))
+                    && (!fo || row.dataset.f  === 'true')
+                    && (!ro || row.dataset.r  === 'true')
+                    && (!fl || row.dataset.fl === 'true');
+          row.classList.toggle('hidden', !show);
+          if (show) vis++;
+        }
+        rowCountEl.textContent = vis + ' of ' + allRows.length + ' tests';
+      }
+
+      filterInput.addEventListener('input', applyFilter);
+      failOnlyBox.addEventListener('change', applyFilter);
+      regressedBox.addEventListener('change', applyFilter);
+      flakyBox.addEventListener('change', applyFilter);
+      applyFilter();
+    }
+  </script>
+</body>
+</html>
