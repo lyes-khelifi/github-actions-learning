@@ -1,10 +1,11 @@
-package org.example.service;
+package org.example.unit;
 
 import net.serenitybdd.annotations.WithTagValuesOf;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.example.entity.UserEntity;
 import org.example.model.UserDTO;
 import org.example.repository.UserRepository;
+import org.example.service.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,7 @@ public class UserServiceTest {
             entity.setId(1L);
             return entity;
         });
-        UserDTO created = userService.createUser(userDTO);
+        userService.createUser(userDTO);
 
         UserEntity entity = new UserEntity();
         entity.setId(1L);
@@ -64,7 +65,6 @@ public class UserServiceTest {
 
     @Test
     void testUserAlreadyExists() {
-        // For simplicity, we just test that createUser works; duplicate handling is not implemented in service
         UserDTO userDTO = new UserDTO(null, "john", "john@example.com");
         when(userRepository.save(any())).thenAnswer(invocation -> {
             UserEntity entity = invocation.getArgument(0);
@@ -72,7 +72,7 @@ public class UserServiceTest {
             return entity;
         });
         assertDoesNotThrow(() -> userService.createUser(userDTO));
-        assertDoesNotThrow(() -> userService.createUser(userDTO)); // No exception thrown currently
+        assertDoesNotThrow(() -> userService.createUser(userDTO));
     }
 
     @Test
@@ -83,9 +83,8 @@ public class UserServiceTest {
             entity.setId(1L);
             return entity;
         });
-        UserDTO created = userService.createUser(userDTO);
+        userService.createUser(userDTO);
 
-        // existsById returns true first (user exists), then false (user deleted)
         when(userRepository.existsById(1L)).thenReturn(true).thenReturn(false);
         doNothing().when(userRepository).deleteById(1L);
 

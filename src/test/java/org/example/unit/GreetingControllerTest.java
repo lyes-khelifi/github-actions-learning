@@ -1,9 +1,10 @@
-package org.example.controller;
+package org.example.unit;
 
 import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.WithTagValuesOf;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.example.TestSecurityConfig;
+import org.example.controller.GreetingController;
 import org.example.steps.ApiSteps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -24,10 +25,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SerenityJUnit5Extension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import({TestSecurityConfig.class})
+@Import({GreetingController.class, TestSecurityConfig.class})
 @Tag("unit")
-@WithTagValuesOf({"unit", "health"})
-public class HealthControllerTest {
+@WithTagValuesOf({"unit", "greeting"})
+public class GreetingControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,13 +47,7 @@ public class HealthControllerTest {
     }
 
     @Test
-    void healthEndpointReturnsOk() throws Exception {
-        apiSteps.healthEndpointReturnsOk();
-    }
-
-    @Test
-    void metricsEndpointReturnsMetrics() throws Exception {
-        apiSteps.metricsEndpointReturnsMetrics();
-    //    apiSteps.failTestExample();
+    void greetingEndpointReturnsMessage() throws Exception {
+        apiSteps.greetingEndpointReturnsMessage();
     }
 }

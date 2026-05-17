@@ -110,4 +110,31 @@ public class RegressionSteps {
         Response response = RestAssured.given().baseUri(baseUrl).get("/api/users");
         Assertions.assertThat(response.statusCode()).isEqualTo(200);
     }
+
+    @Step("Get total number of users in the system")
+    public int getAllUsersCount() {
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/users");
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+        return response.jsonPath().getList("$").size();
+    }
+
+    @Step("Verify system has at least {0} users")
+    public void verifyUserCountIsAtLeast(int minExpected) {
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/users");
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+        Assertions.assertThat(response.jsonPath().getList("$").size()).isGreaterThanOrEqualTo(minExpected);
+    }
+
+    @Step("Verify user with id {0} is not retrievable")
+    public void verifyUserNotFound(long id) {
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/users/" + id);
+        Assertions.assertThat(response.statusCode()).isEqualTo(400);
+    }
+
+    @Step("Verify metrics reports a positive processor count")
+    public void verifyMetricsProcessorCountPositive() {
+        Response response = RestAssured.given().baseUri(baseUrl).get("/api/metrics");
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+        Assertions.assertThat(response.jsonPath().getInt("processors")).isGreaterThan(0);
+    }
 }
