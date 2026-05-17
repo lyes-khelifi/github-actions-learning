@@ -195,3 +195,8 @@ jobs:
           destination_dir: unit-tests
           keep_files: true
 
+      - name: Print report URL
+        run: |
+          echo "Serenity report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/unit-tests/"
+          echo "Trend page:      https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/unit-tests/trend.html"
+
