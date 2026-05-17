@@ -27,12 +27,68 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Restore Serenity history
+        uses: actions/cache@v5
+        with:
+          path: target/site/serenity-history
+          key: serenity-history-regression-${{ github.run_id }}
+          restore-keys: serenity-history-regression-
+
       - name: Run regression tests
         run: mvn -B test -Dgroups=regression -Dmaven.test.failure.ignore=true
 
       - name: Generate Serenity HTML report
         if: always()
         run: mvn serenity:aggregate
+
+      - name: Fetch gh-pages for trend history
+        if: always()
+        run: git fetch origin gh-pages || true
+
+      - name: Build trend data
+        if: always()
+        run: |
+          python3 << 'EOF'
+          import xml.etree.ElementTree as ET, glob, json, os, subprocess, shutil
+          from datetime import datetime
+
+          total = passed = failed = skipped = 0
+          for f in glob.glob('target/surefire-reports/TEST-*.xml'):
+              try:
+                  root = ET.parse(f).getroot()
+                  t  = int(root.get('tests', 0))
+                  fa = int(root.get('failures', 0))
+                  e  = int(root.get('errors', 0))
+                  s  = int(root.get('skipped', 0))
+                  total += t; failed += fa + e; skipped += s; passed += t - fa - e - s
+              except Exception as ex:
+                  print(f"Warning: {f}: {ex}")
+
+          entry = {
+              'date':    datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+              'run':     int(os.environ.get('GITHUB_RUN_NUMBER', 0)),
+              'total':   total,
+              'passed':  passed,
+              'failed':  failed,
+              'skipped': skipped,
+          }
+          print(f"Trend entry: {entry}")
+
+          r = subprocess.run(
+              ['git', 'show', 'origin/gh-pages:regression/trend-data.json'],
+              capture_output=True, text=True
+          )
+          data = json.loads(r.stdout) if r.returncode == 0 else {'runs': []}
+          print(f"Loaded {len(data.get('runs', []))} previous entries from gh-pages")
+          data['runs'].append(entry)
+          data['runs'] = data['runs'][-100:]
+
+          os.makedirs('target/site/serenity', exist_ok=True)
+          with open('target/site/serenity/trend-data.json', 'w') as f:
+              json.dump(data, f, indent=2)
+          shutil.copy('.github/pages/trend.html', 'target/site/serenity/trend.html')
+          print(f"Trend files written ({len(data['runs'])} total runs tracked)")
+          EOF
 
       - name: Upload Serenity report
         if: always()

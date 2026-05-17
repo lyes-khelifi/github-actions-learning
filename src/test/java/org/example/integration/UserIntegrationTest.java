@@ -18,6 +18,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.assertj.core.api.Assertions;
+
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -46,25 +48,22 @@ public class UserIntegrationTest {
     }
 
     @Test
-    void createUserTest() {
+    void createUserTest() throws Exception {
         apiSteps.createUserStep();
-    //    apiSteps.failTestExample();
     }
 
     @Test
-    void getUserTest() {
+    void getUserTest() throws Exception {
         apiSteps.getUserStep();
-    //    apiSteps.failTestExample();
     }
 
     @Test
-    void deleteUserTest() {
+    void deleteUserTest() throws Exception {
         apiSteps.deleteUserStep();
-    //    apiSteps.failTestExample();
     }
 
     @Test
     void contextLoads() {
-    //    apiSteps.failTestExample();
+        Assertions.assertThat(mockMvc).isNotNull();
     }
 }
