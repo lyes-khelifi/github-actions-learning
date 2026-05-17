@@ -33,20 +33,35 @@
     .tfc-stats { display: flex; gap: .5rem; flex-wrap: wrap; font-size: .78rem; align-items: center; }
 
     /* ── charts ── */
-    .chart-wrap { background: #fff; border-radius: 8px; padding: 1.2rem 1.5rem;
+    .chart-wrap { background: #fff; border-radius: 8px; padding: 1.2rem 1.5rem 0;
                   box-shadow: 0 1px 3px rgba(0,0,0,.1); max-width: 900px; margin-bottom: 1rem; }
-    .chart-wrap--sm { padding: .8rem 1.5rem; }
+    .chart-wrap--sm { padding-top: .8rem; }
 
-    /* ── controls ── */
-    .controls { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; margin-top: .6rem; }
-    .controls input[type=search] {
-      padding: .35rem .75rem; border: 1px solid #d0d7de; border-radius: 6px;
-      font-size: .88rem; width: 260px; outline: none; }
-    .controls input[type=search]:focus { border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,.1); }
-    .controls label { display: flex; align-items: center; gap: .4rem; font-size: .88rem; cursor: pointer; }
-    .badge { font-size: .72rem; background: #ffebe9; color: #c42b2b;
-             border-radius: 12px; padding: .05rem .45rem; margin-left: .2rem; font-weight: 600; }
-    .badge-amber { background: #fff8c5; color: #9a6700; }
+    /* ── period radio buttons (below charts) ── */
+    .period-bar { display: flex; gap: .5rem; align-items: center; padding: .6rem 0 .9rem;
+                  flex-wrap: wrap; }
+    .period-bar span { font-size: .78rem; color: #57606a; margin-right: .25rem; }
+    .period-bar label { display: flex; align-items: center; gap: .3rem; font-size: .82rem;
+                        padding: .2rem .65rem; border-radius: 20px; cursor: pointer;
+                        border: 1px solid #d0d7de; background: #f6f8fa; user-select: none; }
+    .period-bar label:has(input:checked) { background: #0969da; color: #fff; border-color: #0969da; }
+    .period-bar input[type=radio] { display: none; }
+
+    /* ── row-filter pill buttons (above table) ── */
+    .filter-bar { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;
+                  margin-bottom: .5rem; }
+    .filter-bar input[type=search] {
+      padding: .32rem .7rem; border: 1px solid #d0d7de; border-radius: 6px;
+      font-size: .85rem; width: 240px; outline: none; }
+    .filter-bar input[type=search]:focus { border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,.1); }
+    .pill-group { display: flex; gap: .35rem; flex-wrap: wrap; }
+    .pill-group label { display: flex; align-items: center; gap: .3rem; font-size: .82rem;
+                        padding: .22rem .65rem; border-radius: 20px; cursor: pointer;
+                        border: 1px solid #d0d7de; background: #f6f8fa; user-select: none; }
+    .pill-group label:has(input:checked) { background: #0969da; color: #fff; border-color: #0969da; }
+    .pill-group input[type=radio] { display: none; }
+    .badge { font-size: .7rem; background: rgba(0,0,0,.12); color: inherit;
+             border-radius: 10px; padding: .02rem .4rem; font-weight: 600; }
     .info-text { font-size: .8rem; color: #57606a; margin-left: auto; }
 
     /* ── table ── */
@@ -73,6 +88,10 @@
 
     th.c-meta { text-align: center; min-width: 64px; font-size: .78rem; padding: 5px 6px; }
     td.c-meta { text-align: center; padding: 5px 6px; }
+    th.c-dur  { text-align: center; min-width: 72px; font-size: .78rem; padding: 5px 6px; }
+    td.c-dur  { text-align: center; padding: 5px 6px; color: #57606a; }
+    td.c-dur-slow { color: #c42b2b; }
+    td.c-dur-fast { color: #1a7f3c; }
 
     td.pass { background: #dafbe1; color: #116329; text-align: center; }
     td.fail { background: #ffebe9; color: #82071e; text-align: center; font-weight: 700; }
@@ -117,68 +136,85 @@
     const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const fmtDate  = iso => { const d = new Date(iso); return MON[d.getMonth()] + ' ' + d.getDate(); };
     const passRate = r   => r.total > 0 ? (r.passed * 100 / r.total).toFixed(0) + '%' : '—';
-    const fmtSecs  = s   => s >= 60 ? Math.floor(s/60) + 'm ' + (s%60).toFixed(0) + 's' : s.toFixed(1) + 's';
+    const fmtSecs  = s   => s == null ? '—' : s < 1 ? (s * 1000).toFixed(0) + 'ms' : s.toFixed(2) + 's';
+    const fmtDur   = s   => s >= 60 ? Math.floor(s/60) + 'm ' + (s % 60).toFixed(0) + 's' : s.toFixed(1) + 's';
 
-    function render(runs) {
+    function render(allRuns) {
       const root = document.getElementById('root');
-      if (!runs.length) {
+      if (!allRuns.length) {
         root.innerHTML = '<div class="empty"><p>No trend data yet — push to master to populate this page.</p></div>';
         return;
       }
 
-      const last = runs[runs.length - 1];
+      const last = allRuns[allRuns.length - 1];
       const rate = last.total > 0 ? (last.passed * 100 / last.total).toFixed(1) : '—';
 
-      /* ── pre-compute test map and per-run lookups ── */
+      /* ── pre-compute test map ── */
       const testMap = new Map();
-      for (const run of runs) {
+      for (const run of allRuns) {
         for (const t of (run.tests || [])) {
           const k = t.class + '||' + t.name;
           if (!testMap.has(k)) testMap.set(k, { cls: t.class, name: t.name, everFailed: false });
           if (t.status === 'failed') testMap.get(k).everFailed = true;
         }
       }
-
       const testList = [...testMap.entries()].sort(([,a],[,b]) =>
         a.cls.localeCompare(b.cls) || a.name.localeCompare(b.name));
 
-      const rlookup = runs.map(run => {
+      /* ── per-run lookups ── */
+      const rlookup = allRuns.map(run => {
         const m = new Map();
         for (const t of (run.tests || [])) m.set(t.class + '||' + t.name, t.status);
+        return m;
+      });
+      const tlookup = allRuns.map(run => {
+        const m = new Map();
+        for (const t of (run.tests || [])) {
+          if (t.time != null) m.set(t.class + '||' + t.name, t.time);
+        }
         return m;
       });
 
       const latestMap = rlookup[rlookup.length - 1];
       const prevMap   = rlookup.length >= 2 ? rlookup[rlookup.length - 2] : null;
 
-      /* ── per-test stats: stability, fail count, delta ── */
+      /* ── per-test stats ── */
       const testStats = new Map();
-      for (const [k, v] of testList) {
+      for (const [k] of testList) {
         let runCount = 0, failCount = 0;
-        for (const rl of rlookup) {
-          const st = rl.get(k);
-          if (st) { runCount++; if (st === 'failed') failCount++; }
+        const times = [];
+        for (let i = 0; i < allRuns.length; i++) {
+          const st = rlookup[i].get(k);
+          if (st) runCount++;
+          if (st === 'failed') failCount++;
+          const t = tlookup[i].get(k);
+          if (t != null && t > 0) times.push(t);
         }
         const stability = runCount > 0 ? Math.round((runCount - failCount) * 100 / runCount) : null;
-
-        const latestSt = latestMap.get(k);
-        const prevSt   = prevMap ? prevMap.get(k) : null;
+        const latestSt  = latestMap.get(k);
+        const prevSt    = prevMap ? prevMap.get(k) : null;
         let delta = '';
         if (latestSt === 'failed' && prevSt && prevSt !== 'failed') delta = 'regressed';
         else if (latestSt === 'passed' && prevSt === 'failed')       delta = 'fixed';
         else if (latestSt && !prevSt)                                delta = 'new';
 
-        testStats.set(k, { stability, failCount, delta, runCount });
+        const slowest = times.length ? Math.max(...times) : null;
+        const fastest = times.length ? Math.min(...times) : null;
+        const average = times.length ? times.reduce((a,b)=>a+b,0)/times.length : null;
+
+        testStats.set(k, { stability, failCount, delta, runCount,
+                           slowest, fastest, average,
+                           latestPassed: latestSt === 'passed',
+                           isFlaky: runCount >= 2 && failCount > 0 && failCount < runCount });
       }
 
       /* ── summary counts ── */
       const regressionCount = [...testStats.values()].filter(s => s.delta === 'regressed').length;
-      const flakyCount      = [...testStats.values()].filter(s =>
-        s.runCount >= 2 && s.failCount > 0 && s.failCount < s.runCount).length;
+      const flakyCount      = [...testStats.values()].filter(s => s.isFlaky).length;
       const failBadgeCount  = testList.filter(([,v]) => v.everFailed).length;
-      const hasDuration     = runs.some(r => r.duration != null);
+      const hasDuration     = allRuns.some(r => r.duration != null);
 
-      /* ── top 3 failing tests ── */
+      /* ── top 3 failing ── */
       const topFailing = [...testList]
         .map(([k, v]) => ({ ...v, ...testStats.get(k) }))
         .filter(t => t.failCount > 0)
@@ -203,11 +239,7 @@
           }).join('')}
         </div>`;
 
-      const durationChartHTML = hasDuration ? `
-        <h2>Suite Duration</h2>
-        <div class="chart-wrap chart-wrap--sm"><canvas id="durationChart" height="60"></canvas></div>` : '';
-
-      /* ── inject HTML ── */
+      /* ── inject HTML skeleton ── */
       root.innerHTML = `
         <div class="summary">
           <div class="card"><div class="val green">${last.passed}</div><div class="lbl">Passed</div></div>
@@ -221,24 +253,45 @@
                             <div class="lbl">${last.date.slice(0,10)}</div></div>
         </div>
         ${topFailHTML}
-        <div class="chart-wrap"><canvas id="chart" height="75"></canvas></div>
-        ${durationChartHTML}
+        <h2>Pass Rate Trend</h2>
+        <div class="chart-wrap">
+          <canvas id="chart" height="75"></canvas>
+          <div class="period-bar">
+            <span>Show:</span>
+            <label><input type="radio" name="chart-period" value="7"> Last 7 days</label>
+            <label><input type="radio" name="chart-period" value="14"> Last 14 days</label>
+            <label><input type="radio" name="chart-period" value="30" checked> Last 30 days</label>
+          </div>
+        </div>
+        ${hasDuration ? `
+        <h2>Suite Duration</h2>
+        <div class="chart-wrap chart-wrap--sm">
+          <canvas id="durationChart" height="60"></canvas>
+          <div class="period-bar" id="durationPeriodBar">
+            <span>Show:</span>
+            <label><input type="radio" name="dur-period" value="7"> Last 7 days</label>
+            <label><input type="radio" name="dur-period" value="14"> Last 14 days</label>
+            <label><input type="radio" name="dur-period" value="30" checked> Last 30 days</label>
+          </div>
+        </div>` : ''}
         <h2>Test Case History</h2>
-        <div class="table-wrap" id="tblWrap"></div>
-        <div class="controls">
+        <div class="filter-bar">
           <input type="search" id="filter" placeholder="Filter by class or test name…">
-          <label><input type="checkbox" id="failOnly"> Failures only
-            <span class="badge" id="failBadge">${failBadgeCount}</span></label>
-          <label><input type="checkbox" id="regressedOnly"> Regressions
-            <span class="badge" id="regrBadge">${regressionCount}</span></label>
-          <label><input type="checkbox" id="flakyOnly"> Flaky
-            <span class="badge badge-amber" id="flakyBadge">${flakyCount}</span></label>
+          <div class="pill-group">
+            <label><input type="radio" name="row-filter" value="all" checked> All</label>
+            <label><input type="radio" name="row-filter" value="passed"> Passed</label>
+            <label><input type="radio" name="row-filter" value="failed"> Failed <span class="badge">${failBadgeCount}</span></label>
+            <label><input type="radio" name="row-filter" value="flaky"> Flaky <span class="badge">${flakyCount}</span></label>
+            <label><input type="radio" name="row-filter" value="regressions"> Regressions <span class="badge">${regressionCount}</span></label>
+          </div>
           <span class="info-text" id="rowCount"></span>
-        </div>`;
+        </div>
+        <div class="table-wrap" id="tblWrap"></div>`;
 
-      /* ── pass rate trend chart ── */
-      new Chart(document.getElementById('chart'), {
-        data: { labels: runs.map(r => '#' + r.run), datasets: [
+      /* ── pass rate chart ── */
+      const buildChartData = runs => ({
+        labels: runs.map(r => '#' + r.run),
+        datasets: [
           { type:'bar',  label:'Passed',  data: runs.map(r => r.passed),
             backgroundColor:'rgba(26,127,60,.75)',   yAxisID:'cnt', order:2 },
           { type:'bar',  label:'Failed',  data: runs.map(r => r.failed),
@@ -246,10 +299,14 @@
           { type:'bar',  label:'Skipped', data: runs.map(r => r.skipped),
             backgroundColor:'rgba(140,140,140,.45)', yAxisID:'cnt', order:2 },
           { type:'line', label:'Pass Rate (%)',
-            data: runs.map(r => r.total > 0 ? +(r.passed * 100 / r.total).toFixed(1) : null),
+            data: runs.map(r => r.total > 0 ? +(r.passed*100/r.total).toFixed(1) : null),
             borderColor:'#0969da', backgroundColor:'rgba(9,105,218,.07)',
             tension:.35, yAxisID:'rate', order:1, pointRadius:3, fill:true }
-        ]},
+        ]
+      });
+
+      const mainChart = new Chart(document.getElementById('chart'), {
+        data: buildChartData(allRuns),
         options: {
           responsive:true,
           interaction:{ mode:'index', intersect:false },
@@ -265,56 +322,89 @@
       });
 
       /* ── duration chart ── */
+      let durChart = null;
       if (hasDuration) {
-        new Chart(document.getElementById('durationChart'), {
+        durChart = new Chart(document.getElementById('durationChart'), {
           type:'line',
-          data:{ labels: runs.map(r => '#' + r.run), datasets:[{
+          data:{ labels: allRuns.map(r => '#' + r.run), datasets:[{
             label:'Duration (s)',
-            data: runs.map(r => r.duration ?? null),
+            data: allRuns.map(r => r.duration ?? null),
             borderColor:'#8250df', backgroundColor:'rgba(130,80,223,.07)',
             tension:.35, pointRadius:3, fill:true, spanGaps:false
           }]},
           options:{
             responsive:true,
             plugins:{ legend:{ position:'top' },
-              tooltip:{ callbacks:{ label: ctx => ' ' + fmtSecs(ctx.parsed.y) } } },
+              tooltip:{ callbacks:{ label: ctx => ' ' + fmtDur(ctx.parsed.y) } } },
             scales:{ y:{ beginAtZero:true, title:{ display:true, text:'Seconds' } } }
           }
         });
       }
 
+      /* ── chart period filter ── */
+      function runsForDays(days) {
+        const cutoff = new Date(Date.now() - days * 864e5);
+        return allRuns.filter(r => new Date(r.date) >= cutoff);
+      }
+      function updateMainChart(days) {
+        const filtered = runsForDays(days);
+        const d = buildChartData(filtered);
+        mainChart.data.labels = d.labels;
+        mainChart.data.datasets.forEach((ds, i) => ds.data = d.datasets[i].data);
+        mainChart.update();
+      }
+      function updateDurChart(days) {
+        if (!durChart) return;
+        const filtered = runsForDays(days);
+        durChart.data.labels = filtered.map(r => '#' + r.run);
+        durChart.data.datasets[0].data = filtered.map(r => r.duration ?? null);
+        durChart.update();
+      }
+      document.querySelectorAll('input[name="chart-period"]').forEach(r =>
+        r.addEventListener('change', () => updateMainChart(+r.value)));
+      document.querySelectorAll('input[name="dur-period"]').forEach(r =>
+        r.addEventListener('change', () => updateDurChart(+r.value)));
+
       /* ── build table ── */
-      const icon  = { passed:'✓', failed:'✗', skipped:'~' };
-      const tdCls = { passed:'pass', failed:'fail', skipped:'skip' };
+      const icon    = { passed:'✓', failed:'✗', skipped:'~' };
+      const tdCls   = { passed:'pass', failed:'fail', skipped:'skip' };
       const deltaIcon = {
         regressed: '<span class="delta-reg" title="Regressed in latest run">↓</span>',
         fixed:     '<span class="delta-fix" title="Fixed in latest run">↑</span>',
         new:       '<span class="delta-new" title="New test">●</span>',
       };
 
-      let thead = '<thead><tr><th class="c-cls">Class</th><th class="c-name">Test</th>';
-      thead += '<th class="c-meta" title="Pass rate across all tracked runs">Stability</th>';
-      thead += '<th class="c-meta" title="Total failures in last 30 days">Fails</th>';
-      thead += '<th class="c-meta" title="Change vs previous run">Δ</th>';
-      for (const r of runs)
-        thead += `<th class="c-run"><a href="./runs/${r.run}/" target="_blank"><span class="rn">#${r.run}</span><span class="rd">${fmtDate(r.date)}</span><span class="rp">${passRate(r)}</span></a></th>`;
+      let thead = '<thead><tr>'
+        + '<th class="c-cls">Class</th>'
+        + '<th class="c-name">Test</th>'
+        + '<th class="c-meta" title="Pass rate across all tracked runs">Stability</th>'
+        + '<th class="c-meta" title="Total failures in last 30 days">Fails</th>'
+        + '<th class="c-meta" title="Change vs previous run">Δ</th>'
+        + '<th class="c-dur" title="Slowest execution time">Slowest</th>'
+        + '<th class="c-dur" title="Fastest execution time">Fastest</th>'
+        + '<th class="c-dur" title="Average execution time">Avg</th>';
+      for (const r of allRuns)
+        thead += `<th class="c-run"><a href="./runs/${r.run}/" target="_blank">`
+               + `<span class="rn">#${r.run}</span>`
+               + `<span class="rd">${fmtDate(r.date)}</span>`
+               + `<span class="rp">${passRate(r)}</span></a></th>`;
       thead += '</tr></thead>';
 
       let tbody = '<tbody>';
       for (const [k, v] of testList) {
         const s  = testStats.get(k);
         const sc = s.stability === null ? '' : s.stability >= 90 ? 'stab-high' : s.stability >= 70 ? 'stab-mid' : 'stab-low';
-        const isFlaky = s.runCount >= 2 && s.failCount > 0 && s.failCount < s.runCount;
-
-        tbody += `<tr data-k="${(v.cls + ' ' + v.name).toLowerCase()}" `
-               + `data-f="${v.everFailed}" `
-               + `data-r="${s.delta === 'regressed'}" `
-               + `data-fl="${isFlaky}">`;
+        tbody += `<tr data-k="${(v.cls+' '+v.name).toLowerCase()}" `
+               + `data-f="${v.everFailed}" data-r="${s.delta==='regressed'}" `
+               + `data-fl="${s.isFlaky}" data-lp="${s.latestPassed}">`;
         tbody += `<td class="c-cls" title="${v.cls}">${v.cls}</td>`;
         tbody += `<td class="c-name" title="${v.name}">${v.name}</td>`;
-        tbody += `<td class="c-meta ${sc}">${s.stability !== null ? s.stability + '%' : '—'}</td>`;
+        tbody += `<td class="c-meta ${sc}">${s.stability !== null ? s.stability+'%' : '—'}</td>`;
         tbody += `<td class="c-meta">${s.failCount > 0 ? s.failCount : '—'}</td>`;
         tbody += `<td class="c-meta">${deltaIcon[s.delta] || ''}</td>`;
+        tbody += `<td class="c-dur c-dur-slow">${fmtSecs(s.slowest)}</td>`;
+        tbody += `<td class="c-dur c-dur-fast">${fmtSecs(s.fastest)}</td>`;
+        tbody += `<td class="c-dur">${s.average !== null ? fmtSecs(s.average) : '—'}</td>`;
         for (const rl of rlookup) {
           const st = rl.get(k);
           tbody += st ? `<td class="${tdCls[st]}" title="${st}">${icon[st]}</td>` : '<td class="na">·</td>';
@@ -322,28 +412,25 @@
         tbody += '</tr>';
       }
       tbody += '</tbody>';
-
       document.getElementById('tblWrap').innerHTML = `<table>${thead}${tbody}</table>`;
 
-      /* ── filter ── */
-      const allRows        = [...document.querySelectorAll('#tblWrap tbody tr')];
-      const rowCountEl     = document.getElementById('rowCount');
-      const filterInput    = document.getElementById('filter');
-      const failOnlyBox    = document.getElementById('failOnly');
-      const regressedBox   = document.getElementById('regressedOnly');
-      const flakyBox       = document.getElementById('flakyOnly');
+      /* ── row filter ── */
+      const allRows     = [...document.querySelectorAll('#tblWrap tbody tr')];
+      const rowCountEl  = document.getElementById('rowCount');
+      const filterInput = document.getElementById('filter');
 
       function applyFilter() {
         const q  = filterInput.value.toLowerCase();
-        const fo = failOnlyBox.checked;
-        const ro = regressedBox.checked;
-        const fl = flakyBox.checked;
+        const ft = document.querySelector('input[name="row-filter"]:checked').value;
         let vis = 0;
         for (const row of allRows) {
-          const show = (!q  || row.dataset.k.includes(q))
-                    && (!fo || row.dataset.f  === 'true')
-                    && (!ro || row.dataset.r  === 'true')
-                    && (!fl || row.dataset.fl === 'true');
+          const matchQ = !q || row.dataset.k.includes(q);
+          const matchT = ft === 'all'         ? true
+                       : ft === 'passed'      ? row.dataset.lp === 'true'
+                       : ft === 'failed'      ? row.dataset.f  === 'true'
+                       : ft === 'flaky'       ? row.dataset.fl === 'true'
+                       :                        row.dataset.r  === 'true'; // regressions
+          const show = matchQ && matchT;
           row.classList.toggle('hidden', !show);
           if (show) vis++;
         }
@@ -351,9 +438,8 @@
       }
 
       filterInput.addEventListener('input', applyFilter);
-      failOnlyBox.addEventListener('change', applyFilter);
-      regressedBox.addEventListener('change', applyFilter);
-      flakyBox.addEventListener('change', applyFilter);
+      document.querySelectorAll('input[name="row-filter"]').forEach(r =>
+        r.addEventListener('change', applyFilter));
       applyFilter();
     }
   </script>
