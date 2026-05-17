@@ -1,17 +1,12 @@
-name: CI/CD
+name: Test Gate
 
 on:
-  push:
-    branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    outputs:
-      # Pass the target folder down if needed, but actions/cache handles it
-      status: ${{ job.status }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,11 +26,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # 1. Run the test suite and quality plugins together
-      - name: Build and Test with Maven
+      - name: Build and test
         run: mvn -B package -DskipITs -Dmaven.test.failure.ignore=true
 
-      # 2. These steps now run even if tests failed, ensuring reports upload
       - name: Run SpotBugs
         if: always()
         run: mvn spotbugs:check
@@ -64,8 +57,7 @@ jobs:
           path: target/site/serenity/
           retention-days: 7
 
-      # 3. Share the test results with the next job
-      - name: Upload Surefire Reports for Validation
+      - name: Upload Surefire reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -73,80 +65,37 @@ jobs:
           path: target/surefire-reports/
           retention-days: 1
 
-  # NEW STANDALONE JOB FOR BRANCH PROTECTION
-  verify-test-threshold:
+  check-pass-rate:
     name: check-pass-rate
     needs: build-and-test
-    if: always() # Ensures this runs even if build-and-test had test failures
+    if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Download Surefire Reports
+      - name: Download Surefire reports
         uses: actions/download-artifact@v4
         with:
           name: surefire-reports
           path: target/surefire-reports/
 
-      - name: Check test pass rate
+      - name: Check test pass rate (>= 80% required)
         run: |
           python3 << 'EOF'
-          import glob, xml.etree.ElementTree as ET, os, sys
+          import glob, xml.etree.ElementTree as ET, sys
+
           total = failures = errors = 0
           for f in glob.glob('target/surefire-reports/TEST-*.xml'):
               root = ET.parse(f).getroot()
               total += int(root.get('tests', 0))
               failures += int(root.get('failures', 0))
               errors += int(root.get('errors', 0))
+
           passed = total - failures - errors
           rate = (passed * 100 // total) if total > 0 else 0
           print(f"Tests: {passed}/{total} passed ({rate}%)")
+
           if rate < 80:
-              print(f"ERROR: pass rate {rate}% is below the 80% threshold — blocking deploy")
+              print(f"ERROR: pass rate {rate}% is below the 80% threshold — PR blocked")
               sys.exit(1)
-          print(f"Pass rate {rate}% meets the 80% threshold — proceeding")
+
+          print(f"Pass rate {rate}% meets the 80% threshold — PR can be merged")
           EOF
-
-  deploy:
-    needs: [build-and-test, verify-test-threshold] # Deploy requires BOTH compilation and the 80% threshold to pass
-    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && success()
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: 'maven'
-
-      - name: Build JAR
-        run: mvn -B package -DskipTests
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata for Docker image
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository }}
-          tags: |
-            type=sha,prefix=
-            type=ref,event=branch
-            type=ref,event=pr
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
