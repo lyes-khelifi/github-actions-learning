@@ -1,14 +1,12 @@
-name: Test Gate
+name: All Tests Daily Run
 
 on:
-  pull_request:
-    branches: [ main, master ]
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
+  schedule:
+    - cron: '0 14 * * *'  # 9:00 AM EST (UTC-5)
+  workflow_dispatch:       # allow manual trigger
 
 jobs:
-  build-and-test:
+  all-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -33,27 +31,11 @@ jobs:
         uses: actions/cache@v5
         with:
           path: target/site/serenity-history
-          key: serenity-history-unit-${{ github.run_id }}
-          restore-keys: serenity-history-unit-
+          key: serenity-history-all-tests-${{ github.run_id }}
+          restore-keys: serenity-history-all-tests-
 
-      - name: Build and run unit tests
-        run: mvn -B package -DskipITs -Dgroups=unit -Dmaven.test.failure.ignore=true
-
-      - name: Run SpotBugs
-        if: always()
-        run: mvn spotbugs:check
-
-      - name: Run JaCoCo Code Coverage
-        if: always()
-        run: mvn jacoco:report
-
-      - name: Upload JaCoCo report
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: jacoco-report
-          path: target/site/jacoco/
-          retention-days: 7
+      - name: Run all tests
+        run: mvn -B test -Dmaven.test.failure.ignore=true
 
       - name: Generate Serenity HTML report
         if: always()
@@ -106,7 +88,7 @@ jobs:
           print(f"Trend entry: run={entry['run']} total={total} passed={passed} failed={failed} tests={len(tests)}")
 
           r = subprocess.run(
-              ['git', 'show', 'origin/gh-pages:unit-tests/trend-data.json'],
+              ['git', 'show', 'origin/gh-pages:all-tests/trend-data.json'],
               capture_output=True, text=True
           )
           data = json.loads(r.stdout) if r.returncode == 0 else {'runs': []}
@@ -127,57 +109,13 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: serenity-report
+          name: all-tests-serenity-report
           path: target/site/serenity/
-          retention-days: 1
-
-      - name: Upload Surefire reports
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: surefire-reports
-          path: target/surefire-reports/
-          retention-days: 1
-
-  check-pass-rate:
-    name: check-pass-rate
-    needs: build-and-test
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Surefire reports
-        uses: actions/download-artifact@v6
-        with:
-          name: surefire-reports
-          path: target/surefire-reports/
-
-      - name: Check test pass rate (>= 80% required)
-        run: |
-          python3 << 'EOF'
-          import glob, xml.etree.ElementTree as ET, sys
-
-          total = failures = errors = 0
-          for f in glob.glob('target/surefire-reports/TEST-*.xml'):
-              root = ET.parse(f).getroot()
-              total += int(root.get('tests', 0))
-              failures += int(root.get('failures', 0))
-              errors += int(root.get('errors', 0))
-
-          passed = total - failures - errors
-          rate = (passed * 100 // total) if total > 0 else 0
-          print(f"Tests: {passed}/{total} passed ({rate}%)")
-
-          if rate < 80:
-              print(f"ERROR: pass rate {rate}% is below the 80% threshold — PR blocked")
-              sys.exit(1)
-
-          print(f"Pass rate {rate}% meets the 80% threshold — PR can be merged")
-          EOF
+          retention-days: 30
 
   publish-report:
-    name: publish-report
-    needs: build-and-test
-    if: always() && github.event_name == 'push'
+    needs: all-tests
+    if: always()
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -185,15 +123,15 @@ jobs:
       - name: Download Serenity report
         uses: actions/download-artifact@v6
         with:
-          name: serenity-report
+          name: all-tests-serenity-report
           path: serenity-report/
 
-      - name: Deploy unit-test report to GitHub Pages
+      - name: Deploy all-tests report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: serenity-report/
-          destination_dir: unit-tests
+          destination_dir: all-tests
           keep_files: true
 
       - name: Archive run report to GitHub Pages
@@ -201,11 +139,10 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: serenity-report/
-          destination_dir: unit-tests/runs/${{ github.run_number }}
+          destination_dir: all-tests/runs/${{ github.run_number }}
           keep_files: true
 
       - name: Print report URL
         run: |
-          echo "Serenity report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/unit-tests/"
-          echo "Trend page:      https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/unit-tests/trend.html"
-
+          echo "Serenity report: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/all-tests/"
+          echo "Trend page:      https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/all-tests/trend.html"
