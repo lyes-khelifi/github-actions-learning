@@ -12,12 +12,9 @@ import jakarta.validation.constraints.Size;
 @Table(name = "users")
 public final class UserEntity {
 
-    // Constants for validation
     private static final int MIN_USERNAME_LENGTH = 3;
     private static final int MAX_USERNAME_LENGTH = 50;
     private static final int MAX_EMAIL_LENGTH = 100;
-    private static final int MIN_PASSWORD_LENGTH = 6;
-    private static final int MAX_PASSWORD_LENGTH = 100;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,10 +36,8 @@ public final class UserEntity {
     private String email;
 
     /**
-     * The password of the user.
+     * The password of the user. Not validated — password handling is out of scope.
      */
-    @NotBlank
-    @Size(min = MIN_PASSWORD_LENGTH, max = MAX_PASSWORD_LENGTH)
     private String password;
 
     // Constructors
