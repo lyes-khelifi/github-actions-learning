@@ -43,10 +43,10 @@ public class RegressionSteps {
     @Step("Metrics endpoint contains all required fields")
     public void metricsContainsAllFields() {
         Response response = RestAssured.given().baseUri(baseUrl).get("/api/metrics");
-        Assertions.assertThat(response.jsonPath().get("status")).isNotNull();
-        Assertions.assertThat(response.jsonPath().get("uptime")).isNotNull();
-        Assertions.assertThat(response.jsonPath().get("memory")).isNotNull();
-        Assertions.assertThat(response.jsonPath().get("processors")).isNotNull();
+        Assertions.assertThat(response.jsonPath().getString("status")).isNotNull();
+        Assertions.assertThat(response.jsonPath().getLong("uptime")).isGreaterThan(0L);
+        Assertions.assertThat(response.jsonPath().getLong("memory")).isGreaterThanOrEqualTo(0L);
+        Assertions.assertThat(response.jsonPath().getInt("processors")).isGreaterThan(0);
     }
 
     @Step("Metrics status field is 'healthy'")
