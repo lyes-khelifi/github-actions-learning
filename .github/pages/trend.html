@@ -100,7 +100,6 @@
 
       const last  = runs[runs.length - 1];
       const rate  = last.total > 0 ? (last.passed * 100 / last.total).toFixed(1) : '—';
-      const dRuns = [...runs].reverse(); // newest first for the table
 
       root.innerHTML = `
         <div class="summary">
