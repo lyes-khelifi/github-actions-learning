@@ -25,8 +25,8 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import({TestSecurityConfig.class})
-@Tag("unit")
-@WithTagValuesOf({"unit", "user"})
+@Tag("integration")
+@WithTagValuesOf({"integration", "user"})
 public class UserIntegrationTest {
 
     @Autowired

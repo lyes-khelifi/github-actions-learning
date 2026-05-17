@@ -1,4 +1,4 @@
-package org.example;
+package org.example.unit;
 
 import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.WithTagValuesOf;
