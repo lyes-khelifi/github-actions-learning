@@ -1,6 +1,8 @@
 package org.example.security;
 
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import net.thucydides.core.annotations.WithTagValuesOf;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -8,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SerenityJUnit5Extension.class)
+@Tag("unit")
+@WithTagValuesOf({"unit", "security"})
 public class JwtUtilTest {
     @Test
     void testGenerateAndExtractUsername() {

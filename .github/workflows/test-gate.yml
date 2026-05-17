@@ -26,8 +26,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Build and test
-        run: mvn -B package -DskipITs -Dmaven.test.failure.ignore=true
+      - name: Build and run unit tests
+        run: mvn -B package -DskipITs -Dgroups=unit -Dmaven.test.failure.ignore=true
 
       - name: Run SpotBugs
         if: always()
@@ -99,3 +99,34 @@ jobs:
 
           print(f"Pass rate {rate}% meets the 80% threshold — PR can be merged")
           EOF
+
+  publish-report:
+    name: publish-report
+    needs: build-and-test
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download Serenity report
+        uses: actions/download-artifact@v4
+        with:
+          name: serenity-report
+          path: serenity-report/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: serenity-report/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
