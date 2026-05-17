@@ -56,7 +56,7 @@ public class RegressionSteps {
     }
 
     @Step("Create user with username '{0}' and email '{1}'")
-    public Response createUser(String username, String email) {
+    public long createUser(String username, String email) {
         String body = String.format("{\"username\":\"%s\",\"email\":\"%s\"}", username, email);
         Response response = RestAssured.given()
                 .baseUri(baseUrl)
@@ -64,18 +64,31 @@ public class RegressionSteps {
                 .body(body)
                 .post("/api/users/register");
         Assertions.assertThat(response.statusCode()).isEqualTo(200);
-        return response;
+        return response.jsonPath().getLong("id");
+    }
+
+    @Step("Create user '{0}' and verify username and email match")
+    public void createUserAndVerify(String username, String email) {
+        String body = String.format("{\"username\":\"%s\",\"email\":\"%s\"}", username, email);
+        Response response = RestAssured.given()
+                .baseUri(baseUrl)
+                .contentType(ContentType.JSON)
+                .body(body)
+                .post("/api/users/register");
+        Assertions.assertThat(response.statusCode()).isEqualTo(200);
+        Assertions.assertThat(response.jsonPath().getString("username")).isEqualTo(username);
+        Assertions.assertThat(response.jsonPath().getString("email")).isEqualTo(email);
     }
 
     @Step("Get user by ID {0} returns correct username")
-    public void getUserByIdReturnsCorrectData(Long id, String expectedUsername) {
+    public void getUserByIdReturnsCorrectData(long id, String expectedUsername) {
         Response response = RestAssured.given().baseUri(baseUrl).get("/api/users/" + id);
         Assertions.assertThat(response.statusCode()).isEqualTo(200);
         Assertions.assertThat(response.jsonPath().getString("username")).isEqualTo(expectedUsername);
     }
 
-    @Step("Update user {0} with username '{1}'")
-    public Response updateUser(Long id, String username, String email) {
+    @Step("Update user {0} and verify username is '{1}'")
+    public void updateUserAndVerify(long id, String username, String email) {
         String body = String.format("{\"username\":\"%s\",\"email\":\"%s\"}", username, email);
         Response response = RestAssured.given()
                 .baseUri(baseUrl)
@@ -83,11 +96,11 @@ public class RegressionSteps {
                 .body(body)
                 .put("/api/users/" + id);
         Assertions.assertThat(response.statusCode()).isEqualTo(200);
-        return response;
+        Assertions.assertThat(response.jsonPath().getString("username")).isEqualTo(username);
     }
 
     @Step("Delete user {0} returns 204 No Content")
-    public void deleteUserReturnsNoContent(Long id) {
+    public void deleteUserReturnsNoContent(long id) {
         Response response = RestAssured.given().baseUri(baseUrl).delete("/api/users/" + id);
         Assertions.assertThat(response.statusCode()).isEqualTo(204);
     }

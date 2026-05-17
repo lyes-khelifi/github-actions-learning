@@ -1,10 +1,8 @@
 package org.example.regression;
 
-import io.restassured.response.Response;
 import net.serenitybdd.annotations.Steps;
 import net.serenitybdd.annotations.WithTagValuesOf;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
-import org.assertj.core.api.Assertions;
 import org.example.TestSecurityConfig;
 import org.example.steps.RegressionSteps;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,30 +78,24 @@ public class RegressionTest {
 
     @Test
     void createUserReturnsCreatedUser() {
-        Response created = regressionSteps.createUser("testuser", "testuser@example.com");
-        Assertions.assertThat(created.jsonPath().getString("username")).isEqualTo("testuser");
-        Assertions.assertThat(created.jsonPath().getString("email")).isEqualTo("testuser@example.com");
+        regressionSteps.createUserAndVerify("testuser", "testuser@example.com");
     }
 
     @Test
     void getUserByIdReturnsCorrectUser() {
-        Response created = regressionSteps.createUser("getbyid", "getbyid@example.com");
-        Long id = created.jsonPath().getLong("id");
+        long id = regressionSteps.createUser("getbyid", "getbyid@example.com");
         regressionSteps.getUserByIdReturnsCorrectData(id, "getbyid");
     }
 
     @Test
     void updateUserReturnsUpdatedData() {
-        Response created = regressionSteps.createUser("updateme", "updateme@example.com");
-        Long id = created.jsonPath().getLong("id");
-        Response updated = regressionSteps.updateUser(id, "updated", "updated@example.com");
-        Assertions.assertThat(updated.jsonPath().getString("username")).isEqualTo("updated");
+        long id = regressionSteps.createUser("updateme", "updateme@example.com");
+        regressionSteps.updateUserAndVerify(id, "updated", "updated@example.com");
     }
 
     @Test
     void deleteUserReturnsNoContent() {
-        Response created = regressionSteps.createUser("deleteme", "deleteme@example.com");
-        Long id = created.jsonPath().getLong("id");
+        long id = regressionSteps.createUser("deleteme", "deleteme@example.com");
         regressionSteps.deleteUserReturnsNoContent(id);
     }
 }
