@@ -1,10 +1,12 @@
 package org.example.controller;
 
 import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.annotations.WithTagValuesOf;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.example.TestSecurityConfig;
 import org.example.steps.ApiSteps;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import({TestSecurityConfig.class})
+@Tag("unit")
+@WithTagValuesOf({"unit", "health"})
 public class HealthControllerTest {
 
     @Autowired
