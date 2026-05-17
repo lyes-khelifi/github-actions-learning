@@ -11,17 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: 'maven'
 
       - name: Cache Maven packages
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -41,7 +41,7 @@ jobs:
 
       - name: Upload JaCoCo report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: jacoco-report
           path: target/site/jacoco/
@@ -53,7 +53,7 @@ jobs:
 
       - name: Upload Serenity report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: serenity-report
           path: target/site/serenity/
@@ -61,7 +61,7 @@ jobs:
 
       - name: Upload Surefire reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: surefire-reports
           path: target/surefire-reports/
@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Surefire reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: surefire-reports
           path: target/surefire-reports/
@@ -108,28 +108,19 @@ jobs:
     if: always() && github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      contents: write
     steps:
       - name: Download Serenity report
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: serenity-report
           path: serenity-report/
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy unit-test report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: serenity-report/
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: serenity-report/
+          destination_dir: unit-tests
+          keep_files: true
 
