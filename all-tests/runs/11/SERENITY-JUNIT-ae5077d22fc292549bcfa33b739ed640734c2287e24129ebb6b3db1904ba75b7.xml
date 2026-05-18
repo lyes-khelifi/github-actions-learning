@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserBulkOperationsRegressionTest" skipped="0" tests="1" time="0.31" timestamp="2026-05-18 11:48:18"><testcase classname="org.example.regression.UserBulkOperationsRegressionTest" name="User list grows with multiple creations"><failure message="&#10;Expecting actual:&#10;  13&#10;to be greater than or equal to:&#10;  14&#10;" type="java.lang.AssertionError">
+Expecting actual:
+  13
+to be greater than or equal to:
+  14
+</failure><system-err>
+Expecting actual:
+  13
+to be greater than or equal to:
+  14
+
+org.example.steps.RegressionSteps.verifyUserCountIsAtLeast(RegressionSteps.java:163)
+org.example.regression.UserBulkOperationsRegressionTest.userListGrowsWithMultipleCreations(UserBulkOperationsRegressionTest.java:63)
+</system-err></testcase></testsuite>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.unit.HealthControllerTest" skipped="0" tests="1" time="0.39" timestamp="2026-05-18 11:48:09"><testcase classname="org.example.unit.HealthControllerTest" name="Health endpoint returns ok"><failure message="This test should fail as an example to check the reporting" type="java.lang.AssertionError">This test should fail as an example to check the reporting</failure><system-err>This test should fail as an example to check the reporting
+org.example.steps.ApiSteps.failTestExample(ApiSteps.java:147)
+org.example.unit.HealthControllerTest.healthEndpointReturnsOk(HealthControllerTest.java:51)
+</system-err></testcase></testsuite>
