@@ -154,7 +154,7 @@
             $("#requirements-tabs").tabs();
             $("#test-tabs").tabs();
 
-            var requirementsTree = [{"text":"Advanced regression test","type":"feature","href":"d9622f47e811fc483c0cedec29fd467489f383531341900c512e629c2d2d2df1.html","nodes":[],"selectable":false,"tags":["\u003ca href\u003d\u0027##beforetable\u0027\u003e\u003ci class\u003d\u0027bi bi-check-circle-fill success-icon \u0027 title\u003d\u0027SUCCESS\u0027\u003e\u003c/i\u003e\u003c/a\u003e","\u003cspan class\u003d\u0027feature-count\u0027\u003e4 scenarios\u003c/span\u003e, \u003cspan class\u003d\u0027feature-count\u0027\u003e4 test cases\u003c/span\u003e"]}];
+            var requirementsTree = [{"text":"Advanced regression test","type":"feature","href":"d9622f47e811fc483c0cedec29fd467489f383531341900c512e629c2d2d2df1.html","nodes":[],"selectable":false,"tags":["\u003ca href\u003d\u0027##beforetable\u0027\u003e\u003ci class\u003d\u0027bi bi-x-circle-fill failure-icon \u0027 title\u003d\u0027FAILURE\u0027\u003e\u003c/i\u003e\u003c/a\u003e","\u003cspan class\u003d\u0027feature-count\u0027\u003e4 scenarios\u003c/span\u003e, \u003cspan class\u003d\u0027feature-count\u0027\u003e4 test cases\u003c/span\u003e"]}];
 
             $('#tree').treeview({
                 data: requirementsTree,
@@ -229,7 +229,7 @@
             <a href="#"><i class="bi bi-chat-text"></i> Features</a>
         </li>
     </ul>
-    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 18-05-2026 19:19</span>
+    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 18-05-2026 22:39</span>
     <br style="clear:left"/>
 </div>
 
@@ -312,7 +312,7 @@
                                                                                         <a style="margin-left:0.5em;padding-right: 1.5em;"
                                                                                            href="cb2c00d3c75ead597bfa1d786bfe285f20ed89b8e003384bcf7f3f1cb29fff0d.html"
                                                                                            title="View test results">
-                                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                                            <a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a>
                                                                                             </a>
 
 
@@ -345,7 +345,7 @@
                                                                                         <a style="margin-left:0.5em;padding-right: 1.5em;"
                                                                                            href="184d06a571843d2e0019022a4081c51a09dd21eb9fd51e719879e846dcc1e39c.html"
                                                                                            title="View test results">
-                                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                                            <a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a>
                                                                                             </a>
 
 
@@ -378,7 +378,7 @@
                                                                                         <a style="margin-left:0.5em;padding-right: 1.5em;"
                                                                                            href="2f7503ae22522afb52209370bd65ea41b009d8e3d406c04f6724132e1aafa02b.html"
                                                                                            title="View test results">
-                                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                                            <a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a>
                                                                                             </a>
 
 
@@ -411,7 +411,7 @@
                                                                                         <a style="margin-left:0.5em;padding-right: 1.5em;"
                                                                                            href="e0657782fa46e4f0c0b337c6c9a9b71e1e4c6c1a79ec0414ea57774f9c1e8f1e.html"
                                                                                            title="View test results">
-                                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                                            <a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a>
                                                                                             </a>
 
 
@@ -434,13 +434,13 @@
                                             <div class="col-sm-12">
                                                 <h3>Scenarios</h3>
 
-                                                    <a name="78724802-f0c4-406c-bfdb-0483d6a1257d"></a>
+                                                    <a name="9f8ba83e-279b-4203-969b-a0432484912b"></a>
                                                     <p class="rule-tags inline-tag">
                                                     </p>
 
 
                                                         <div class="scenario-docs card" id="4a69d3ec1ec97ddbf176b10fd9b20c68cf810ec6c58bc82c6ba63a8aa3c1347d">
-                                                            <div class="scenario-docs card-header success"
+                                                            <div class="scenario-docs card-header failure"
                                                                  style="min-height:1.5em;">
                                                                 <div>
                                                                         <span class="scenario-heading">
@@ -454,7 +454,7 @@
                                                                     <span class="scenario-result-icon">
                                                                     
 
-                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                            <a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a>
                                                                         </span>
                                                                 </div>
 
@@ -464,13 +464,14 @@
                                                                     <p>Health endpoint reports status 200 and UP</p>
                                                                     <p>Metrics endpoint returns status 200</p>
                                                                     <p>Get all users returns 200</p>
+                                                                    <p>Fails the test on purpose</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="scenario-docs card" id="e201e06987255854344046a1a972db816d7cde1bc23e72f62df8bc1f0cadad09">
-                                                            <div class="scenario-docs card-header success"
+                                                            <div class="scenario-docs card-header failure"
                                                                  style="min-height:1.5em;">
                                                                 <div>
                                                                         <span class="scenario-heading">
@@ -484,7 +485,7 @@
                                                                     <span class="scenario-result-icon">
                                                                     
 
-                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                            <a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a>
                                                                         </span>
                                                                 </div>
 
@@ -494,13 +495,14 @@
                                                                     <p>Greeting endpoint returns 'Hello, Bob'</p>
                                                                     <p>Greeting endpoint returns 'Hello, Charlie'</p>
                                                                     <p>Greeting endpoint returns 'Hello, Dave'</p>
+                                                                    <p>Fails the test on purpose</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="scenario-docs card" id="5e683628b3c6fc95cdc6f8e8af4669b8fe015806dcafc85ef15b63be32026828">
-                                                            <div class="scenario-docs card-header success"
+                                                            <div class="scenario-docs card-header failure"
                                                                  style="min-height:1.5em;">
                                                                 <div>
                                                                         <span class="scenario-heading">
@@ -514,7 +516,7 @@
                                                                     <span class="scenario-result-icon">
                                                                     
 
-                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                            <a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a>
                                                                         </span>
                                                                 </div>
 
@@ -524,13 +526,14 @@
                                                                     <p>Metrics endpoint contains all required fields</p>
                                                                     <p>Metrics status field is 'healthy'</p>
                                                                     <p>Verify metrics reports a positive processor count</p>
+                                                                    <p>Fails the test on purpose</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="scenario-docs card" id="5c2ae0b59dcec4a3d406f4aad8aed7d1f170fd3bdc004fff2b16f3dbf08b301a">
-                                                            <div class="scenario-docs card-header success"
+                                                            <div class="scenario-docs card-header failure"
                                                                  style="min-height:1.5em;">
                                                                 <div>
                                                                         <span class="scenario-heading">
@@ -544,7 +547,7 @@
                                                                     <span class="scenario-result-icon">
                                                                     
 
-                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                            <a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a>
                                                                         </span>
                                                                 </div>
 
@@ -554,6 +557,7 @@
                                                                     <p>Health endpoint contains service detail</p>
                                                                     <p>Metrics endpoint returns status 200</p>
                                                                     <p>Metrics status field is 'healthy'</p>
+                                                                    <p>Fails the test on purpose</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -608,7 +612,7 @@
                         <i class="bi bi-stopwatch"></i> Total
                         Duration
                     </td>
-                    <td>271ms</td>
+                    <td>273ms</td>
                 </tr>
                 <tr scope="row">
                     <td>
@@ -618,7 +622,7 @@
                     <td>
                         <i class="bi bi-trophy"></i> Fastest Test
                     </td>
-                    <td>47ms</td>
+                    <td>37ms</td>
                 </tr>
                 <tr scope="row">
                     <td>
@@ -629,13 +633,13 @@
                         <i class="bi bi-skip-start"></i> Slowest
                         Test
                     </td>
-                    <td>65ms</td>
+                    <td>69ms</td>
                 </tr>
                 <tr scope="row">
                     <td>
                         <i class="bi bi-flag-fill"></i> Tests Started
                     </td>
-                    <td>May 18, 2026 19:19:23</td>
+                    <td>May 18, 2026 22:39:34</td>
                     <td>
                         <i class="bi bi-stopwatch"></i> Average
                         Execution Time
@@ -647,12 +651,12 @@
                         <i class="bi bi-stop-circle"></i> Tests
                         Finished
                     </td>
-                    <td>May 18, 2026 19:19:23</td>
+                    <td>May 18, 2026 22:39:35</td>
                     <td>
                         <i class="bi bi-stopwatch-fill"></i> Total
                         Execution Time
                     </td>
-                    <td>229ms</td>
+                    <td>228ms</td>
                 </tr>
                 </tbody>
             </table>
@@ -674,7 +678,7 @@
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                                <tr class="scenario-result SUCCESS">
+                                                                <tr class="scenario-result FAILURE">
                                                                     <td>
                                                                             <a href="d9622f47e811fc483c0cedec29fd467489f383531341900c512e629c2d2d2df1.html">AdvancedRegressionTest</a>
                                                                     </td>
@@ -683,13 +687,13 @@
                                                                     </td>
                                                                     <td><span style="display:none"></span>
                                                                     </td>
-                                                                    <td>4</td>
-                                                                    <td>19:19:23</td>
-                                                                    <td>061ms</td>
-                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    <td>5</td>
+                                                                    <td>22:39:34</td>
+                                                                    <td>060ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a> <span style="display:none">FAILURE</span>
                                                                     </td>
                                                                 </tr>
-                                                                <tr class="scenario-result SUCCESS">
+                                                                <tr class="scenario-result FAILURE">
                                                                     <td>
                                                                             <a href="d9622f47e811fc483c0cedec29fd467489f383531341900c512e629c2d2d2df1.html">AdvancedRegressionTest</a>
                                                                     </td>
@@ -698,13 +702,13 @@
                                                                     </td>
                                                                     <td><span style="display:none"></span>
                                                                     </td>
-                                                                    <td>4</td>
-                                                                    <td>19:19:23</td>
-                                                                    <td>047ms</td>
-                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    <td>5</td>
+                                                                    <td>22:39:34</td>
+                                                                    <td>037ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a> <span style="display:none">FAILURE</span>
                                                                     </td>
                                                                 </tr>
-                                                                <tr class="scenario-result SUCCESS">
+                                                                <tr class="scenario-result FAILURE">
                                                                     <td>
                                                                             <a href="d9622f47e811fc483c0cedec29fd467489f383531341900c512e629c2d2d2df1.html">AdvancedRegressionTest</a>
                                                                     </td>
@@ -713,13 +717,13 @@
                                                                     </td>
                                                                     <td><span style="display:none"></span>
                                                                     </td>
-                                                                    <td>4</td>
-                                                                    <td>19:19:23</td>
-                                                                    <td>065ms</td>
-                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    <td>5</td>
+                                                                    <td>22:39:34</td>
+                                                                    <td>069ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a> <span style="display:none">FAILURE</span>
                                                                     </td>
                                                                 </tr>
-                                                                <tr class="scenario-result SUCCESS">
+                                                                <tr class="scenario-result FAILURE">
                                                                     <td>
                                                                             <a href="d9622f47e811fc483c0cedec29fd467489f383531341900c512e629c2d2d2df1.html">AdvancedRegressionTest</a>
                                                                     </td>
@@ -728,10 +732,10 @@
                                                                     </td>
                                                                     <td><span style="display:none"></span>
                                                                     </td>
-                                                                    <td>4</td>
-                                                                    <td>19:19:23</td>
-                                                                    <td>056ms</td>
-                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    <td>5</td>
+                                                                    <td>22:39:34</td>
+                                                                    <td>062ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a> <span style="display:none">FAILURE</span>
                                                                     </td>
                                                                 </tr>
                                                         </tbody>
@@ -756,12 +760,12 @@
                         <div class="card-body">
                             <div>
                                     <a href="1d0c02fb9cb969bbd9e2f900ec6333e01b070c6fb5e26345e9374169cfab9e68.html">
-                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                    <span class="tag-badge badge" style="background-color:#fd938e; margin:1em;padding:4px;">
                                         <i class="bi bi-tag-fill"></i> Regression&nbsp;&nbsp;&nbsp;4
                                     </span>
                                     </a>
                                     <a href="65a2df077748f74ccd607af4e962738958bdf672b0d6b0150ae42bcfa475044e.html">
-                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                    <span class="tag-badge badge" style="background-color:#fd938e; margin:1em;padding:4px;">
                                         <i class="bi bi-tag-fill"></i> Smoke&nbsp;&nbsp;&nbsp;4
                                     </span>
                                     </a>
@@ -810,7 +814,7 @@
             datasets: [{
                 label: 'Test Results',
                 fill: false,
-                data: [{meta: 'Passing tests', value: 4}, {meta: 'Pending tests', value: 0}, {meta: 'Ignored tests', value: 0}, {meta: 'Skipped tests', value: 0}, {meta: 'Aborted tests', value: 0}, {meta: 'Failing tests', value: 0}, {meta: 'Broken tests', value: 0}, {meta: 'Compromised tests', value: 0}],
+                data: [{meta: 'Passing tests', value: 0}, {meta: 'Pending tests', value: 0}, {meta: 'Ignored tests', value: 0}, {meta: 'Skipped tests', value: 0}, {meta: 'Aborted tests', value: 0}, {meta: 'Failing tests', value: 4}, {meta: 'Broken tests', value: 0}, {meta: 'Compromised tests', value: 0}],
                 backgroundColor: ['rgba(153,204,51,0.5)','rgba(165, 199, 238, 0.5)','rgba(168, 168, 168, 0.5)','rgba(238, 224, 152, 0.75)','rgba(255, 153, 102, 0.5)','rgba(255, 22, 49, 0.5)','rgba(255, 97, 8, 0.5)','rgba(255, 104, 255, 0.5)','rgba(83, 50, 168, 0.5)'],
                 borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
                 borderWidth: 1,
@@ -861,7 +865,7 @@
                         ctx.font = fontSize + "em sans-serif";
                         ctx.textBaseline = "middle";
 
-                        var text = "100%"
+                        var text = " "
                         textX = 10 + Math.round((width - ctx.measureText(text).width) / 2);
                         textY = (height / 2) - 40;
 
@@ -905,7 +909,7 @@
             datasets: [{
                 label: 'Feature Coverage',
                 fill: false,
-                data: [{meta: 'Passing tests', value: 4}, {meta: 'Pending tests', value: 0}, {meta: 'Ignored tests', value: 0}, {meta: 'Skipped tests', value: 0}, {meta: 'Aborted tests', value: 0}, {meta: 'Failing tests', value: 0}, {meta: 'Broken tests', value: 0}, {meta: 'Compromised tests', value: 0}],
+                data: [{meta: 'Passing tests', value: 0}, {meta: 'Pending tests', value: 0}, {meta: 'Ignored tests', value: 0}, {meta: 'Skipped tests', value: 0}, {meta: 'Aborted tests', value: 0}, {meta: 'Failing tests', value: 4}, {meta: 'Broken tests', value: 0}, {meta: 'Compromised tests', value: 0}],
                 backgroundColor: ['rgba(153,204,51,0.5)','rgba(165, 199, 238, 0.5)','rgba(168, 168, 168, 0.5)','rgba(238, 224, 152, 0.75)','rgba(255, 153, 102, 0.5)','rgba(255, 22, 49, 0.5)','rgba(255, 97, 8, 0.5)','rgba(255, 104, 255, 0.5)','rgba(83, 50, 168, 0.5)'],
                 borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
                 borderWidth: 1,
@@ -956,7 +960,7 @@
                         ctx.font = fontSize + "em sans-serif";
                         ctx.textBaseline = "middle";
 
-                        var text = "100%"
+                        var text = " "
                         textX = 10 + Math.round((width - ctx.measureText(text).width) / 2);
                         textY = (height / 2) - 40;
 
@@ -1001,7 +1005,7 @@
             datasets: [
                 {
                     label: 'Automated',
-                    data: [4,0,0,0,0,0,0,0],
+                    data: [0,0,0,0,0,4,0,0],
                     backgroundColor: ['rgba(153,204,51,0.5)','rgba(165, 199, 238, 0.5)','rgba(168, 168, 168, 0.5)','rgba(238, 224, 152, 0.75)','rgba(255, 153, 102, 0.5)','rgba(255, 22, 49, 0.5)','rgba(255, 97, 8, 0.5)','rgba(255, 104, 255, 0.5)','rgba(83, 50, 168, 0.5)'],
                     borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
                     borderWidth: 1

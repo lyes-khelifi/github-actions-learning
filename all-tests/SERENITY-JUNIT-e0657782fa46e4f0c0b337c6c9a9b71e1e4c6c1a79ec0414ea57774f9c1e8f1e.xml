@@ -1,1 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.AdvancedRegressionTest" skipped="0" tests="1" time="0.06" timestamp="2026-05-18 07:19:23"><testcase classname="org.example.regression.AdvancedRegressionTest" name="Health and metrics endpoints are healthy"/></testsuite>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.AdvancedRegressionTest" skipped="0" tests="1" time="0.06" timestamp="2026-05-18 10:39:34"><testcase classname="org.example.regression.AdvancedRegressionTest" name="Health and metrics endpoints are healthy"><failure message="This test should fail as an example to check the reporting" type="java.lang.AssertionError">This test should fail as an example to check the reporting</failure><system-err>This test should fail as an example to check the reporting
+org.example.steps.RegressionSteps.failTestExample(RegressionSteps.java:267)
+org.example.regression.AdvancedRegressionTest.healthAndMetricsEndpointsAreHealthy(AdvancedRegressionTest.java:49)
+</system-err></testcase></testsuite>
