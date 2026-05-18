@@ -1,0 +1,201 @@
+name: Integration Tests
+
+on:
+  pull_request:
+    branches: [ main, master ]
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  run-integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v5
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Restore Serenity history
+        uses: actions/cache@v5
+        with:
+          path: target/site/serenity-history
+          key: serenity-history-integration-${{ github.run_id }}
+          restore-keys: serenity-history-integration-
+
+      - name: Run integration tests
+        run: mvn -B test -Dgroups=integration -Dmaven.test.failure.ignore=true
+
+      - name: Generate Serenity HTML report
+        if: always()
+        run: mvn serenity:aggregate
+
+      - name: Fetch gh-pages for trend history
+        if: always()
+        run: git fetch origin gh-pages || true
+
+      - name: Build trend data
+        if: always()
+        run: |
+          python3 << 'EOF'
+          import xml.etree.ElementTree as ET, glob, json, os, subprocess, shutil
+          from datetime import datetime, timezone, timedelta
+
+          total = passed = failed = skipped = 0
+          duration = 0.0
+          tests = []
+          for f in sorted(glob.glob('target/surefire-reports/TEST-*.xml')):
+              try:
+                  root = ET.parse(f).getroot()
+                  t  = int(root.get('tests', 0))
+                  fa = int(root.get('failures', 0))
+                  e  = int(root.get('errors', 0))
+                  s  = int(root.get('skipped', 0))
+                  duration += float(root.get('time', 0))
+                  total += t; failed += fa + e; skipped += s; passed += t - fa - e - s
+                  for tc in root.findall('testcase'):
+                      cn   = tc.get('classname', '')
+                      name = tc.get('name', '')
+                      if tc.find('failure') is not None or tc.find('error') is not None:
+                          status = 'failed'
+                      elif tc.find('skipped') is not None:
+                          status = 'skipped'
+                      else:
+                          status = 'passed'
+                      tests.append({'class': cn.split('.')[-1], 'name': name, 'status': status, 'time': round(float(tc.get('time') or 0), 3)})
+              except Exception as ex:
+                  print(f"Warning: {f}: {ex}")
+
+          now = datetime.now(timezone.utc)
+          entry = {
+              'date':     now.strftime('%Y-%m-%dT%H:%M:%SZ'),
+              'run':      int(os.environ.get('GITHUB_RUN_NUMBER', 0)),
+              'total':    total,
+              'passed':   passed,
+              'failed':   failed,
+              'skipped':  skipped,
+              'duration': round(duration, 1),
+              'tests':    tests,
+          }
+          print(f"Trend entry: run={entry['run']} total={total} passed={passed} failed={failed} duration={duration:.1f}s tests={len(tests)}")
+
+          r = subprocess.run(
+              ['git', 'show', 'origin/gh-pages:integration/trend-data.json'],
+              capture_output=True, text=True
+          )
+          data = json.loads(r.stdout) if r.returncode == 0 else {'runs': []}
+          print(f"Loaded {len(data.get('runs', []))} previous entries from gh-pages")
+          data['runs'].append(entry)
+
+          cutoff = (now - timedelta(days=30)).strftime('%Y-%m-%dT%H:%M:%SZ')
+          data['runs'] = [run for run in data['runs'] if run.get('date', '') >= cutoff]
+
+          os.makedirs('target/site/serenity', exist_ok=True)
+          with open('target/site/serenity/trend-data.json', 'w') as f:
+              json.dump(data, f, separators=(',', ':'))
+          shutil.copy('.github/pages/trend.html', 'target/site/serenity/trend.html')
+          print(f"Trend files written ({len(data['runs'])} runs in last 30 days)")
+          EOF
+
+      - name: Upload Serenity report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: integration-serenity-report
+          path: target/site/serenity/
+          retention-days: 7
+
+      - name: Upload Surefire reports
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: integration-surefire-reports
+          path: target/surefire-reports/
+          retention-days: 1
+
+  check-pass-rate:
+    name: check-pass-rate
+    needs: run-integration-tests
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Surefire reports
+        uses: actions/download-artifact@v6
+        with:
+          name: integration-surefire-reports
+          path: target/surefire-reports/
+
+      - name: Check test pass rate (>= 80% required)
+        run: |
+          python3 << 'EOF'
+          import glob, xml.etree.ElementTree as ET, sys
+
+          total = failures = errors = 0
+          for f in glob.glob('target/surefire-reports/TEST-*.xml'):
+              root = ET.parse(f).getroot()
+              total += int(root.get('tests', 0))
+              failures += int(root.get('failures', 0))
+              errors += int(root.get('errors', 0))
+
+          passed = total - failures - errors
+          rate = (passed * 100 // total) if total > 0 else 0
+          print(f"Tests: {passed}/{total} passed ({rate}%)")
+
+          if rate < 80:
+              print(f"ERROR: pass rate {rate}% is below the 80% threshold — PR blocked")
+              sys.exit(1)
+
+          print(f"Pass rate {rate}% meets the 80% threshold — PR can be merged")
+          EOF
+
+  publish-report:
+    name: publish-report
+    needs: run-integration-tests
+    if: always() && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download Serenity report
+        uses: actions/download-artifact@v6
+        with:
+          name: integration-serenity-report
+          path: serenity-report/
+
+      - name: Deploy integration report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: serenity-report/
+          destination_dir: integration
+          keep_files: true
+
+      - name: Archive run report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: serenity-report/
+          destination_dir: integration/runs/${{ github.run_number }}
+          keep_files: true
+
+      - name: Print report URL
+        run: |
+          BASE="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/integration"
+          echo "### Integration Test Report" >> $GITHUB_STEP_SUMMARY
+          echo "| | |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Serenity Report | [$BASE/]($BASE/) |" >> $GITHUB_STEP_SUMMARY
+          echo "| Trend Page      | [$BASE/trend.html]($BASE/trend.html) |" >> $GITHUB_STEP_SUMMARY

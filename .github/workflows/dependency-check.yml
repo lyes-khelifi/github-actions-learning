@@ -1,0 +1,55 @@
+name: Dependency Vulnerability Scan
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'  # Every Monday at 8:00 AM UTC
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  dependency-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Run OWASP Dependency-Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: '${{ github.event.repository.name }}'
+          path: '.'
+          format: 'ALL'
+          args: >
+            --failOnCVSS 9
+            --enableRetired
+
+      - name: Upload SARIF to GitHub Security tab
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: reports/dependency-check-report.sarif
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: dependency-check-report
+          path: reports/dependency-check-report.html
+          retention-days: 30
+
+      - name: Print summary
+        if: always()
+        run: |
+          echo "### OWASP Dependency-Check" >> $GITHUB_STEP_SUMMARY
+          echo "Scan complete. Results uploaded to the Security tab (SARIF) and as a downloadable artifact." >> $GITHUB_STEP_SUMMARY
