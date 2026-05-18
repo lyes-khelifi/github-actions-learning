@@ -232,4 +232,91 @@ public class ApiSteps {
                 .andExpect(status().isOk());
         log.info("All users endpoint verified");
     }
+
+    @Step("Verify metrics status field is 'healthy'")
+    public void verifyMetricsStatusIsHealthy() throws Exception {
+        log.info("Verifying metrics status is 'healthy'");
+        mockMvc.perform(get("/api/metrics"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("healthy"));
+        log.info("Metrics status verified as healthy");
+    }
+
+    @Step("Verify metrics uptime is a positive number")
+    public void verifyMetricsUptimeIsPositive() throws Exception {
+        log.info("Verifying metrics uptime field is positive");
+        MvcResult result = mockMvc.perform(get("/api/metrics"))
+                .andExpect(status().isOk())
+                .andReturn();
+        com.fasterxml.jackson.databind.JsonNode body =
+                objectMapper.readTree(result.getResponse().getContentAsString());
+        Assertions.assertThat(body.get("uptime").asLong()).isGreaterThan(0L);
+        log.info("Metrics uptime verified as positive");
+    }
+
+    @Step("Verify metrics memory is non-negative")
+    public void verifyMetricsMemoryIsNonNegative() throws Exception {
+        log.info("Verifying metrics memory field is non-negative");
+        MvcResult result = mockMvc.perform(get("/api/metrics"))
+                .andExpect(status().isOk())
+                .andReturn();
+        com.fasterxml.jackson.databind.JsonNode body =
+                objectMapper.readTree(result.getResponse().getContentAsString());
+        Assertions.assertThat(body.get("memory").asLong()).isGreaterThanOrEqualTo(0L);
+        log.info("Metrics memory verified as non-negative");
+    }
+
+    @Step("Verify metrics processors count is positive")
+    public void verifyMetricsProcessorsIsPositive() throws Exception {
+        log.info("Verifying metrics processors count is positive");
+        MvcResult result = mockMvc.perform(get("/api/metrics"))
+                .andExpect(status().isOk())
+                .andReturn();
+        com.fasterxml.jackson.databind.JsonNode body =
+                objectMapper.readTree(result.getResponse().getContentAsString());
+        Assertions.assertThat(body.get("processors").asInt()).isGreaterThan(0);
+        log.info("Metrics processors count verified as positive");
+    }
+
+    @Step("Verify health response includes a version detail")
+    public void verifyHealthVersionPresent() throws Exception {
+        log.info("Verifying health endpoint has a version detail");
+        mockMvc.perform(get("/api/health"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.details.version").exists());
+        log.info("Health version detail verified");
+    }
+
+    @Step("Verify health status is UP")
+    public void verifyHealthStatusIsUp() throws Exception {
+        log.info("Verifying health status field equals UP");
+        mockMvc.perform(get("/api/health"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("UP"));
+        log.info("Health status UP verified");
+    }
+
+    @Step("Verify greeting for '{0}' returns HTTP 200")
+    public void verifyGreetingStatusIsOk(String name) throws Exception {
+        log.info("Verifying greeting status 200 for name: {}", name);
+        mockMvc.perform(get("/api/greeting/" + name))
+                .andExpect(status().isOk());
+        log.info("Greeting status 200 verified for: {}", name);
+    }
+
+    @Step("Verify user id {0} has email '{1}'")
+    public void verifyUserEmailById(long id, String expectedEmail) throws Exception {
+        log.info("Verifying email for user id={}, expected: {}", id, expectedEmail);
+        mockMvc.perform(get("/api/users/" + id))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value(expectedEmail));
+        log.info("User email verified for id={}", id);
+    }
+
+    @Step("Verify user id {0} is positive")
+    public void verifyUserIdIsPositive(long id) {
+        log.info("Verifying user id {} is positive", id);
+        Assertions.assertThat(id).isGreaterThan(0L);
+        log.info("User id {} verified as positive", id);
+    }
 }

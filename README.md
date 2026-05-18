@@ -62,8 +62,13 @@ src/test/java/org/example/
     └── ConstantsTest.java
 
 .github/workflows/
-├── test-gate.yml              # PR quality gate
-└── build-deploy.yml           # Build, deploy, and publish report
+├── test-gate.yml              # Unit test gate — PRs and pushes to master
+├── integration-gate.yml       # Integration test gate — PRs and pushes to master
+├── regression-run.yml         # Regression suite — PRs to master, nightly schedule
+├── all-tests-run.yml          # Full test suite — PRs to master, nightly schedule
+├── build-deploy.yml           # Build JAR and push Docker image — pushes to master
+├── codeql.yml                 # CodeQL security analysis — PRs, pushes, weekly
+└── dependency-check.yml       # OWASP dependency scan — pushes to master, weekly
 ```
 
 ## Getting Started
@@ -114,25 +119,56 @@ mvn serenity:aggregate  # Regenerate Serenity HTML report from last test run
 
 ## CI/CD Pipelines
 
-### `test-gate.yml` — runs on every Pull Request
+### `test-gate.yml` — PRs and pushes to master
 
 | Step | Details |
 |---|---|
-| Build & test | `mvn package -Dmaven.test.failure.ignore=true` |
+| Unit tests | `mvn package -Dgroups=unit -Dmaven.test.failure.ignore=true` |
 | SpotBugs | Static analysis, fails the job if issues found |
 | JaCoCo | Coverage report uploaded as artifact |
-| Serenity report | HTML report uploaded as artifact |
+| Serenity report | HTML report published to GitHub Pages on push |
 | **Pass rate check** | Parses Surefire XML — blocks merge if pass rate < 80% |
 
-The `check-pass-rate` job is the required status check enforced by branch protection. A PR cannot be merged into master unless at least 80% of tests pass.
+The `check-pass-rate` job is the required status check enforced by branch protection. A PR cannot be merged into master unless at least 80% of unit tests pass.
 
-### `build-deploy.yml` — runs on every push to master
+### `integration-gate.yml` — PRs and pushes to master
+
+| Step | Details |
+|---|---|
+| Integration tests | `mvn -B test -Dgroups=integration -Dmaven.test.failure.ignore=true` |
+
+### `regression-run.yml` — PRs to master, nightly at 8 AM EST, manual
+
+| Step | Details |
+|---|---|
+| Regression tests | `mvn -B test -Dgroups=regression -Dmaven.test.failure.ignore=true` |
+| Serenity report | HTML report published to GitHub Pages |
+| Trend data | Pass/fail history written to `regression/trend-data.json` on gh-pages |
+
+Running on PRs ensures regressions on a feature branch are caught before merge. The nightly schedule keeps a continuous health history on master.
+
+### `all-tests-run.yml` — PRs to master, nightly at 9 AM EST, manual
+
+| Step | Details |
+|---|---|
+| Full test suite | `mvn -B test -Dmaven.test.failure.ignore=true` |
+| Serenity report | HTML report published to GitHub Pages |
+| Trend data | Pass/fail history written to `all-tests/trend-data.json` on gh-pages |
+
+### `build-deploy.yml` — pushes to master
 
 | Step | Details |
 |---|---|
 | Build JAR | `mvn package -DskipTests` |
 | Docker build & push | Pushes image to GitHub Container Registry |
-| Publish Serenity report | Runs tests, generates report, deploys to GitHub Pages |
+
+### `codeql.yml` — PRs, pushes to master, weekly on Monday
+
+Runs GitHub's CodeQL static analysis for security vulnerabilities in Java source code.
+
+### `dependency-check.yml` — pushes to master, weekly on Monday
+
+Runs the OWASP Dependency-Check tool and uploads results as a SARIF security alert to the Security tab.
 
 ## Serenity Test Report
 
