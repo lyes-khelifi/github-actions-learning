@@ -37,6 +37,7 @@ public class AdvancedRegressionTest {
         regressionSteps.greetingReturnsHello("Bob");
         regressionSteps.greetingReturnsHello("Charlie");
         regressionSteps.greetingReturnsHello("Dave");
+        regressionSteps.failTestExample();
     }
 
     @Test
@@ -45,6 +46,7 @@ public class AdvancedRegressionTest {
         regressionSteps.healthContainsServiceDetail();
         regressionSteps.metricsReturns200();
         regressionSteps.metricsStatusIsHealthy();
+        regressionSteps.failTestExample();
     }
 
     @Test
@@ -53,6 +55,7 @@ public class AdvancedRegressionTest {
         regressionSteps.metricsContainsAllFields();
         regressionSteps.metricsStatusIsHealthy();
         regressionSteps.verifyMetricsProcessorCountPositive();
+        regressionSteps.failTestExample();
     }
 
     @Test
@@ -61,5 +64,6 @@ public class AdvancedRegressionTest {
         regressionSteps.healthReturnsUp();
         regressionSteps.metricsReturns200();
         regressionSteps.getAllUsersReturns200();
+        regressionSteps.failTestExample();
     }
 }

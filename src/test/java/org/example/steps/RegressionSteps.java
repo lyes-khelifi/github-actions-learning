@@ -5,6 +5,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Step;
 import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -258,5 +259,11 @@ public class RegressionSteps {
         Response response = RestAssured.given().baseUri(baseUrl).get("/api/greeting/" + name);
         log.info("Greeting response status for {}: {}", name, response.statusCode());
         Assertions.assertThat(response.statusCode()).isEqualTo(200);
+    }
+
+    @Step("Fails the test on purpose")
+    public void failTestExample() {
+        log.warn("Intentional failure step invoked");
+        Assert.assertFalse("This test should fail as an example to check the reporting", true);
     }
 }

@@ -54,6 +54,7 @@ public class ApiIntegrationTest {
         apiSteps.verifyGreetingForName("IntegrationTest");
         apiSteps.healthEndpointReturnsOk();
         apiSteps.deleteUserByIdStep(id);
+        apiSteps.failTestExample();
     }
 
     @Test
@@ -64,6 +65,7 @@ public class ApiIntegrationTest {
         apiSteps.metricsEndpointReturnsMetrics();
         apiSteps.deleteUserByIdStep(id);
         apiSteps.greetingEndpointReturnsMessage();
+        apiSteps.failTestExample();
     }
 
     @Test
@@ -74,6 +76,7 @@ public class ApiIntegrationTest {
         apiSteps.updateUserStep(id, "int-upd-user-v2", "int-upd-v2@example.com");
         apiSteps.getUserByIdStep(id, "int-upd-user-v2");
         apiSteps.deleteUserByIdStep(id);
+        apiSteps.failTestExample();
     }
 
     @Test
