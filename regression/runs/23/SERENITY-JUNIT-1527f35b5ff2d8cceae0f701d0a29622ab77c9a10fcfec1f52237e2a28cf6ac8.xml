@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserCrudRegressionTest" skipped="0" tests="1" time="0.18" timestamp="2026-05-18 11:50:29"><testcase classname="org.example.regression.UserCrudRegressionTest" name="User deletion removes from system"><failure message="&#10;Expecting actual:&#10;  7&#10;to be greater than or equal to:&#10;  8&#10;" type="java.lang.AssertionError">
+Expecting actual:
+  7
+to be greater than or equal to:
+  8
+</failure><system-err>
+Expecting actual:
+  7
+to be greater than or equal to:
+  8
+
+org.example.steps.RegressionSteps.verifyUserCountIsAtLeast(RegressionSteps.java:163)
+org.example.regression.UserCrudRegressionTest.userDeletionRemovesFromSystem(UserCrudRegressionTest.java:88)
+</system-err></testcase></testsuite>
