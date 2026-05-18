@@ -24,10 +24,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SerenityJUnit5Extension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import({TestSecurityConfig.class})
+@Import(TestSecurityConfig.class)
 @Tag("unit")
 @WithTagValuesOf({"unit", "health"})
-public class HealthControllerTest {
+public class HealthControllerExtendedTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,14 +46,54 @@ public class HealthControllerTest {
     }
 
     @Test
-    void healthEndpointReturnsOk() throws Exception {
-        apiSteps.healthEndpointReturnsOk();
-        apiSteps.failTestExample();
+    void healthStatusIsUp() throws Exception {
+        apiSteps.verifyHealthStatusIsUp();
     }
 
     @Test
-    void metricsEndpointReturnsMetrics() throws Exception {
+    void healthDetailsArePresentInResponse() throws Exception {
+        apiSteps.verifyHealthDetailsPresent();
+    }
+
+    @Test
+    void healthServiceNameIsCorrect() throws Exception {
+        apiSteps.verifyHealthDetailsPresent();
+        apiSteps.healthEndpointReturnsOk();
+    }
+
+    @Test
+    void healthVersionDetailIsPresent() throws Exception {
+        apiSteps.verifyHealthVersionPresent();
+    }
+
+    @Test
+    void metricsEndpointReturns200() throws Exception {
         apiSteps.metricsEndpointReturnsMetrics();
-        apiSteps.failTestExample();
+    }
+
+    @Test
+    void metricsStatusIsHealthy() throws Exception {
+        apiSteps.verifyMetricsStatusIsHealthy();
+    }
+
+    @Test
+    void metricsUptimeIsPositive() throws Exception {
+        apiSteps.verifyMetricsUptimeIsPositive();
+    }
+
+    @Test
+    void metricsMemoryIsNonNegative() throws Exception {
+        apiSteps.verifyMetricsMemoryIsNonNegative();
+    }
+
+    @Test
+    void metricsProcessorsIsPositive() throws Exception {
+        apiSteps.verifyMetricsProcessorsIsPositive();
+    }
+
+    @Test
+    void healthAndMetricsBothReachable() throws Exception {
+        apiSteps.healthEndpointReturnsOk();
+        apiSteps.metricsEndpointReturnsMetrics();
     }
 }

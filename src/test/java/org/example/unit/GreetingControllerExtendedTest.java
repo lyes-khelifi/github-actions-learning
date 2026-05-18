@@ -24,10 +24,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SerenityJUnit5Extension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import({TestSecurityConfig.class})
+@Import(TestSecurityConfig.class)
 @Tag("unit")
-@WithTagValuesOf({"unit", "health"})
-public class HealthControllerTest {
+@WithTagValuesOf({"unit", "greeting"})
+public class GreetingControllerExtendedTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,14 +46,53 @@ public class HealthControllerTest {
     }
 
     @Test
-    void healthEndpointReturnsOk() throws Exception {
-        apiSteps.healthEndpointReturnsOk();
-        apiSteps.failTestExample();
+    void greetingForAliceReturnsHelloAlice() throws Exception {
+        apiSteps.verifyGreetingForName("Alice");
     }
 
     @Test
-    void metricsEndpointReturnsMetrics() throws Exception {
-        apiSteps.metricsEndpointReturnsMetrics();
-        apiSteps.failTestExample();
+    void greetingForBobReturnsHelloBob() throws Exception {
+        apiSteps.verifyGreetingForName("Bob");
+    }
+
+    @Test
+    void greetingForWorldReturnsHelloWorld() throws Exception {
+        apiSteps.verifyGreetingForName("World");
+    }
+
+    @Test
+    void greetingForNumericNameReturnsOk() throws Exception {
+        apiSteps.verifyGreetingStatusIsOk("User123");
+    }
+
+    @Test
+    void greetingForSingleCharReturnsOk() throws Exception {
+        apiSteps.verifyGreetingStatusIsOk("A");
+    }
+
+    @Test
+    void greetingEndpointIsAccessible() throws Exception {
+        apiSteps.greetingEndpointReturnsMessage();
+    }
+
+    @Test
+    void greetingForCharlieReturnsHelloCharlie() throws Exception {
+        apiSteps.verifyGreetingForName("Charlie");
+    }
+
+    @Test
+    void greetingForDaveReturnsHelloDave() throws Exception {
+        apiSteps.verifyGreetingForName("Dave");
+    }
+
+    @Test
+    void greetingForEveReturnsHelloEve() throws Exception {
+        apiSteps.verifyGreetingForName("Eve");
+    }
+
+    @Test
+    void greetingStatusIsOkForTestUser() throws Exception {
+        apiSteps.verifyGreetingStatusIsOk("TestUser");
+        apiSteps.verifyGreetingForName("TestUser");
     }
 }
