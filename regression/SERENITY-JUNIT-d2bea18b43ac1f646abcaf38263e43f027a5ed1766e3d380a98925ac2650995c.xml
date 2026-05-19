@@ -1,1 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.UserCrudRegressionTest" skipped="0" tests="1" time="0.45" timestamp="2026-05-19 12:01:48"><testcase classname="org.example.regression.UserCrudRegressionTest" name="User count changes with crud operations"/></testsuite>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserCrudRegressionTest" skipped="0" tests="1" time="0.36" timestamp="2026-05-19 12:04:21"><testcase classname="org.example.regression.UserCrudRegressionTest" name="User count changes with crud operations"><failure message="&#10;Expecting actual:&#10;  9&#10;to be greater than or equal to:&#10;  10&#10;" type="java.lang.AssertionError">
+Expecting actual:
+  9
+to be greater than or equal to:
+  10
+</failure><system-err>
+Expecting actual:
+  9
+to be greater than or equal to:
+  10
+
+org.example.steps.RegressionSteps.verifyUserCountIsAtLeast(RegressionSteps.java:163)
+org.example.regression.UserCrudRegressionTest.userCountChangesWithCrudOperations(UserCrudRegressionTest.java:61)
+</system-err></testcase></testsuite>
