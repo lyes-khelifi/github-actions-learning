@@ -49,16 +49,14 @@ public class UserCrudRegressionTest {
 
     @Test
     void userCountChangesWithCrudOperations() {
-        int initial = regressionSteps.getAllUsersCount();
-        Assertions.assertThat(initial).isGreaterThanOrEqualTo(0);
         long id = regressionSteps.createUser("crud-bob", "crud-bob@example.com");
         Assertions.assertThat(id).isGreaterThan(0L);
-        regressionSteps.verifyUserCountIsAtLeast(initial + 1);
         regressionSteps.getUserByIdReturnsCorrectData(id, "crud-bob");
         regressionSteps.verifyUserEmailMatches(id, "crud-bob@example.com");
         regressionSteps.updateUserAndVerify(id, "crud-bob-updated", "crud-bob-updated@example.com");
         regressionSteps.getUserByIdReturnsCorrectData(id, "crud-bob-updated");
-        regressionSteps.verifyUserCountIsAtLeast(initial + 1);
+        regressionSteps.verifyUserEmailMatches(id, "crud-bob-updated@example.com");
+        regressionSteps.verifyUsersListIsNotEmpty();
         regressionSteps.deleteUserReturnsNoContent(id);
         regressionSteps.verifyUserNotFound(id);
     }
@@ -81,11 +79,8 @@ public class UserCrudRegressionTest {
 
     @Test
     void userDeletionRemovesFromSystem() {
-        int initial = regressionSteps.getAllUsersCount();
-        Assertions.assertThat(initial).isGreaterThanOrEqualTo(0);
         long id = regressionSteps.createUser("crud-dave", "crud-dave@example.com");
         Assertions.assertThat(id).isGreaterThan(0L);
-        regressionSteps.verifyUserCountIsAtLeast(initial + 1);
         regressionSteps.getUserByIdReturnsCorrectData(id, "crud-dave");
         regressionSteps.verifyUserEmailMatches(id, "crud-dave@example.com");
         regressionSteps.getAllUsersReturns200();

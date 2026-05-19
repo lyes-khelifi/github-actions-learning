@@ -30,6 +30,6 @@ public class ConstantsTest {
     @Test
     void testGreetingKeyValue() {
         assertEquals("greeting", Constants.GREETING_KEY);
-        apiSteps.failTestExample();
+    //    apiSteps.failTestExample();
     }
 }

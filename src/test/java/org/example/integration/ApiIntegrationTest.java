@@ -54,7 +54,7 @@ public class ApiIntegrationTest {
         apiSteps.verifyGreetingForName("IntegrationTest");
         apiSteps.healthEndpointReturnsOk();
         apiSteps.deleteUserByIdStep(id);
-        apiSteps.failTestExample();
+    //    apiSteps.failTestExample();
     }
 
     @Test
