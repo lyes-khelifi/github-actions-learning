@@ -181,6 +181,9 @@ jobs:
     name: publish-report
     needs: build-and-test
     if: always() && github.event_name == 'push'
+    concurrency:
+      group: gh-pages-publish
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     permissions:
       contents: write

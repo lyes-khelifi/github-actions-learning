@@ -121,6 +121,9 @@ jobs:
   publish-report:
     needs: regression
     if: always()
+    concurrency:
+      group: gh-pages-publish
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     permissions:
       contents: write
