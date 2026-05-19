@@ -266,7 +266,7 @@
                     <td class="step-description-column">
                         <div class="step-description">
                                 <span class="top-level-step">
-                                                Get total number of users in the system
+                                                Create user with username 'crud-dave' and email 'crud-dave@example.com'
                                         </span>
                             <span class="evidence">
                                 </span>
@@ -274,7 +274,7 @@
                     </td>
 
                     <td width="130"><span class="top-level-step">SUCCESS</span></td>
-                    <td width="100"><span class="top-level-step">042ms</span></td>
+                    <td width="100"><span class="top-level-step">063ms</span></td>
                 </tr>
                 <tr class="test-SUCCESS">
 
@@ -288,7 +288,7 @@
                     <td class="step-description-column">
                         <div class="step-description">
                                 <span class="top-level-step">
-                                                Create user with username 'crud-dave' and email 'crud-dave@example.com'
+                                                Get user by ID 25 returns correct username
                                         </span>
                             <span class="evidence">
                                 </span>
@@ -296,7 +296,7 @@
                     </td>
 
                     <td width="130"><span class="top-level-step">SUCCESS</span></td>
-                    <td width="100"><span class="top-level-step">060ms</span></td>
+                    <td width="100"><span class="top-level-step">051ms</span></td>
                 </tr>
                 <tr class="test-SUCCESS">
 
@@ -310,7 +310,7 @@
                     <td class="step-description-column">
                         <div class="step-description">
                                 <span class="top-level-step">
-                                                Verify system has at least 7 users
+                                                Verify user 25 has email 'crud-dave@example.com'
                                         </span>
                             <span class="evidence">
                                 </span>
@@ -318,56 +318,12 @@
                     </td>
 
                     <td width="130"><span class="top-level-step">SUCCESS</span></td>
-                    <td width="100"><span class="top-level-step">026ms</span></td>
+                    <td width="100"><span class="top-level-step">061ms</span></td>
                 </tr>
                 <tr class="test-SUCCESS">
 
                     <td width="50" class="step-icon">
                         <a name="3"></a>
-                            <span style="margin-left: 20px;"
-                                  class="top-level-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
-                                </span>
-                    </td>
-
-                    <td class="step-description-column">
-                        <div class="step-description">
-                                <span class="top-level-step">
-                                                Get user by ID 29 returns correct username
-                                        </span>
-                            <span class="evidence">
-                                </span>
-                        </div>
-                    </td>
-
-                    <td width="130"><span class="top-level-step">SUCCESS</span></td>
-                    <td width="100"><span class="top-level-step">048ms</span></td>
-                </tr>
-                <tr class="test-SUCCESS">
-
-                    <td width="50" class="step-icon">
-                        <a name="4"></a>
-                            <span style="margin-left: 20px;"
-                                  class="top-level-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
-                                </span>
-                    </td>
-
-                    <td class="step-description-column">
-                        <div class="step-description">
-                                <span class="top-level-step">
-                                                Verify user 29 has email 'crud-dave@example.com'
-                                        </span>
-                            <span class="evidence">
-                                </span>
-                        </div>
-                    </td>
-
-                    <td width="130"><span class="top-level-step">SUCCESS</span></td>
-                    <td width="100"><span class="top-level-step">043ms</span></td>
-                </tr>
-                <tr class="test-SUCCESS">
-
-                    <td width="50" class="step-icon">
-                        <a name="5"></a>
                             <span style="margin-left: 20px;"
                                   class="top-level-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
                                 </span>
@@ -384,12 +340,12 @@
                     </td>
 
                     <td width="130"><span class="top-level-step">SUCCESS</span></td>
-                    <td width="100"><span class="top-level-step">035ms</span></td>
+                    <td width="100"><span class="top-level-step">031ms</span></td>
                 </tr>
                 <tr class="test-SUCCESS">
 
                     <td width="50" class="step-icon">
-                        <a name="6"></a>
+                        <a name="4"></a>
                             <span style="margin-left: 20px;"
                                   class="top-level-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
                                 </span>
@@ -406,56 +362,56 @@
                     </td>
 
                     <td width="130"><span class="top-level-step">SUCCESS</span></td>
-                    <td width="100"><span class="top-level-step">016ms</span></td>
+                    <td width="100"><span class="top-level-step">036ms</span></td>
+                </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="50" class="step-icon">
+                        <a name="5"></a>
+                            <span style="margin-left: 20px;"
+                                  class="top-level-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="top-level-step">
+                                                Delete user 25 returns 204 No Content
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                    <td width="130"><span class="top-level-step">SUCCESS</span></td>
+                    <td width="100"><span class="top-level-step">047ms</span></td>
+                </tr>
+                <tr class="test-SUCCESS">
+
+                    <td width="50" class="step-icon">
+                        <a name="6"></a>
+                            <span style="margin-left: 20px;"
+                                  class="top-level-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                </span>
+                    </td>
+
+                    <td class="step-description-column">
+                        <div class="step-description">
+                                <span class="top-level-step">
+                                                Verify user with id 25 is not retrievable
+                                        </span>
+                            <span class="evidence">
+                                </span>
+                        </div>
+                    </td>
+
+                    <td width="130"><span class="top-level-step">SUCCESS</span></td>
+                    <td width="100"><span class="top-level-step">024ms</span></td>
                 </tr>
                 <tr class="test-SUCCESS">
 
                     <td width="50" class="step-icon">
                         <a name="7"></a>
-                            <span style="margin-left: 20px;"
-                                  class="top-level-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
-                                </span>
-                    </td>
-
-                    <td class="step-description-column">
-                        <div class="step-description">
-                                <span class="top-level-step">
-                                                Delete user 29 returns 204 No Content
-                                        </span>
-                            <span class="evidence">
-                                </span>
-                        </div>
-                    </td>
-
-                    <td width="130"><span class="top-level-step">SUCCESS</span></td>
-                    <td width="100"><span class="top-level-step">020ms</span></td>
-                </tr>
-                <tr class="test-SUCCESS">
-
-                    <td width="50" class="step-icon">
-                        <a name="8"></a>
-                            <span style="margin-left: 20px;"
-                                  class="top-level-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
-                                </span>
-                    </td>
-
-                    <td class="step-description-column">
-                        <div class="step-description">
-                                <span class="top-level-step">
-                                                Verify user with id 29 is not retrievable
-                                        </span>
-                            <span class="evidence">
-                                </span>
-                        </div>
-                    </td>
-
-                    <td width="130"><span class="top-level-step">SUCCESS</span></td>
-                    <td width="100"><span class="top-level-step">010ms</span></td>
-                </tr>
-                <tr class="test-SUCCESS">
-
-                    <td width="50" class="step-icon">
-                        <a name="9"></a>
                             <span style="margin-left: 20px;"
                                   class="top-level-icon"><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
                                 </span>
@@ -472,12 +428,12 @@
                     </td>
 
                     <td width="130"><span class="top-level-step">SUCCESS</span></td>
-                    <td width="100"><span class="top-level-step">016ms</span></td>
+                    <td width="100"><span class="top-level-step">032ms</span></td>
                 </tr>
             <tr class="test-SUCCESS">
                     <td colspan="2"></td>
                 <td width="130"><span class="top-level-step"><em>SUCCESS</em></span></td>
-                <td width="100"><span class="top-level-step"><em>0.34s</em></span></td>
+                <td width="100"><span class="top-level-step"><em>0.38s</em></span></td>
             </tr>
 
         </table>
