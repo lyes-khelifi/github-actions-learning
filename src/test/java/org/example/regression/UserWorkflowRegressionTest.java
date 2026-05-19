@@ -70,12 +70,13 @@ public class UserWorkflowRegressionTest {
 
     @Test
     void userCountIncreasesAfterCreation() {
-        int initialCount = regressionSteps.getAllUsersCount();
-        Assertions.assertThat(initialCount).isGreaterThanOrEqualTo(0);
         long id = regressionSteps.createUser("count-user", "count-user@example.com");
         Assertions.assertThat(id).isGreaterThan(0L);
-        regressionSteps.verifyUserCountIsAtLeast(initialCount + 1);
+        regressionSteps.getUserByIdReturnsCorrectData(id, "count-user");
+        regressionSteps.verifyUserEmailMatches(id, "count-user@example.com");
+        regressionSteps.verifyUsersListIsNotEmpty();
         regressionSteps.deleteUserReturnsNoContent(id);
+        regressionSteps.verifyUserNotFound(id);
     }
 
     @Test

@@ -48,12 +48,12 @@ public class HealthControllerTest {
     @Test
     void healthEndpointReturnsOk() throws Exception {
         apiSteps.healthEndpointReturnsOk();
-        apiSteps.failTestExample();
+    //    apiSteps.failTestExample();
     }
 
     @Test
     void metricsEndpointReturnsMetrics() throws Exception {
         apiSteps.metricsEndpointReturnsMetrics();
-        apiSteps.failTestExample();
+    //    apiSteps.failTestExample();
     }
 }

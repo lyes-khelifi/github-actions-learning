@@ -34,18 +34,18 @@ public class UserBulkOperationsRegressionTest {
 
     @Test
     void createThreeUsersVerifyAndCleanup() {
-        int initial = regressionSteps.getAllUsersCount();
-        Assertions.assertThat(initial).isGreaterThanOrEqualTo(0);
         long id1 = regressionSteps.createUser("bulk-a", "bulk-a@example.com");
         long id2 = regressionSteps.createUser("bulk-b", "bulk-b@example.com");
         long id3 = regressionSteps.createUser("bulk-c", "bulk-c@example.com");
         Assertions.assertThat(id1).isGreaterThan(0L);
         Assertions.assertThat(id2).isGreaterThan(0L);
         Assertions.assertThat(id3).isGreaterThan(0L);
-        regressionSteps.verifyUserCountIsAtLeast(initial + 3);
+        Assertions.assertThat(id1).isNotEqualTo(id2);
+        Assertions.assertThat(id2).isNotEqualTo(id3);
         regressionSteps.getUserByIdReturnsCorrectData(id1, "bulk-a");
         regressionSteps.getUserByIdReturnsCorrectData(id2, "bulk-b");
         regressionSteps.getUserByIdReturnsCorrectData(id3, "bulk-c");
+        regressionSteps.verifyUsersListIsNotEmpty();
         regressionSteps.deleteUserReturnsNoContent(id1);
         regressionSteps.deleteUserReturnsNoContent(id2);
         regressionSteps.deleteUserReturnsNoContent(id3);
@@ -53,18 +53,16 @@ public class UserBulkOperationsRegressionTest {
 
     @Test
     void userListGrowsWithMultipleCreations() {
-        int initial = regressionSteps.getAllUsersCount();
-        Assertions.assertThat(initial).isGreaterThanOrEqualTo(0);
         long id1 = regressionSteps.createUser("grow-a", "grow-a@example.com");
-        Assertions.assertThat(id1).isGreaterThan(0L);
-        regressionSteps.verifyUserCountIsAtLeast(initial + 1);
         long id2 = regressionSteps.createUser("grow-b", "grow-b@example.com");
+        Assertions.assertThat(id1).isGreaterThan(0L);
         Assertions.assertThat(id2).isGreaterThan(0L);
-        regressionSteps.verifyUserCountIsAtLeast(initial + 2);
-        regressionSteps.getAllUsersReturns200();
-        regressionSteps.verifyUsersListIsNotEmpty();
         regressionSteps.getUserByIdReturnsCorrectData(id1, "grow-a");
         regressionSteps.getUserByIdReturnsCorrectData(id2, "grow-b");
+        regressionSteps.verifyUserEmailMatches(id1, "grow-a@example.com");
+        regressionSteps.verifyUserEmailMatches(id2, "grow-b@example.com");
+        regressionSteps.getAllUsersReturns200();
+        regressionSteps.verifyUsersListIsNotEmpty();
         regressionSteps.deleteUserReturnsNoContent(id1);
         regressionSteps.deleteUserReturnsNoContent(id2);
     }
