@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.unit.ConstantsTest" skipped="0" tests="1" time="0.07" timestamp="2026-05-18 11:58:57"><testcase classname="org.example.unit.ConstantsTest" name="Test greeting key value"><failure message="This test should fail as an example to check the reporting" type="java.lang.AssertionError">This test should fail as an example to check the reporting</failure><system-err>This test should fail as an example to check the reporting
+org.example.steps.ApiSteps.failTestExample(ApiSteps.java:147)
+org.example.unit.ConstantsTest.testGreetingKeyValue(ConstantsTest.java:33)
+</system-err></testcase></testsuite>

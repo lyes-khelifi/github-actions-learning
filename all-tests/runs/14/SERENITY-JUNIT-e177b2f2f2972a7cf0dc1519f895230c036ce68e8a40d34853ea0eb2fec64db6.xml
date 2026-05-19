@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.EndToEndRegressionTest" skipped="0" tests="1" time="0.09" timestamp="2026-05-18 11:59:24"><testcase classname="org.example.regression.EndToEndRegressionTest" name="Full api surface availability check"/></testsuite>
