@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.integration.ApiIntegrationTest" skipped="0" tests="1" time="1.27" timestamp="2026-05-19 12:09:23"><testcase classname="org.example.integration.ApiIntegrationTest" name="User registration creates retrievable user"><failure message="This test should fail as an example to check the reporting" type="java.lang.AssertionError">This test should fail as an example to check the reporting</failure><system-err>This test should fail as an example to check the reporting
+org.example.steps.ApiSteps.failTestExample(ApiSteps.java:147)
+org.example.integration.ApiIntegrationTest.userRegistrationCreatesRetrievableUser(ApiIntegrationTest.java:57)
+</system-err></testcase></testsuite>
