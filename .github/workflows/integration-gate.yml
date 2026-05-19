@@ -165,6 +165,9 @@ jobs:
     name: publish-report
     needs: run-integration-tests
     if: always() && github.event_name == 'push'
+    concurrency:
+      group: gh-pages-publish
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     permissions:
       contents: write
