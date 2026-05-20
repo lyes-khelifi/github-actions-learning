@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.integration.MetricsIntegrationTest" skipped="0" tests="1" time="0.05" timestamp="2026-05-20 08:56:36"><testcase classname="org.example.integration.MetricsIntegrationTest" name="Metrics with health endpoint smoke check"/></testsuite>

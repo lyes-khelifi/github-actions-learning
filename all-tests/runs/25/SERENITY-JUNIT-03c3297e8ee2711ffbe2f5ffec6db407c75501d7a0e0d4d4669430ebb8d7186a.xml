@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.HealthMetricsRegressionTest" skipped="0" tests="1" time="0.07" timestamp="2026-05-20 08:56:37"><testcase classname="org.example.regression.HealthMetricsRegressionTest" name="Health endpoint returns up status"/></testsuite>
