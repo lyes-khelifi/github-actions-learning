@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.CrossFunctionalRegressionTest" skipped="0" tests="1" time="0.46" timestamp="2026-05-21 08:27:05"><testcase classname="org.example.regression.CrossFunctionalRegressionTest" name="Greeting variants with health check"/></testsuite>
