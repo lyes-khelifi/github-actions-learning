@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.SystemHealthRegressionTest" skipped="0" tests="1" time="0.61" timestamp="2026-05-21 03:52:54"><testcase classname="org.example.regression.SystemHealthRegressionTest" name="System resource metrics are valid"/></testsuite>
