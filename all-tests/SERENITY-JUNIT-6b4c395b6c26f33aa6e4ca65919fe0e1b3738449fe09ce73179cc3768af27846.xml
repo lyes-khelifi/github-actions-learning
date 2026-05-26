@@ -1,1 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.unit.UserServiceTest" skipped="0" tests="1" time="0.0" timestamp="2026-05-25 07:08:31"><testcase classname="org.example.unit.UserServiceTest" name="Test create user"/></testsuite>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.unit.UserServiceTest" skipped="0" tests="1" time="0.03" timestamp="2026-05-26 02:16:48"><testcase classname="org.example.unit.UserServiceTest" name="Test create user"/></testsuite>
