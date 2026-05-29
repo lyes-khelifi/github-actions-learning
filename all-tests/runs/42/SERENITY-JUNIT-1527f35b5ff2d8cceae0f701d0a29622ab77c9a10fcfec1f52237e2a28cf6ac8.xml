@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserCrudRegressionTest" skipped="0" tests="1" time="8.34" timestamp="2026-05-29 09:19:46"><testcase classname="org.example.regression.UserCrudRegressionTest" name="User deletion removes from system"><failure message="&#10;expected: 200&#10; but was: 400" type="org.opentest4j.AssertionFailedError">
+expected: 200
+ but was: 400</failure><system-err>
+expected: 200
+ but was: 400
+org.example.steps.RegressionSteps.verifyUserEmailMatches(RegressionSteps.java:190)
+org.example.regression.UserCrudRegressionTest.userDeletionRemovesFromSystem(UserCrudRegressionTest.java:85)
+</system-err></testcase></testsuite>
