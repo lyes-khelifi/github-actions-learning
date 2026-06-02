@@ -1,1 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.unit.SampleTest" skipped="0" tests="1" time="0.31" timestamp="2026-06-01 10:39:47"><testcase classname="org.example.unit.SampleTest" name="Sample api test2"/></testsuite>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.unit.SampleTest" skipped="0" tests="1" time="0.88" timestamp="2026-06-02 10:29:57"><testcase classname="org.example.unit.SampleTest" name="Sample api test2"/></testsuite>
