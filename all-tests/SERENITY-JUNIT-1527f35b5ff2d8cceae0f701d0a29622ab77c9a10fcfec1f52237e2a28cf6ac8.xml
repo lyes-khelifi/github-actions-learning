@@ -1,14 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserCrudRegressionTest" skipped="0" tests="1" time="8.5" timestamp="2026-06-02 10:29:49"><testcase classname="org.example.regression.UserCrudRegressionTest" name="User deletion removes from system"><failure message="&#10;Expecting actual:&#10;  0&#10;to be greater than:&#10;  0&#10;" type="java.lang.AssertionError">
-Expecting actual:
-  0
-to be greater than:
-  0
-</failure><system-err>
-Expecting actual:
-  0
-to be greater than:
-  0
-
-org.example.steps.RegressionSteps.verifyUsersListIsNotEmpty(RegressionSteps.java:213)
-org.example.regression.UserCrudRegressionTest.userDeletionRemovesFromSystem(UserCrudRegressionTest.java:87)
-</system-err></testcase></testsuite>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.UserCrudRegressionTest" skipped="0" tests="1" time="7.9" timestamp="2026-06-03 10:34:37"><testcase classname="org.example.regression.UserCrudRegressionTest" name="User deletion removes from system"/></testsuite>
