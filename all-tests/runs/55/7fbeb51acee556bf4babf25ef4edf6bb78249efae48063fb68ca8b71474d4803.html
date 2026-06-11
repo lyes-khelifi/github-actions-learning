@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Serenity Reports</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" sizes="57x57" href="apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="bootstrap-icons/bootstrap-icons.css">
+<!-- JQuery -->
+<script type="text/javascript" src="scripts/jquery-3.7.1.min.js"></script><!-- Required Stylesheets -->
+<link href="bootstrap-treeview/dist/bootstrap-treeview.min.css" rel="stylesheet">
+
+<!-- Required Javascript -->
+<script src="bootstrap-treeview/dist/bootstrap-treeview.min.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/2.3.1/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/2.3.1/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/2.3.1/time-elapsed-dhms.js"></script>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+
+<script>
+    jQuery.fn.dataTable.ext.type.order['time-elapsed-dhms-pre'] = function(data) {
+
+        var matches = data.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)/i);
+        var multipliers = {
+            ms: 1,
+            s: 1000,
+            m: 60000,
+            h: 3600000,
+            d: 86400000
+        };
+
+        if (matches) {
+            var multiplier = multipliers[matches[2].toLowerCase()];
+            return parseFloat(matches[1]) * multiplier;
+        } else {
+            return -1;
+        };
+    };
+</script>
+<link rel="stylesheet" href="css/core.css"/>
+<link rel="stylesheet" href="css/link.css"/>
+<link type="text/css" media="screen" href="css/screen.css" rel="Stylesheet"/>
+<!--CHART.JS-->
+<script src="chartjs/chart.js"></script>
+<script src="chartjs/chartjs-plugin-datalabels@2.0.0.min.js"></script>
+<script src="chartjs/patternomaly.min.js"></script>
+<script>
+    // Register the plugin to all charts:
+    Chart.register(ChartDataLabels);
+</script>
+<!-- JQuery-UI -->
+<link type="text/css" href="jquery-ui-1.14.1/jquery-ui.css" rel="Stylesheet" />
+<script type="text/javascript" src="jquery-ui-1.14.1/jquery-ui.js"></script><!-- DataTables -->
+<link type="text/css" href="datatables/2.3.1/datatables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="datatables/2.3.1/datatables.min.js"></script>
+<script type="text/javascript" src="datatables/2.3.1/time-elapsed-dhms.js"></script>
+
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+
+<script>
+    jQuery.fn.dataTable.ext.type.order['time-elapsed-dhms-pre'] = function(data) {
+
+        var matches = data.match(/^(\d+(?:\.\d+)?)\s*([a-z]+)/i);
+        var multipliers = {
+            ms: 1,
+            s: 1000,
+            m: 60000,
+            h: 3600000,
+            d: 86400000
+        };
+
+        if (matches) {
+            var multiplier = multipliers[matches[2].toLowerCase()];
+            return parseFloat(matches[1]) * multiplier;
+        } else {
+            return -1;
+        };
+    };
+</script>
+
+
+
+
+    <script class="code" type="text/javascript">$(document).ready(function () {
+
+            $("#scenario-results").DataTable({
+                "order": [[0, "asc",], [1, "asc",], [2, "asc",]],
+                "language": {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                },
+                columnDefs: [
+                    {
+                        targets: 4,
+                        visible: false
+                    },
+                    {type: 'time-elapsed-dhms', targets: 6}
+                ]
+            })
+            $("#manual-scenario-results").DataTable({
+                "order": [[0, "asc",], [1, "asc",]],
+                "language": {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                },
+                columnDefs: [
+                    {
+                        targets: 4,
+                        visible: false
+                    },
+                ]
+            })
+
+            // Results table
+            $('#test-results-table').DataTable({
+                "order": [[0, "asc",], [3, "asc",]],
+                "pageLength": 10,
+                "lengthMenu": [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]]
+            });
+
+            $('#evidence-table').DataTable({
+                searching: false,
+                paging: false,
+                info: false
+            });
+
+            $(".feature-coverage-table").DataTable({
+                searching: true,
+                paging: false,
+                info: false,
+                language: {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                },
+            });
+
+            $(".feature-coverage-table-with-pagination").DataTable({
+                searching: true,
+                order: [[0, "asc",]],
+                pageLength: 10,
+                language: {
+                    searchPlaceholder: "Filter",
+                    search: ""
+                },
+            });
+        });
+    </script>
+</head>
+
+<body class="results-page">
+<div id="topheader">
+    <div id="topbanner">
+        <div id="logo"><a href="index.html"><img src="images/serenity-logo.png" border="0"/></a></div>
+        <div id="projectname-banner" style="float:right">
+            <span class="projectname">
+                <span class="projecttitle">GitHub Actions Learning Project</span>
+                <span class="projectsubtitle"></span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="middlecontent">
+
+
+    <div id="contenttop">
+        <div class="middlebg">
+        <span class="breadcrumbs"><a href="index.html">Home</a>
+                    > Tag 
+                > <span class="truncate-60">
+                Health
+            </span>
+        </span>
+        </div>
+        <div class="rightbg"></div>
+    </div>
+
+    <div class="clr"></div>
+    <!--/* starts second table*/-->
+<div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#"><i class="bi bi-journal-check"></i> Overall Test Results</a>
+        </li>
+        <li >
+            <a href="capabilities.html"><i class="bi bi-journal-text"></i> Requirements</a>
+        </li>
+        <li >
+            <a href="7ea0a5e2d679b9deeda9910ae4a9bcd3a281e0d908303a9e16e486103e98880c.html"><i class="bi bi-chat-text"></i> Capabilities</a>
+        </li>
+        <li >
+            <a href="576946480b52ad056d6f5bddf874399c83582ecf90963cc074a14c70580e7d9f.html"><i class="bi bi-chat-text"></i> Features</a>
+        </li>
+    </ul>
+    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 11-06-2026 17:39:22</span>
+    <br style="clear:left"/>
+</div>
+    <div class="clr"></div>
+    <div id="beforetable"></div>
+    <div id="results-dashboard">
+        <div class="middlb">
+            <div class="table">
+
+                <h2><i class='bi bi-tags'></i> Tag: Health</h2>
+                <table class='overview'>
+                    <tr>
+                        <td width="375px" valign="top">
+                            <div class="test-count-summary">
+                                <div class="test-count-title">
+                                    40 tests
+
+                                     |
+                                        <a href="7fbeb51acee556bf4babf25ef4edf6bb78249efae48063fb68ca8b71474d4803.csv" title="Download CSV"> <i class="bi bi-cloud-arrow-down"
+                                                                                        title="Download CSV"></i></a>
+
+
+                                </div>
+                            </div>
+
+                            <div>
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#summary"><i class="bi bi-house-door"></i>
+                                            Summary</a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#tests"><i class="bi bi-speedometer"></i> Test
+                                            Results</a>
+                                    </li>
+                                </ul>
+
+
+                                <div class="card border">
+                                    <div class="tab-content" id="pills-tabContent">
+                                        <div id="summary" class="tab-pane fade in active">
+                                            <div class="container-fluid">
+                                                <div class="dashboard-charts row">
+                                                    <div class="col-lg-4 col-md-6 col-sm-9">
+                                                        <!-- PIE CHART -->
+                                                        <h4><i class="bi bi-pie-chart"></i> Overview</h4>
+                                                            <div class="chart-container">
+                                                                <canvas id="resultChart" height="200px"></canvas>
+                                                            </div>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-6 col-sm-9">
+                                                        <h4><i class="bi bi-check-square"></i> Test Outcomes</h4>
+                                                        <!-- Severity bar chart -->
+                                                        <div class="chart-container">
+                                                            <canvas id="severityChart" height="200px"></canvas>
+                                                        </div>
+                                                    </div>
+                                                        <div class="col-lg-4 col-md-6 col-sm-9">
+                                                            <h4><i class="bi bi-graph-up"></i> Test Performance</h4>
+
+                                                            <!-- Duration bar chart -->
+                                                            <div class="chart-container">
+                                                                <canvas id="durationChart" height="200px"></canvas>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                        <div class="col-lg-8 col-md-8 col-sm-9">
+                                                            <!-- High level coverage bar chart -->
+                                                            <div class="chart-container">
+                                                                <h3><i class="bi bi-reception-3"></i> Functional
+                                                                    Coverage Overview</h3>
+                                                                <h4>Features</h4>
+                                                                <canvas id="coverageChart"></canvas>
+                                                            </div>
+                                                        </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-6">
+    <div>
+        <h3><i class="bi bi-speedometer2"></i> Key Statistics</h3>
+        <div>
+            <table class="table table-striped table-hover">
+                <tbody>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-card-checklist"></i> Number of Scenarios
+                    </td>
+                    <td>40</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-caret-right"></i> Total Number of Test Cases
+                    </td>
+                    <td>40</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-flag-fill"></i> Tests Started
+                    </td>
+                    <td>Jun 11, 2026 17:38:45</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-stop-circle"></i> Tests
+                        Finished
+                    </td>
+                    <td>Jun 11, 2026 17:39:07</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-stopwatch"></i> Total
+                        Duration
+                    </td>
+                    <td>22s</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-trophy"></i> Fastest Test
+                    </td>
+                    <td>15ms</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-skip-start"></i> Slowest
+                        Test
+                    </td>
+                    <td>10s</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-stopwatch"></i> Average
+                        Execution Time
+                    </td>
+                    <td>725ms</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-stopwatch-fill"></i> Total
+                        Execution Time
+                    </td>
+                    <td>29s</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-sm-11">
+                                                            <h3>Functional Coverage Details</h3>
+
+
+                                                                    <h4>Features</h4>
+
+                                                                    <table class="table feature-coverage-table" id="Feature" style="width:100%">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>Feature</th>
+                                                                            <th style="width:1em;">Scenarios</th>
+                                                                            <th style="width:1em;">Test&nbsp;Cases</th>
+                                                                            <th style="width:1em;">%&nbsp;Pass</th>
+                                                                            <th style="width:1em;">Result</th>
+                                                                            <th>Coverage</th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                            <a href="959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html"> Health integration test</a>
+                                                                                    </td>
+                                                                                    <td>10</td>
+                                                                                    <td>10</td>
+                                                                                    <td>100%</td>
+                                                                                    <td>
+                                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="progress">
+                                                                                                <div class="progress-bar"
+                                                                                                     role="progressbar"
+                                                                                                     style="width: 100%; background-color: #b0cf73"
+                                                                                                     aria-valuenow="10"
+                                                                                                     title="100% success"
+                                                                                                     aria-valuemin="0"
+                                                                                                     aria-valuemax="100">
+                                                                                                </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                            <a href="4029e0265245266ed43882a65b9cba72d27810fb357040490c0ddd0ec4ea3171.html"> Health extended regression test</a>
+                                                                                    </td>
+                                                                                    <td>8</td>
+                                                                                    <td>8</td>
+                                                                                    <td>100%</td>
+                                                                                    <td>
+                                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="progress">
+                                                                                                <div class="progress-bar"
+                                                                                                     role="progressbar"
+                                                                                                     style="width: 100%; background-color: #b0cf73"
+                                                                                                     aria-valuenow="8"
+                                                                                                     title="100% success"
+                                                                                                     aria-valuemin="0"
+                                                                                                     aria-valuemax="100">
+                                                                                                </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                            <a href="6ffe633f14af62158695868b5ef01dc4c713dad27d0f04d076371a6026cc2d65.html"> Health metrics regression test</a>
+                                                                                    </td>
+                                                                                    <td>5</td>
+                                                                                    <td>5</td>
+                                                                                    <td>100%</td>
+                                                                                    <td>
+                                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="progress">
+                                                                                                <div class="progress-bar"
+                                                                                                     role="progressbar"
+                                                                                                     style="width: 100%; background-color: #b0cf73"
+                                                                                                     aria-valuenow="5"
+                                                                                                     title="100% success"
+                                                                                                     aria-valuemin="0"
+                                                                                                     aria-valuemax="100">
+                                                                                                </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                            <a href="6c0a1baef93f6fddf95bffcd4e1cffdb83b32c1963efdb9baebfb1a544a64e46.html"> System health regression test</a>
+                                                                                    </td>
+                                                                                    <td>5</td>
+                                                                                    <td>5</td>
+                                                                                    <td>100%</td>
+                                                                                    <td>
+                                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="progress">
+                                                                                                <div class="progress-bar"
+                                                                                                     role="progressbar"
+                                                                                                     style="width: 100%; background-color: #b0cf73"
+                                                                                                     aria-valuenow="5"
+                                                                                                     title="100% success"
+                                                                                                     aria-valuemin="0"
+                                                                                                     aria-valuemax="100">
+                                                                                                </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                            <a href="60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html"> Health controller extended test</a>
+                                                                                    </td>
+                                                                                    <td>10</td>
+                                                                                    <td>10</td>
+                                                                                    <td>100%</td>
+                                                                                    <td>
+                                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="progress">
+                                                                                                <div class="progress-bar"
+                                                                                                     role="progressbar"
+                                                                                                     style="width: 100%; background-color: #b0cf73"
+                                                                                                     aria-valuenow="10"
+                                                                                                     title="100% success"
+                                                                                                     aria-valuemin="0"
+                                                                                                     aria-valuemax="100">
+                                                                                                </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td>
+                                                                                            <a href="e4e443ee3fb6d3be7e8cdd6ec3c2c41cac4e6602d354f90041f7560d1f677299.html"> Health controller test</a>
+                                                                                    </td>
+                                                                                    <td>2</td>
+                                                                                    <td>2</td>
+                                                                                    <td>100%</td>
+                                                                                    <td>
+                                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="progress">
+                                                                                                <div class="progress-bar"
+                                                                                                     role="progressbar"
+                                                                                                     style="width: 100%; background-color: #b0cf73"
+                                                                                                     aria-valuenow="2"
+                                                                                                     title="100% success"
+                                                                                                     aria-valuemin="0"
+                                                                                                     aria-valuemax="100">
+                                                                                                </div>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                        </div>
+                                                    </div>
+
+                                            </div>
+                                            <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Tags</h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                    <a href="3ce0557593d8474e32371d0b17beb9dda2592f8536d3313c16285189516e3537.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> Integration&nbsp;&nbsp;&nbsp;10
+                                    </span>
+                                    </a>
+                                    <a href="1d0c02fb9cb969bbd9e2f900ec6333e01b070c6fb5e26345e9374169cfab9e68.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> Regression&nbsp;&nbsp;&nbsp;18
+                                    </span>
+                                    </a>
+                                    <a href="10a1e355f57e2d8f6b048dca408340db55dd8cf5fb3df3d7fc843dc3329a9e4b.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> Unit&nbsp;&nbsp;&nbsp;12
+                                    </span>
+                                    </a>
+                                    <a href="7fbeb51acee556bf4babf25ef4edf6bb78249efae48063fb68ca8b71474d4803.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> Health&nbsp;&nbsp;&nbsp;40
+                                    </span>
+                                    </a>
+                                    <a href="e48f3a867a3aabfcdc073311091b5be4a41cddd95aa536d69647212a2bc275b7.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> Metrics&nbsp;&nbsp;&nbsp;10
+                                    </span>
+                                    </a>
+                                    <a href="1fd8be515bf4be97e0830669e96b165d688c00f61cd988c47c1fe797e3392e8a.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> System&nbsp;&nbsp;&nbsp;5
+                                    </span>
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+                                            </div>
+                                        </div>
+                                        <div id="tests" class="tab-pane fade">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+    <div>
+        <h3><i class="bi bi-speedometer2"></i> Key Statistics</h3>
+        <div>
+            <table class="table table-striped table-hover">
+                <tbody>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-card-checklist"></i> Number of Scenarios
+                    </td>
+                    <td>40</td>
+                    <td>
+                        <i class="bi bi-stopwatch"></i> Total
+                        Duration
+                    </td>
+                    <td>22s</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-caret-right"></i> Total Number of Test Cases
+                    </td>
+                    <td>40</td>
+                    <td>
+                        <i class="bi bi-trophy"></i> Fastest Test
+                    </td>
+                    <td>15ms</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-person"></i> Number of Manual Test Cases
+                    </td>
+                    <td>0</td>
+                    <td>
+                        <i class="bi bi-skip-start"></i> Slowest
+                        Test
+                    </td>
+                    <td>10s</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-flag-fill"></i> Tests Started
+                    </td>
+                    <td>Jun 11, 2026 17:38:45</td>
+                    <td>
+                        <i class="bi bi-stopwatch"></i> Average
+                        Execution Time
+                    </td>
+                    <td>725ms</td>
+                </tr>
+                <tr scope="row">
+                    <td>
+                        <i class="bi bi-stop-circle"></i> Tests
+                        Finished
+                    </td>
+                    <td>Jun 11, 2026 17:39:07</td>
+                    <td>
+                        <i class="bi bi-stopwatch-fill"></i> Total
+                        Execution Time
+                    </td>
+                    <td>29s</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+                                                        <h3><i class="bi bi-gear"></i> Automated Scenarios</h3>
+
+                                                            <table class="scenario-result-table table" id="scenario-results" style="width:100%">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>feature</th>
+                                                                    <th class="test-name-column">Scenario</th>
+                                                                    <th>Context</th>
+                                                                    <th>Steps</th>
+                                                                    <th>Started</th>
+                                                                    <th>Total Duration</th>
+                                                                    <th>Result</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html">HealthIntegrationTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health and metrics full integration check">
+                                                                                    <a href="6870f3e170909c78a5d71573a034a4a19847ed04c13a00597c02640a513230ae.html">Health and metrics full integration check</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>5</td>
+                                                                        <td data-order="1781199547">17:39:07</td>
+                                                                        <td>061ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html">HealthIntegrationTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health integration with all checks">
+                                                                                    <a href="6bd48e1d3c651d3e36638474e4a62307b8af50d98472e1c9390a3027a802e9de.html">Health integration with all checks</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>5</td>
+                                                                        <td data-order="1781199547">17:39:07</td>
+                                                                        <td>071ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html">HealthIntegrationTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health and greeting are accessible">
+                                                                                    <a href="71cf5cde35413aeb3bd7fa4772e77d9e93adf2a6b7d8a52b8debddd90646879a.html">Health and greeting are accessible</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>3</td>
+                                                                        <td data-order="1781199547">17:39:07</td>
+                                                                        <td>058ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html">HealthIntegrationTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health status is up">
+                                                                                    <a href="57b63a0ff7fa14d38a21619a55390cac1ee05592e9ecf1375dacab24306d4073.html">Health status is up</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>2</td>
+                                                                        <td data-order="1781199547">17:39:07</td>
+                                                                        <td>030ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html">HealthIntegrationTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health with greeting and metrics">
+                                                                                    <a href="0ad07c3bceb6172f94f84f33ebefae074ca95f7ae2df20605e644be5f3ee4025.html">Health with greeting and metrics</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>4</td>
+                                                                        <td data-order="1781199547">17:39:07</td>
+                                                                        <td>042ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html">HealthIntegrationTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health service name and version are present">
+                                                                                    <a href="64f5d66e39c878ed4cbeaafcbf7f99204d8d313a8f86f41258d5f2e093413430.html">Health service name and version are present</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>3</td>
+                                                                        <td data-order="1781199547">17:39:07</td>
+                                                                        <td>029ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html">HealthIntegrationTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health full verification flow">
+                                                                                    <a href="2adf76591f0afd2157f8e6df5361b66c75e631c9be380cb717c0a5b8d0bce8d7.html">Health full verification flow</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>4</td>
+                                                                        <td data-order="1781199547">17:39:07</td>
+                                                                        <td>043ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html">HealthIntegrationTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health endpoint smoke check">
+                                                                                    <a href="fff2ced6f8ed4bf1cef8aca8c3c49f98ea3e36306586a6cf0932891e73b73d4f.html">Health endpoint smoke check</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>4</td>
+                                                                        <td data-order="1781199547">17:39:07</td>
+                                                                        <td>030ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html">HealthIntegrationTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health status and details consistency">
+                                                                                    <a href="0fa272de167f84b401351396a324d3b8b28d67a2638cb3c96d920f0fbc2c39e7.html">Health status and details consistency</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>3</td>
+                                                                        <td data-order="1781199547">17:39:07</td>
+                                                                        <td>051ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html">HealthIntegrationTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health details are present in response">
+                                                                                    <a href="13f188dcf20c47f24cea0e4824412df557fef01682307146c5fd28a5c89ea0a2.html">Health details are present in response</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>2</td>
+                                                                        <td data-order="1781199547">17:39:07</td>
+                                                                        <td>015ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="4029e0265245266ed43882a65b9cba72d27810fb357040490c0ddd0ec4ea3171.html">HealthExtendedRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health complete regression suite">
+                                                                                    <a href="72dfc40c3cc6c7a1d7939addf7a2606401c0ed2d1e7520fb3c161be919f0af15.html">Health complete regression suite</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>10</td>
+                                                                        <td data-order="1781199525">17:38:45</td>
+                                                                        <td>10s 842ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="4029e0265245266ed43882a65b9cba72d27810fb357040490c0ddd0ec4ea3171.html">HealthExtendedRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health full details verification">
+                                                                                    <a href="433c3d2a2b17b208a4103cc79c4b590a6c864c438ead61287d339156f83c4a76.html">Health full details verification</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>8</td>
+                                                                        <td data-order="1781199536">17:38:56</td>
+                                                                        <td>707ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="4029e0265245266ed43882a65b9cba72d27810fb357040490c0ddd0ec4ea3171.html">HealthExtendedRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health and metrics consistency check">
+                                                                                    <a href="f533661b2f7d1e64ea501d9bd58cccd5011b147ca75a83d7ee36164d1edadaf2.html">Health and metrics consistency check</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>7</td>
+                                                                        <td data-order="1781199537">17:38:57</td>
+                                                                        <td>518ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="4029e0265245266ed43882a65b9cba72d27810fb357040490c0ddd0ec4ea3171.html">HealthExtendedRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health with greeting verification">
+                                                                                    <a href="c82d05f5080f45483f23f173e4ede6bcf357e8a41283c813146c8334bcb59e81.html">Health with greeting verification</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>5</td>
+                                                                        <td data-order="1781199538">17:38:58</td>
+                                                                        <td>238ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="4029e0265245266ed43882a65b9cba72d27810fb357040490c0ddd0ec4ea3171.html">HealthExtendedRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health details and metrics regression">
+                                                                                    <a href="014222906989f5a3d648491c421978ee34b46758eea2a07626292d04af34779f.html">Health details and metrics regression</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>6</td>
+                                                                        <td data-order="1781199538">17:38:58</td>
+                                                                        <td>488ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="4029e0265245266ed43882a65b9cba72d27810fb357040490c0ddd0ec4ea3171.html">HealthExtendedRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health system readiness regression">
+                                                                                    <a href="f56447f8a641ffd31c965d8d8ac765558f4a42a13574627f4cb845761282b1e9.html">Health system readiness regression</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>9</td>
+                                                                        <td data-order="1781199538">17:38:58</td>
+                                                                        <td>741ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="4029e0265245266ed43882a65b9cba72d27810fb357040490c0ddd0ec4ea3171.html">HealthExtendedRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health status and details regression">
+                                                                                    <a href="b07c022bfabeb5857cc284e25218f1dcd38ab5d99881de278e6f6d5b83705a7e.html">Health status and details regression</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>5</td>
+                                                                        <td data-order="1781199539">17:38:59</td>
+                                                                        <td>204ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="4029e0265245266ed43882a65b9cba72d27810fb357040490c0ddd0ec4ea3171.html">HealthExtendedRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health service metadata regression">
+                                                                                    <a href="d8909bd76c298be462253cc2113abc3230d9c5f641b370563924cf10d30d1ac0.html">Health service metadata regression</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>7</td>
+                                                                        <td data-order="1781199539">17:38:59</td>
+                                                                        <td>326ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="6ffe633f14af62158695868b5ef01dc4c713dad27d0f04d076371a6026cc2d65.html">HealthMetricsRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Metrics status is healthy">
+                                                                                    <a href="a4b551cdfa7b035214e37fa04cbf9999f813624e0cfeeea0a944241d1bf02ab7.html">Metrics status is healthy</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199525">17:38:45</td>
+                                                                        <td>9s 856ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="6ffe633f14af62158695868b5ef01dc4c713dad27d0f04d076371a6026cc2d65.html">HealthMetricsRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Metrics endpoint returns200">
+                                                                                    <a href="0a800354e84fecc016c35c766b1fcd77867eea2198367225c2e5e0b2f2bcddd7.html">Metrics endpoint returns200</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199535">17:38:55</td>
+                                                                        <td>079ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="6ffe633f14af62158695868b5ef01dc4c713dad27d0f04d076371a6026cc2d65.html">HealthMetricsRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health endpoint returns up status">
+                                                                                    <a href="03c3297e8ee2711ffbe2f5ffec6db407c75501d7a0e0d4d4669430ebb8d7186a.html">Health endpoint returns up status</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199535">17:38:55</td>
+                                                                        <td>056ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="6ffe633f14af62158695868b5ef01dc4c713dad27d0f04d076371a6026cc2d65.html">HealthMetricsRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health endpoint contains service details">
+                                                                                    <a href="f8680683a2c341601ef3ce7828569babc1ed68f3e26084a8affd9337465f716b.html">Health endpoint contains service details</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199535">17:38:55</td>
+                                                                        <td>138ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="6ffe633f14af62158695868b5ef01dc4c713dad27d0f04d076371a6026cc2d65.html">HealthMetricsRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Metrics endpoint contains all required fields">
+                                                                                    <a href="27e32070ed1a0e602d5c4b3745fc50fd238ddd4dd3e632cc12d6848ce95319b4.html">Metrics endpoint contains all required fields</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199536">17:38:56</td>
+                                                                        <td>284ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="6c0a1baef93f6fddf95bffcd4e1cffdb83b32c1963efdb9baebfb1a544a64e46.html">SystemHealthRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health endpoint full verification">
+                                                                                    <a href="f3f22e83be926b8e6309e41accf71036390499d865057fa5eef75ef7a325eb00.html">Health endpoint full verification</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>10</td>
+                                                                        <td data-order="1781199543">17:39:03</td>
+                                                                        <td>677ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="6c0a1baef93f6fddf95bffcd4e1cffdb83b32c1963efdb9baebfb1a544a64e46.html">SystemHealthRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Metrics endpoint full verification">
+                                                                                    <a href="fc1cf19a7a96efd81b88fced8bbae532911fa750816105ef185156187204c2ed.html">Metrics endpoint full verification</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>10</td>
+                                                                        <td data-order="1781199544">17:39:04</td>
+                                                                        <td>635ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="6c0a1baef93f6fddf95bffcd4e1cffdb83b32c1963efdb9baebfb1a544a64e46.html">SystemHealthRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health and metrics combined check">
+                                                                                    <a href="f83bb3a9ce7c99746f162f0590acd788e4b6ed44d18686f590e8728db68c234a.html">Health and metrics combined check</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>10</td>
+                                                                        <td data-order="1781199545">17:39:05</td>
+                                                                        <td>680ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="6c0a1baef93f6fddf95bffcd4e1cffdb83b32c1963efdb9baebfb1a544a64e46.html">SystemHealthRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="Repeated health checks are consistent">
+                                                                                    <a href="9f764bced33c6b0147f8f07e0fd3e1bcf8278fc6fed01e42a16d8d2c897546cd.html">Repeated health checks are consistent</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>10</td>
+                                                                        <td data-order="1781199546">17:39:06</td>
+                                                                        <td>536ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="6c0a1baef93f6fddf95bffcd4e1cffdb83b32c1963efdb9baebfb1a544a64e46.html">SystemHealthRegressionTest</a>
+                                                                        </td>
+                                                                        <td data-order="System resource metrics are valid">
+                                                                                    <a href="0e2c126b1b03ec6d575ac9e946569fe6447f4a34c2320eb1d262111ba4a60263.html">System resource metrics are valid</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>10</td>
+                                                                        <td data-order="1781199546">17:39:06</td>
+                                                                        <td>539ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html">HealthControllerExtendedTest</a>
+                                                                        </td>
+                                                                        <td data-order="Metrics status is healthy">
+                                                                                    <a href="0622a66778c5b63dea1df6d541de563a4e70bd12476caea40b329e9d3f141b35.html">Metrics status is healthy</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199542">17:39:02</td>
+                                                                        <td>022ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html">HealthControllerExtendedTest</a>
+                                                                        </td>
+                                                                        <td data-order="Metrics endpoint returns200">
+                                                                                    <a href="e50ac7ea2da878088d473434526f5b72e22d797e021d751bb053942be067a9cc.html">Metrics endpoint returns200</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199542">17:39:02</td>
+                                                                        <td>036ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html">HealthControllerExtendedTest</a>
+                                                                        </td>
+                                                                        <td data-order="Metrics processors is positive">
+                                                                                    <a href="29158d80b49d4fd853ce231082878528ebfe996c76f2798c35ad7a9625d995d5.html">Metrics processors is positive</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199542">17:39:02</td>
+                                                                        <td>052ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html">HealthControllerExtendedTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health status is up">
+                                                                                    <a href="209034337045693eb865a93c78bc373fede6d461a23f821592070789d920e996.html">Health status is up</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199542">17:39:02</td>
+                                                                        <td>037ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html">HealthControllerExtendedTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health version detail is present">
+                                                                                    <a href="ac78110da71adf628d710a733fe681a7c504846458cf218f7d766e0f317588dc.html">Health version detail is present</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199542">17:39:02</td>
+                                                                        <td>025ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html">HealthControllerExtendedTest</a>
+                                                                        </td>
+                                                                        <td data-order="Metrics uptime is positive">
+                                                                                    <a href="a08319e8ba86ac89e257eb2eaeb44e3f6c1869836c87079a23bf9d4d53d1b26b.html">Metrics uptime is positive</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199542">17:39:02</td>
+                                                                        <td>015ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html">HealthControllerExtendedTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health service name is correct">
+                                                                                    <a href="77572cad3ddbcf15cf8d40a7ceb3e379c99ab57a7422621fd61d60e5a5e79403.html">Health service name is correct</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>2</td>
+                                                                        <td data-order="1781199542">17:39:02</td>
+                                                                        <td>033ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html">HealthControllerExtendedTest</a>
+                                                                        </td>
+                                                                        <td data-order="Metrics memory is non negative">
+                                                                                    <a href="28350bbf73341d6cc3b20167f4ed9823cc419484190572260f6f0d69f2c96970.html">Metrics memory is non negative</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199542">17:39:02</td>
+                                                                        <td>033ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html">HealthControllerExtendedTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health and metrics both reachable">
+                                                                                    <a href="0fae2321346304a030cc199e83dbc34d7c1a86cc3c948c8cf61d37fedd4e22ea.html">Health and metrics both reachable</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>2</td>
+                                                                        <td data-order="1781199542">17:39:02</td>
+                                                                        <td>047ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html">HealthControllerExtendedTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health details are present in response">
+                                                                                    <a href="435f13016a5d12ff23197a6c242be7aa078f363868b76b08dda5033c6c2b9cf0.html">Health details are present in response</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199542">17:39:02</td>
+                                                                        <td>034ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="e4e443ee3fb6d3be7e8cdd6ec3c2c41cac4e6602d354f90041f7560d1f677299.html">HealthControllerTest</a>
+                                                                        </td>
+                                                                        <td data-order="Health endpoint returns ok">
+                                                                                    <a href="a5a9e3b71d4191abaa7f5b2d014c0cd382c768dfd2ec52231c25ab44e70a4b3f.html">Health endpoint returns ok</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199529">17:38:49</td>
+                                                                        <td>648ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="scenario-result SUCCESS">
+                                                                        <td>
+                                                                                <a href="e4e443ee3fb6d3be7e8cdd6ec3c2c41cac4e6602d354f90041f7560d1f677299.html">HealthControllerTest</a>
+                                                                        </td>
+                                                                        <td data-order="Metrics endpoint returns metrics">
+                                                                                    <a href="9c47aa1bc5b051d5fbbe4b32874002c4006c163c63ec905934adbbfc7f1e0486.html">Metrics endpoint returns metrics</a>
+                                                                        </td>
+                                                                        <td><span style="display:none"></span>
+                                                                        </td>
+                                                                        <td>1</td>
+                                                                        <td data-order="1781199529">17:38:49</td>
+                                                                        <td>056ms</td>
+                                                                        <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span
+                                                                                    style="display:none">SUCCESS</span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <h3><i class="bi bi-hand-index-thumb"></i> Manual Tests</h3>
+
+                                                            No manual tests were recorded
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <h3>Tags</h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                    <a href="3ce0557593d8474e32371d0b17beb9dda2592f8536d3313c16285189516e3537.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> Integration&nbsp;&nbsp;&nbsp;10
+                                    </span>
+                                    </a>
+                                    <a href="1d0c02fb9cb969bbd9e2f900ec6333e01b070c6fb5e26345e9374169cfab9e68.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> Regression&nbsp;&nbsp;&nbsp;18
+                                    </span>
+                                    </a>
+                                    <a href="10a1e355f57e2d8f6b048dca408340db55dd8cf5fb3df3d7fc843dc3329a9e4b.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> Unit&nbsp;&nbsp;&nbsp;12
+                                    </span>
+                                    </a>
+                                    <a href="7fbeb51acee556bf4babf25ef4edf6bb78249efae48063fb68ca8b71474d4803.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> Health&nbsp;&nbsp;&nbsp;40
+                                    </span>
+                                    </a>
+                                    <a href="e48f3a867a3aabfcdc073311091b5be4a41cddd95aa536d69647212a2bc275b7.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> Metrics&nbsp;&nbsp;&nbsp;10
+                                    </span>
+                                    </a>
+                                    <a href="1fd8be515bf4be97e0830669e96b165d688c00f61cd988c47c1fe797e3392e8a.html">
+                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                        <i class="bi bi-tag-fill"></i> System&nbsp;&nbsp;&nbsp;5
+                                    </span>
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="beforefooter"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <span class="version">Serenity BDD version 4.3.4</span>
+        </div>
+    </div>
+</div>
+
+<!-- Chart data -->
+    <!-- PIE CHART -->
+    <script>
+
+        // The results pie chart
+        const outcomeChartCtx = document.getElementById('resultChart');
+
+        // Options define for display value on top of bars
+        const outcomeDetailsReports = [
+            { title: 'Passing Test Cases', link: "15d2d32bc30f9ba04861edd05b54c7a85e50cd185f9975024bb6c7d37f8bb9ae.html" },
+            { title: 'Pending Test Cases', link: "84ee0336f51f898fa710f00e0a3ed13aef88ef9dde798a9ed0b00610e7f9820d.html" },
+            { title: 'Ignored Test Cases', link: "a765571bfcf98a5fb26d5e41e2eacbd2037eb21f1db6926b0b3424427ad6d334.html" },
+            { title: 'Skipped Test Cases', link: "679b45ba1691dea02890e31b33aa7c52e99df812fc3c77539528653a753ef759.html" },
+            { title: 'Aborted Test Cases',  link: "c6ffaf68a7aadea88b957868b10ab58c465bbaa61d7bda921e70ba3fc17b9afe.html"},
+            { title: 'Failed Test Cases', link: "da807952e35b2b520108f479f25450f37a0e1979b93f8215e38b8b90cfeff22c.html"  },
+            { title: 'Broken Test Cases', link: "bdf48da45d9aec5cddfc24e9c34dba074b74a36e13af5754d12f2ae4a023fe1f.html"    },
+            { title: 'Compromised Test Cases',  link: "899011b4148a9e586503ee05210c54dd625985d011e67a6550e54249aba048ce.html" },
+        ]
+        const outcomeData = {
+            labels: ['Passing Test Cases', 'Pending Test Cases', 'Ignored Test Cases', 'Skipped Test Cases', 'Aborted Test Cases', 'Failed Test Cases', 'Broken Test Cases', 'Compromised Test Cases','Undefined Test Cases'],
+            datasets: [{
+                label: 'Test Results',
+                fill: false,
+                data: [40,0,0,0,0,0,0,0],
+                backgroundColor: ['rgba(153,204,51,0.5)','rgba(165, 199, 238, 0.5)','rgba(168, 168, 168, 0.5)','rgba(238, 224, 152, 0.75)','rgba(255, 153, 102, 0.5)','rgba(255, 22, 49, 0.5)','rgba(255, 97, 8, 0.5)','rgba(255, 104, 255, 0.5)','rgba(83, 50, 168, 0.5)'],
+                borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
+                borderWidth: 1,
+            }]
+        }
+        const outcomeOptions = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom'
+                },
+                // Change options for ALL labels of THIS CHART
+                datalabels: {
+                    color: '#444444',
+                    'font.weight': 'bold',
+                    formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        let percentage = (value * 100 / sum).toFixed(0) + "%";
+                        if (percentage === '0%' || percentage === 'NaN%') {
+                            return '';
+                        } else {
+                            return percentage;
+                        }
+                    },
+                },
+            }
+        }
+
+        const outcomeChart = new Chart(outcomeChartCtx, {
+            type: 'doughnut',
+            data: outcomeData,
+            options: outcomeOptions,
+            plugins: [
+                {
+                    id: 'text',
+                    beforeDraw: function (chart, a, b) {
+                        var width = chart.width,
+                            height = chart.height,
+                            ctx = chart.ctx;
+
+                        ctx.restore();
+                        var fontSize = (height / 200).toFixed(1);
+                        ctx.font = fontSize + "em sans-serif";
+                        ctx.textBaseline = "middle";
+
+                        var text = "100%"
+                        textX = 10 + Math.round((width - ctx.measureText(text).width) / 2);
+                        textY = (height / 2) - 40;
+
+                        ctx.fillText(text, textX, textY);
+                        ctx.save();
+                    }
+                }]
+        });
+
+        function clickHandler(click) {
+            const points = outcomeChart.getElementsAtEventForMode(click, 'nearest', {intersect: true}, true);
+            if (points.length) {
+                const firstPoint = points[0];
+                window.open(outcomeDetailsReports[firstPoint.index].link, "_self")
+
+            }
+        }
+        outcomeChartCtx.onclick = clickHandler;
+    </script>
+    <!-- END PIE CHART -->
+
+    <!-- SUMMARY BAR CHART -->
+    <script>
+
+        // The Severity bar chart
+        const severityChartCtx = document.getElementById('severityChart');
+
+        // Options define for display value on top of bars
+
+        const severityDetailsReports = [
+            { title: 'Passing Scenarios', link: "15d2d32bc30f9ba04861edd05b54c7a85e50cd185f9975024bb6c7d37f8bb9ae.html" },
+            { title: 'Pending Scenarios', link: "84ee0336f51f898fa710f00e0a3ed13aef88ef9dde798a9ed0b00610e7f9820d.html" },
+            { title: 'Ignored Scenarios', link: "a765571bfcf98a5fb26d5e41e2eacbd2037eb21f1db6926b0b3424427ad6d334.html" },
+            { title: 'Skipped Scenarios', link: "679b45ba1691dea02890e31b33aa7c52e99df812fc3c77539528653a753ef759.html" },
+            { title: 'Aborted Scenarios',  link: "c6ffaf68a7aadea88b957868b10ab58c465bbaa61d7bda921e70ba3fc17b9afe.html"},
+            { title: 'Failed Scenarios', link: "da807952e35b2b520108f479f25450f37a0e1979b93f8215e38b8b90cfeff22c.html"  },
+            { title: 'Broken Scenarios', link: "bdf48da45d9aec5cddfc24e9c34dba074b74a36e13af5754d12f2ae4a023fe1f.html"    },
+            { title: 'Compromised Scenarios',  link: "899011b4148a9e586503ee05210c54dd625985d011e67a6550e54249aba048ce.html" },
+        ]
+        const severityData = {
+            labels: ['Passing', 'Pending', 'Ignored', 'Skipped', 'Aborted', 'Failed', 'Broken', 'Compromised'],
+            datasets: [
+                {
+                    label: 'Automated',
+                    data: [40,0,0,0,0,0,0,0],
+                    backgroundColor: ['rgba(153,204,51,0.5)','rgba(165, 199, 238, 0.5)','rgba(168, 168, 168, 0.5)','rgba(238, 224, 152, 0.75)','rgba(255, 153, 102, 0.5)','rgba(255, 22, 49, 0.5)','rgba(255, 97, 8, 0.5)','rgba(255, 104, 255, 0.5)','rgba(83, 50, 168, 0.5)'],
+                    borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Manual',
+                    data: [0,0,0,0,0,0,0,0],
+                    backgroundColor: ['rgba(153,204,51,0.25)','rgba(165, 199, 238, 0.25)','rgba(168, 168, 168, 0.25)','rgba(238, 224, 152, 0.375)','rgba(255, 153, 102, 0.25)','rgba(255, 22, 49, 0.25)','rgba(255, 97, 8, 0.25)','rgba(255, 104, 255, 0.25)','rgba(83, 50, 168, 0.25)'],
+                    borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
+                    borderWidth: 1
+                },
+
+            ]
+        }
+        const severityOptions = {
+            responsive: true,
+            skipNull: true,
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true,
+                }
+            },
+            plugins: {
+                // Change options for ALL labels of THIS CHART
+                datalabels: {
+                    color: '#444444',
+                    'font.weight': 'bold',
+                    formatter: (value, ctx) => {
+                        if (value === 0) {
+                            return '';
+                        } else {
+                            return value;
+                        }
+                    },
+                }
+            }
+        }
+        const severityChart = new Chart(severityChartCtx, {
+            type: 'bar',
+            data: severityData,
+            options: severityOptions
+        });
+
+        function clickHandler(click) {
+            const points = severityChart.getElementsAtEventForMode(click, 'nearest', {intersect: true}, true);
+            if (points.length) {
+                const firstPoint = points[0];
+                window.open(severityDetailsReports[firstPoint.index].link, "_self")
+
+            }
+        }
+        severityChartCtx.onclick = clickHandler;
+    </script>
+    <!-- END SUMMARY CHART -->
+
+    <!-- DURATION CHART -->
+    <script>
+
+        // Options define for display value on top of bars
+        const durationDetailsReports = [
+                {title: "Under 1 second", link: "f7d863d260b106c7ee5ceff4a7f756b273878873fed91dfce106a94ca8b44033.html"},
+                {title: "1 to 10 seconds", link: "2ecefaf25edb3f20d1ac0ab777e71e7235c6ae71814dc7ee54c75555798df795.html"},
+                {title: "10 to 30 seconds", link: "d9215899ffd30b551ca7c0de8b55f563d537c7c127dc01d157b97fa1bd892cf3.html"},
+                {title: "30 to 60 seconds", link: "086b80794d2fc1f1c3b925316f4f332ea107ebd5c0e6875a01950aef28c9cad4.html"},
+                {title: "1 to 2 minutes", link: "7b067ae381d07161b5035159960bb0f0ef4119a56ef1181ec99e22846eed2d32.html"},
+                {title: "2 to 5 minutes", link: "3a757d5ad4e9f5ef4b4b85e826d207eaed30c383e73b62ccf5acb30e124cc041.html"},
+                {title: "5 to 10 minutes", link: "b78b6d6e55a290f393ceca358dead646cd16241b2cdfbd2d061c7277485daa83.html"},
+                {title: "10 minutes or over", link: "439ddeaff6f6bac835ee33a0fc8bfb8f3d8fa3dafb13d0cc7486a27a372f74b4.html"},
+        ]
+        // The Severity bar chart
+        const durationChartCtx = document.getElementById('durationChart');
+
+        // Options define for display value on top of bars
+
+        const durationData = {
+            labels: ['Under 1 second','1 to 10 seconds','10 to 30 seconds','30 to 60 seconds','1 to 2 minutes','2 to 5 minutes','5 to 10 minutes','10 minutes or over'],
+            datasets: [{
+                label: 'Number of tests per duration',
+                fill: false,
+                data: ['38','1','1','0','0','0','0','0'],
+                backgroundColor: 'rgba(83, 146, 255,0.5)',
+                borderColor: 'rgba(83, 146, 255, 1)',
+            }]
+        }
+        const durationOptions = {
+            responsive: true,
+            plugins: {
+                // Change options for ALL labels of THIS CHART
+                datalabels: {
+                    color: '#444444',
+                    'font.weight': 'bold',
+                    formatter: (value, ctx) => {
+                        if (value > 0) {
+                            return value;
+                        } else {
+                            return '';
+                        }
+                    },
+                },
+                tooltip: {
+                    enabled: true,
+                    usePointStyle: true,
+                    callbacks: {
+                        label: (data) => {
+                            return data.parsed.y + ' tests'
+                        }
+                    },
+                },
+            },
+        }
+
+        const durationChart = new Chart(durationChartCtx, {
+            type: 'bar',
+            data: durationData,
+            options: durationOptions
+        });
+
+        function durationClickHandler(click) {
+            const points = durationChart.getElementsAtEventForMode(click, 'nearest', {intersect: true}, true);
+            if (points.length) {
+                const firstPoint = points[0];
+                window.open(durationDetailsReports[firstPoint.index].link, "_self")
+
+            }
+        }
+
+        durationChartCtx.onclick = durationClickHandler;
+    </script>
+    <!-- END DURATION CHART -->
+
+
+
+    <!-- COVERAGE BAR CHART -->
+    <script>
+
+        // The coverage bar chart
+        const coverageChartCtx = document.getElementById('coverageChart');
+
+        // Options define for display value on top of bars
+
+        const coverageReports = [
+            {
+                title: 'Health integration test',
+                result: 'SUCCESS',
+                link: "959a2fc9c6971ec5221fa474246d6c729f1cfb77f96d35da5c7701809e5ad96f.html"
+            },
+            {
+                title: 'Health extended regression test',
+                result: 'SUCCESS',
+                link: "4029e0265245266ed43882a65b9cba72d27810fb357040490c0ddd0ec4ea3171.html"
+            },
+            {
+                title: 'Health metrics regression test',
+                result: 'SUCCESS',
+                link: "6ffe633f14af62158695868b5ef01dc4c713dad27d0f04d076371a6026cc2d65.html"
+            },
+            {
+                title: 'System health regression test',
+                result: 'SUCCESS',
+                link: "6c0a1baef93f6fddf95bffcd4e1cffdb83b32c1963efdb9baebfb1a544a64e46.html"
+            },
+            {
+                title: 'Health controller extended test',
+                result: 'SUCCESS',
+                link: "60ae41790eb0e0168ececac094452b5b0458430bd5f2ad145c87bbaeec96d13b.html"
+            },
+            {
+                title: 'Health controller test',
+                result: 'SUCCESS',
+                link: "e4e443ee3fb6d3be7e8cdd6ec3c2c41cac4e6602d354f90041f7560d1f677299.html"
+            },
+        ]
+        const coverageData = {
+            labels: [
+                'Health integration test',
+                'Health extended regression test',
+                'Health metrics regression test',
+                'System health regression test',
+                'Health controller extended test',
+                'Health controller test',
+            ],
+            datasets: [
+                {
+                    label: ['Passing Tests'],
+                    data: [10,8,5,5,10,2],
+                    backgroundColor: [ 'rgba(153,204,51,0.5)' ]
+                },
+                {
+                    label: ['Pending Tests'],
+                    data: [0,0,0,0,0,0],
+                    backgroundColor: [ 'rgba(165, 199, 238, 0.5)' ]
+                },
+                {
+                    label: ['Ignored Tests'],
+                    data: [0,0,0,0,0,0],
+                    backgroundColor: [ 'rgba(168, 168, 168, 0.5)' ]
+                },
+                {
+                    label: ['Skipped Tests'],
+                    data: [0,0,0,0,0,0],
+                    backgroundColor: [ 'rgba(238, 224, 152, 0.75)' ]
+                },
+                {
+                    label: ['Aborted Tests'],
+                    data: [0,0,0,0,0,0],
+                    backgroundColor: [ 'rgba(255, 153, 102, 0.5)' ]
+                },
+                {
+                    label: ['Failed Tests'],
+                    data: [0,0,0,0,0,0],
+                    backgroundColor: [ 'rgba(255, 22, 49, 0.5)' ]
+                },
+                {
+                    label: ['Errors'],
+                    data: [0,0,0,0,0,0],
+                    backgroundColor: [ 'rgba(255, 97, 8, 0.5)' ]
+                },
+                {
+                    label: ['Compromised Tests'],
+                    data: [0,0,0,0,0,0],
+                    backgroundColor: [ 'rgba(255, 104, 255, 0.5)' ]
+                },
+            ]
+        }
+        const coverageOptions = {
+            responsive: true,
+            indexAxis: 'y',
+            // barPercentage: ,
+            barThickness: 'flex',
+            maxBarThickness: 30,
+            minBarLength: 2,
+            skipNull: true,
+            scales: {
+                x: {
+                    stacked: true,
+                },
+                y: {
+                    stacked: true,
+                }
+            },
+            plugins: {
+                // Change options for ALL labels of THIS CHART
+                datalabels: {
+                    color: '#444444',
+                    'font.weight': 'bold'
+                },
+                tooltip: {
+                    enabled: true,
+                    usePointStyle: true,
+                },
+            },
+        }
+
+        const coverageChart = new Chart(coverageChartCtx, {
+            type: 'bar',
+            data: coverageData,
+            options: coverageOptions
+        });
+
+        function coverageClickHandler(click) {
+            const points = coverageChart.getElementsAtEventForMode(click, 'nearest', {intersect: true}, true);
+            if (points.length) {
+                const firstPoint = points[0];
+                if (coverageReports[firstPoint.index].link) {
+                    window.open(coverageReports[firstPoint.index].link, "_self")
+                }
+            }
+        }
+
+        coverageChartCtx.onclick = coverageClickHandler;
+    </script>
+    <!-- END COVERAGE CHART -->
+
+</body>
+</html>
