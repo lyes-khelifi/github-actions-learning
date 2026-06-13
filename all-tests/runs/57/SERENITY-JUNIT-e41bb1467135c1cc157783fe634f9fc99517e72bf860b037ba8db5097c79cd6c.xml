@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.unit.GreetingControllerExtendedTest" skipped="0" tests="1" time="0.03" timestamp="2026-06-13 03:44:14"><testcase classname="org.example.unit.GreetingControllerExtendedTest" name="Greeting for bob returns hello bob"/></testsuite>
