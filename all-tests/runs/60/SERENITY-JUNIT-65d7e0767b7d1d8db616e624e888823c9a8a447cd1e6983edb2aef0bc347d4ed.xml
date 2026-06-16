@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.EndToEndRegressionTest" skipped="0" tests="1" time="10.81" timestamp="2026-06-16 06:30:01"><testcase classname="org.example.regression.EndToEndRegressionTest" name="Greeting health metrics user journey"/></testsuite>
