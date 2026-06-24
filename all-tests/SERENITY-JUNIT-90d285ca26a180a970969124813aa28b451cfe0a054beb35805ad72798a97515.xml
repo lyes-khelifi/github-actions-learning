@@ -1,1 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.unit.UserEntityTest" skipped="0" tests="1" time="0.02" timestamp="2026-06-23 04:29:04"><testcase classname="org.example.unit.UserEntityTest" name="Setter updates email"/></testsuite>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.unit.UserEntityTest" skipped="0" tests="1" time="0.02" timestamp="2026-06-24 04:25:56"><testcase classname="org.example.unit.UserEntityTest" name="Setter updates email"/></testsuite>
