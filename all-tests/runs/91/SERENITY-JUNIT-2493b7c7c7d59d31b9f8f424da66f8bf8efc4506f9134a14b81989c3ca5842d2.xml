@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.UserRegressionTest" skipped="0" tests="1" time="0.16" timestamp="2026-07-17 03:18:21"><testcase classname="org.example.regression.UserRegressionTest" name="Update user returns updated data"/></testsuite>
