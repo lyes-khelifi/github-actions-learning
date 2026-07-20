@@ -1,8 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.unit.SampleTest" skipped="0" tests="1" time="0.98" timestamp="2026-07-19 03:02:35"><testcase classname="org.example.unit.SampleTest" name="Sample api test2"><failure message="&#10;expected: 200&#10; but was: 503" type="org.opentest4j.AssertionFailedError">
-expected: 200
- but was: 503</failure><system-err>
-expected: 200
- but was: 503
-org.example.steps.ApiSteps.iGetRequestToEndpoint(ApiSteps.java:74)
-org.example.unit.SampleTest.sampleApiTest2(SampleTest.java:28)
-</system-err></testcase></testsuite>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.unit.SampleTest" skipped="0" tests="1" time="2.76" timestamp="2026-07-20 03:54:39"><testcase classname="org.example.unit.SampleTest" name="Sample api test2"/></testsuite>
