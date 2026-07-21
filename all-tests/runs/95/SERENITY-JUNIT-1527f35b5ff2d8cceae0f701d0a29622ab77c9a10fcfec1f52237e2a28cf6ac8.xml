@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.UserCrudRegressionTest" skipped="0" tests="1" time="0.41" timestamp="2026-07-21 03:47:15"><testcase classname="org.example.regression.UserCrudRegressionTest" name="User deletion removes from system"/></testsuite>

@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.integration.GreetingIntegrationTest" skipped="0" tests="1" time="0.14" timestamp="2026-07-21 03:47:03"><testcase classname="org.example.integration.GreetingIntegrationTest" name="Greeting core flow with health and metrics"/></testsuite>
