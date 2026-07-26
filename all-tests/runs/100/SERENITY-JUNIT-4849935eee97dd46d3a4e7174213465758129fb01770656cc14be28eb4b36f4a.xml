@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserBulkOperationsRegressionTest" skipped="0" tests="1" time="5.77" timestamp="2026-07-26 03:09:21"><testcase classname="org.example.regression.UserBulkOperationsRegressionTest" name="User ids are unique across creations"><failure message="&#10;Expecting actual:&#10;  2L&#10;not to be equal to:&#10;  2L&#10;" type="java.lang.AssertionError">
+Expecting actual:
+  2L
+not to be equal to:
+  2L
+</failure><system-err>
+Expecting actual:
+  2L
+not to be equal to:
+  2L
+
+org.example.regression.UserBulkOperationsRegressionTest.userIdsAreUniqueAcrossCreations(UserBulkOperationsRegressionTest.java:112)
+</system-err></testcase></testsuite>
