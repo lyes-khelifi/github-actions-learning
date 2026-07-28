@@ -154,7 +154,7 @@
             $("#requirements-tabs").tabs();
             $("#test-tabs").tabs();
 
-            var requirementsTree = [{"text":"User profile regression test","type":"feature","href":"d4698f36d1314dedf656532e1c50fb8bab9d31dc4d7321c86417c395912aee7e.html","nodes":[],"selectable":false,"tags":["\u003ca href\u003d\u0027##beforetable\u0027\u003e\u003ci class\u003d\u0027bi bi-check-circle-fill success-icon \u0027 title\u003d\u0027SUCCESS\u0027\u003e\u003c/i\u003e\u003c/a\u003e","\u003cspan class\u003d\u0027feature-count\u0027\u003e8 scenarios\u003c/span\u003e, \u003cspan class\u003d\u0027feature-count\u0027\u003e8 test cases\u003c/span\u003e"]}];
+            var requirementsTree = [{"text":"User profile regression test","type":"feature","href":"d4698f36d1314dedf656532e1c50fb8bab9d31dc4d7321c86417c395912aee7e.html","nodes":[],"selectable":false,"tags":["\u003ca href\u003d\u0027##beforetable\u0027\u003e\u003ci class\u003d\u0027bi bi-x-circle-fill failure-icon \u0027 title\u003d\u0027FAILURE\u0027\u003e\u003c/i\u003e\u003c/a\u003e","\u003cspan class\u003d\u0027feature-count\u0027\u003e8 scenarios\u003c/span\u003e, \u003cspan class\u003d\u0027feature-count\u0027\u003e8 test cases\u003c/span\u003e"]}];
 
             $('#tree').treeview({
                 data: requirementsTree,
@@ -229,7 +229,7 @@
             <a href="#"><i class="bi bi-chat-text"></i> Features</a>
         </li>
     </ul>
-    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 27-07-2026 16:25</span>
+    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 28-07-2026 16:06</span>
     <br style="clear:left"/>
 </div>
 
@@ -312,7 +312,7 @@
                                                                                         <a style="margin-left:0.5em;padding-right: 1.5em;"
                                                                                            href="a439022eb49e313135369d594896f4fa214e7a4d4b0e42c7090b777aad461f46.html"
                                                                                            title="View test results">
-                                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                                            <a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a>
                                                                                             </a>
 
 
@@ -566,13 +566,13 @@
                                             <div class="col-sm-12">
                                                 <h3>Scenarios</h3>
 
-                                                    <a name="1d9b91eb-7939-44ad-a3fa-c60037103d9c"></a>
+                                                    <a name="7e07c630-b1da-4c85-9b57-37514705f471"></a>
                                                     <p class="rule-tags inline-tag">
                                                     </p>
 
 
                                                         <div class="scenario-docs card" id="7dba13ad3fb5ccf3aa696157fc659c9a66694118cc336f4f49f32820f2b85c2c">
-                                                            <div class="scenario-docs card-header success"
+                                                            <div class="scenario-docs card-header failure"
                                                                  style="min-height:1.5em;">
                                                                 <div>
                                                                         <span class="scenario-heading">
@@ -586,17 +586,17 @@
                                                                     <span class="scenario-result-icon">
                                                                     
 
-                                                                            <a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a>
+                                                                            <a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a>
                                                                         </span>
                                                                 </div>
 
                                                             </div>
                                                             <div class="scenario-docs card-body">
                                                                     <p>Create user with username 'prof-user-1' and email 'prof-user-1@example.com'</p>
-                                                                    <p>Get user by ID 1 returns correct username</p>
-                                                                    <p>Verify user 1 has email 'prof-user-1@example.com'</p>
+                                                                    <p>Get user by ID 3 returns correct username</p>
+                                                                    <p>Verify user 3 has email 'prof-user-1@example.com'</p>
                                                                     <p>Get all users returns 200</p>
-                                                                    <p>Delete user 1 returns 204 No Content</p>
+                                                                    <p>Delete user 3 returns 204 No Content</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -625,11 +625,11 @@
                                                             <div class="scenario-docs card-body">
                                                                     <p>Health endpoint reports status 200 and UP</p>
                                                                     <p>Create user with username 'prof-user-5' and email 'prof-user-5@example.com'</p>
-                                                                    <p>Get user by ID 11 returns correct username</p>
-                                                                    <p>Verify user 11 has email 'prof-user-5@example.com'</p>
+                                                                    <p>Get user by ID 7 returns correct username</p>
+                                                                    <p>Verify user 7 has email 'prof-user-5@example.com'</p>
                                                                     <p>Get all users returns 200</p>
                                                                     <p>Verify users list is not empty</p>
-                                                                    <p>Delete user 11 returns 204 No Content</p>
+                                                                    <p>Delete user 7 returns 204 No Content</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -659,12 +659,12 @@
                                                                     <p>Health endpoint reports status 200 and UP</p>
                                                                     <p>Greeting endpoint returns 'Hello, ProfileTest'</p>
                                                                     <p>Create user with username 'prof-user-7' and email 'prof-user-7@example.com'</p>
-                                                                    <p>Get user by ID 16 returns correct username</p>
-                                                                    <p>Verify user 16 has email 'prof-user-7@example.com'</p>
-                                                                    <p>Update user 16 and verify username is 'prof-user-7-v2'</p>
-                                                                    <p>Get user by ID 16 returns correct username</p>
-                                                                    <p>Delete user 16 returns 204 No Content</p>
-                                                                    <p>Verify user with id 16 is not retrievable</p>
+                                                                    <p>Get user by ID 13 returns correct username</p>
+                                                                    <p>Verify user 13 has email 'prof-user-7@example.com'</p>
+                                                                    <p>Update user 13 and verify username is 'prof-user-7-v2'</p>
+                                                                    <p>Get user by ID 13 returns correct username</p>
+                                                                    <p>Delete user 13 returns 204 No Content</p>
+                                                                    <p>Verify user with id 13 is not retrievable</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -692,12 +692,12 @@
                                                             </div>
                                                             <div class="scenario-docs card-body">
                                                                     <p>Create user with username 'prof-user-4' and email 'prof-user-4@example.com'</p>
-                                                                    <p>Get user by ID 20 returns correct username</p>
-                                                                    <p>Verify user 20 has email 'prof-user-4@example.com'</p>
-                                                                    <p>Update user 20 and verify username is 'prof-user-4-v2'</p>
-                                                                    <p>Get user by ID 20 returns correct username</p>
-                                                                    <p>Verify user 20 has email 'prof-user-4-v2@example.com'</p>
-                                                                    <p>Delete user 20 returns 204 No Content</p>
+                                                                    <p>Get user by ID 16 returns correct username</p>
+                                                                    <p>Verify user 16 has email 'prof-user-4@example.com'</p>
+                                                                    <p>Update user 16 and verify username is 'prof-user-4-v2'</p>
+                                                                    <p>Get user by ID 16 returns correct username</p>
+                                                                    <p>Verify user 16 has email 'prof-user-4-v2@example.com'</p>
+                                                                    <p>Delete user 16 returns 204 No Content</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -725,10 +725,10 @@
                                                             </div>
                                                             <div class="scenario-docs card-body">
                                                                     <p>Create user with username 'prof-user-2' and email 'prof-user-2@example.com'</p>
-                                                                    <p>Get user by ID 21 returns correct username</p>
-                                                                    <p>Update user 21 and verify username is 'prof-user-2-updated'</p>
+                                                                    <p>Get user by ID 20 returns correct username</p>
+                                                                    <p>Update user 20 and verify username is 'prof-user-2-updated'</p>
                                                                     <p>Get all users returns 200</p>
-                                                                    <p>Delete user 21 returns 204 No Content</p>
+                                                                    <p>Delete user 20 returns 204 No Content</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -759,12 +759,12 @@
                                                                     <p>Health endpoint contains service detail</p>
                                                                     <p>Greeting endpoint returns 'Hello, Profile'</p>
                                                                     <p>Create user with username 'prof-user-8' and email 'prof-user-8@example.com'</p>
-                                                                    <p>Get user by ID 25 returns correct username</p>
-                                                                    <p>Verify user 25 has email 'prof-user-8@example.com'</p>
-                                                                    <p>Verify user 25 has username 'prof-user-8' and email 'prof-user-8@example.com'</p>
+                                                                    <p>Get user by ID 24 returns correct username</p>
+                                                                    <p>Verify user 24 has email 'prof-user-8@example.com'</p>
+                                                                    <p>Verify user 24 has username 'prof-user-8' and email 'prof-user-8@example.com'</p>
                                                                     <p>Get all users returns 200</p>
-                                                                    <p>Delete user 25 returns 204 No Content</p>
-                                                                    <p>Verify user with id 25 is not retrievable</p>
+                                                                    <p>Delete user 24 returns 204 No Content</p>
+                                                                    <p>Verify user with id 24 is not retrievable</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -792,11 +792,11 @@
                                                             </div>
                                                             <div class="scenario-docs card-body">
                                                                     <p>Create user with username 'prof-user-3' and email 'prof-user-3@example.com'</p>
-                                                                    <p>Get user by ID 29 returns correct username</p>
-                                                                    <p>Verify user 29 has email 'prof-user-3@example.com'</p>
-                                                                    <p>Verify user 29 has username 'prof-user-3' and email 'prof-user-3@example.com'</p>
+                                                                    <p>Get user by ID 25 returns correct username</p>
+                                                                    <p>Verify user 25 has email 'prof-user-3@example.com'</p>
+                                                                    <p>Verify user 25 has username 'prof-user-3' and email 'prof-user-3@example.com'</p>
                                                                     <p>Get all users returns 200</p>
-                                                                    <p>Delete user 29 returns 204 No Content</p>
+                                                                    <p>Delete user 25 returns 204 No Content</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -824,13 +824,13 @@
                                                             </div>
                                                             <div class="scenario-docs card-body">
                                                                     <p>Create user with username 'prof-user-6' and email 'prof-user-6@example.com'</p>
-                                                                    <p>Get user by ID 30 returns correct username</p>
-                                                                    <p>Verify user 30 has email 'prof-user-6@example.com'</p>
-                                                                    <p>Verify user 30 has username 'prof-user-6' and email 'prof-user-6@example.com'</p>
+                                                                    <p>Get user by ID 26 returns correct username</p>
+                                                                    <p>Verify user 26 has email 'prof-user-6@example.com'</p>
+                                                                    <p>Verify user 26 has username 'prof-user-6' and email 'prof-user-6@example.com'</p>
                                                                     <p>Get all users returns 200</p>
                                                                     <p>Verify users list is not empty</p>
-                                                                    <p>Delete user 30 returns 204 No Content</p>
-                                                                    <p>Verify user with id 30 is not retrievable</p>
+                                                                    <p>Delete user 26 returns 204 No Content</p>
+                                                                    <p>Verify user with id 26 is not retrievable</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -885,7 +885,7 @@
                         <i class="bi bi-stopwatch"></i> Total
                         Duration
                     </td>
-                    <td>10s</td>
+                    <td>11s</td>
                 </tr>
                 <tr scope="row">
                     <td>
@@ -895,7 +895,7 @@
                     <td>
                         <i class="bi bi-trophy"></i> Fastest Test
                     </td>
-                    <td>235ms</td>
+                    <td>225ms</td>
                 </tr>
                 <tr scope="row">
                     <td>
@@ -906,13 +906,13 @@
                         <i class="bi bi-skip-start"></i> Slowest
                         Test
                     </td>
-                    <td>7s</td>
+                    <td>6s</td>
                 </tr>
                 <tr scope="row">
                     <td>
                         <i class="bi bi-flag-fill"></i> Tests Started
                     </td>
-                    <td>Jul 27, 2026 16:25:04</td>
+                    <td>Jul 28, 2026 16:06:52</td>
                     <td>
                         <i class="bi bi-stopwatch"></i> Average
                         Execution Time
@@ -924,7 +924,7 @@
                         <i class="bi bi-stop-circle"></i> Tests
                         Finished
                     </td>
-                    <td>Jul 27, 2026 16:25:14</td>
+                    <td>Jul 28, 2026 16:07:03</td>
                     <td>
                         <i class="bi bi-stopwatch-fill"></i> Total
                         Execution Time
@@ -951,7 +951,7 @@
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                                <tr class="scenario-result SUCCESS">
+                                                                <tr class="scenario-result FAILURE">
                                                                     <td>
                                                                             <a href="d4698f36d1314dedf656532e1c50fb8bab9d31dc4d7321c86417c395912aee7e.html">UserProfileRegressionTest</a>
                                                                     </td>
@@ -961,9 +961,9 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>5</td>
-                                                                    <td>16:25:04</td>
-                                                                    <td>7s 387ms</td>
-                                                                    <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
+                                                                    <td>16:06:52</td>
+                                                                    <td>6s 969ms</td>
+                                                                    <td><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a> <span style="display:none">FAILURE</span>
                                                                     </td>
                                                                 </tr>
                                                                 <tr class="scenario-result SUCCESS">
@@ -976,8 +976,8 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>7</td>
-                                                                    <td>16:25:11</td>
-                                                                    <td>537ms</td>
+                                                                    <td>16:06:59</td>
+                                                                    <td>1s 279ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
                                                                     </td>
                                                                 </tr>
@@ -991,8 +991,8 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>9</td>
-                                                                    <td>16:25:12</td>
-                                                                    <td>530ms</td>
+                                                                    <td>16:07:01</td>
+                                                                    <td>610ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
                                                                     </td>
                                                                 </tr>
@@ -1006,8 +1006,8 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>7</td>
-                                                                    <td>16:25:12</td>
-                                                                    <td>426ms</td>
+                                                                    <td>16:07:01</td>
+                                                                    <td>407ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
                                                                     </td>
                                                                 </tr>
@@ -1021,8 +1021,8 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>5</td>
-                                                                    <td>16:25:13</td>
-                                                                    <td>235ms</td>
+                                                                    <td>16:07:02</td>
+                                                                    <td>225ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
                                                                     </td>
                                                                 </tr>
@@ -1036,8 +1036,8 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>10</td>
-                                                                    <td>16:25:13</td>
-                                                                    <td>579ms</td>
+                                                                    <td>16:07:02</td>
+                                                                    <td>542ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
                                                                     </td>
                                                                 </tr>
@@ -1051,8 +1051,8 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>6</td>
-                                                                    <td>16:25:14</td>
-                                                                    <td>327ms</td>
+                                                                    <td>16:07:03</td>
+                                                                    <td>344ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
                                                                     </td>
                                                                 </tr>
@@ -1066,8 +1066,8 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>8</td>
-                                                                    <td>16:25:14</td>
-                                                                    <td>446ms</td>
+                                                                    <td>16:07:03</td>
+                                                                    <td>346ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
                                                                     </td>
                                                                 </tr>
@@ -1093,12 +1093,12 @@
                         <div class="card-body">
                             <div>
                                     <a href="1d0c02fb9cb969bbd9e2f900ec6333e01b070c6fb5e26345e9374169cfab9e68.html">
-                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                    <span class="tag-badge badge" style="background-color:#fd938e; margin:1em;padding:4px;">
                                         <i class="bi bi-tag-fill"></i> Regression&nbsp;&nbsp;&nbsp;8
                                     </span>
                                     </a>
                                     <a href="2e8f1269fe45189870d5526ad4ad731be44b38828d72bce8e524d95df0079f07.html">
-                                    <span class="tag-badge badge" style="background-color:#b0cf73; margin:1em;padding:4px;">
+                                    <span class="tag-badge badge" style="background-color:#fd938e; margin:1em;padding:4px;">
                                         <i class="bi bi-tag-fill"></i> User&nbsp;&nbsp;&nbsp;8
                                     </span>
                                     </a>
@@ -1147,7 +1147,7 @@
             datasets: [{
                 label: 'Test Results',
                 fill: false,
-                data: [{meta: 'Passing tests', value: 8}, {meta: 'Pending tests', value: 0}, {meta: 'Ignored tests', value: 0}, {meta: 'Skipped tests', value: 0}, {meta: 'Aborted tests', value: 0}, {meta: 'Failing tests', value: 0}, {meta: 'Broken tests', value: 0}, {meta: 'Compromised tests', value: 0}],
+                data: [{meta: 'Passing tests', value: 7}, {meta: 'Pending tests', value: 0}, {meta: 'Ignored tests', value: 0}, {meta: 'Skipped tests', value: 0}, {meta: 'Aborted tests', value: 0}, {meta: 'Failing tests', value: 1}, {meta: 'Broken tests', value: 0}, {meta: 'Compromised tests', value: 0}],
                 backgroundColor: ['rgba(153,204,51,0.5)','rgba(165, 199, 238, 0.5)','rgba(168, 168, 168, 0.5)','rgba(238, 224, 152, 0.75)','rgba(255, 153, 102, 0.5)','rgba(255, 22, 49, 0.5)','rgba(255, 97, 8, 0.5)','rgba(255, 104, 255, 0.5)','rgba(83, 50, 168, 0.5)'],
                 borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
                 borderWidth: 1,
@@ -1198,7 +1198,7 @@
                         ctx.font = fontSize + "em sans-serif";
                         ctx.textBaseline = "middle";
 
-                        var text = "100%"
+                        var text = "88%"
                         textX = 10 + Math.round((width - ctx.measureText(text).width) / 2);
                         textY = (height / 2) - 40;
 
@@ -1242,7 +1242,7 @@
             datasets: [{
                 label: 'Feature Coverage',
                 fill: false,
-                data: [{meta: 'Passing tests', value: 8}, {meta: 'Pending tests', value: 0}, {meta: 'Ignored tests', value: 0}, {meta: 'Skipped tests', value: 0}, {meta: 'Aborted tests', value: 0}, {meta: 'Failing tests', value: 0}, {meta: 'Broken tests', value: 0}, {meta: 'Compromised tests', value: 0}],
+                data: [{meta: 'Passing tests', value: 7}, {meta: 'Pending tests', value: 0}, {meta: 'Ignored tests', value: 0}, {meta: 'Skipped tests', value: 0}, {meta: 'Aborted tests', value: 0}, {meta: 'Failing tests', value: 1}, {meta: 'Broken tests', value: 0}, {meta: 'Compromised tests', value: 0}],
                 backgroundColor: ['rgba(153,204,51,0.5)','rgba(165, 199, 238, 0.5)','rgba(168, 168, 168, 0.5)','rgba(238, 224, 152, 0.75)','rgba(255, 153, 102, 0.5)','rgba(255, 22, 49, 0.5)','rgba(255, 97, 8, 0.5)','rgba(255, 104, 255, 0.5)','rgba(83, 50, 168, 0.5)'],
                 borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
                 borderWidth: 1,
@@ -1293,7 +1293,7 @@
                         ctx.font = fontSize + "em sans-serif";
                         ctx.textBaseline = "middle";
 
-                        var text = "100%"
+                        var text = "88%"
                         textX = 10 + Math.round((width - ctx.measureText(text).width) / 2);
                         textY = (height / 2) - 40;
 
@@ -1338,7 +1338,7 @@
             datasets: [
                 {
                     label: 'Automated',
-                    data: [8,0,0,0,0,0,0,0],
+                    data: [7,0,0,0,0,1,0,0],
                     backgroundColor: ['rgba(153,204,51,0.5)','rgba(165, 199, 238, 0.5)','rgba(168, 168, 168, 0.5)','rgba(238, 224, 152, 0.75)','rgba(255, 153, 102, 0.5)','rgba(255, 22, 49, 0.5)','rgba(255, 97, 8, 0.5)','rgba(255, 104, 255, 0.5)','rgba(83, 50, 168, 0.5)'],
                     borderColor: ['rgba(153,204,51,1)','rgba(165, 199, 238, 1)','rgba(168, 168, 168, 1)','rgba(238, 224, 152, 1)','rgba(255, 153, 102, 1)','rgba(255, 22, 49, 1)','rgba(255, 97, 8, 1)','rgba(255, 104, 255, 1)','rgba(83, 50, 168, 1)'],
                     borderWidth: 1
@@ -1421,7 +1421,7 @@
             datasets: [{
                 label: 'Number of tests per duration',
                 fill: false,
-                data: ['7','1','0','0','0','0','0','0'],
+                data: ['6','2','0','0','0','0','0','0'],
                 backgroundColor: 'rgba(83, 146, 255,0.5)',
                 borderColor: 'rgba(83, 146, 255, 1)',
             }]
