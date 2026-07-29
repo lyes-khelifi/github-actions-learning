@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserBulkOperationsRegressionTest" skipped="0" tests="1" time="6.83" timestamp="2026-07-28 04:06:52"><testcase classname="org.example.regression.UserBulkOperationsRegressionTest" name="User ids are unique across creations"><failure message="&#10;Expecting actual:&#10;  1L&#10;not to be equal to:&#10;  1L&#10;" type="java.lang.AssertionError">
-Expecting actual:
-  1L
-not to be equal to:
-  1L
-</failure><system-err>
-Expecting actual:
-  1L
-not to be equal to:
-  1L
-
-org.example.regression.UserBulkOperationsRegressionTest.userIdsAreUniqueAcrossCreations(UserBulkOperationsRegressionTest.java:110)
-</system-err></testcase></testsuite>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.UserBulkOperationsRegressionTest" skipped="0" tests="1" time="9.12" timestamp="2026-07-29 03:51:59"><testcase classname="org.example.regression.UserBulkOperationsRegressionTest" name="User ids are unique across creations"/></testsuite>
