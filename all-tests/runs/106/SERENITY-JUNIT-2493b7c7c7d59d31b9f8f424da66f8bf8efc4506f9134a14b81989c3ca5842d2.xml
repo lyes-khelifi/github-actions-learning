@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserRegressionTest" skipped="0" tests="1" time="7.02" timestamp="2026-08-01 03:04:33"><testcase classname="org.example.regression.UserRegressionTest" name="Update user returns updated data"><failure message="&#10;expected: 200&#10; but was: 400" type="org.opentest4j.AssertionFailedError">
+expected: 200
+ but was: 400</failure><system-err>
+expected: 200
+ but was: 400
+org.example.steps.RegressionSteps.updateUserAndVerify(RegressionSteps.java:126)
+org.example.regression.UserRegressionTest.updateUserReturnsUpdatedData(UserRegressionTest.java:56)
+</system-err></testcase></testsuite>
