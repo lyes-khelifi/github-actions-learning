@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserRegressionTest" skipped="0" tests="1" time="6.83" timestamp="2026-08-02 03:06:31"><testcase classname="org.example.regression.UserRegressionTest" name="Update user returns updated data"><failure message="&#10;expected: 200&#10; but was: 400" type="org.opentest4j.AssertionFailedError">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserRegressionTest" skipped="0" tests="1" time="5.63" timestamp="2026-08-03 04:30:03"><testcase classname="org.example.regression.UserRegressionTest" name="Update user returns updated data"><failure message="&#10;expected: 200&#10; but was: 400" type="org.opentest4j.AssertionFailedError">
 expected: 200
  but was: 400</failure><system-err>
 expected: 200

@@ -229,7 +229,7 @@
             <a href="#"><i class="bi bi-chat-text"></i> Features</a>
         </li>
     </ul>
-    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 02-08-2026 15:06</span>
+    <span class="date-and-time"><a href="build-info.html"><i class="bi bi-info-circle"></i></a> Report generated 03-08-2026 16:30</span>
     <br style="clear:left"/>
 </div>
 
@@ -467,7 +467,7 @@
                                             <div class="col-sm-12">
                                                 <h3>Scenarios</h3>
 
-                                                    <a name="225b2801-0fc8-4f59-8801-520a241753c4"></a>
+                                                    <a name="61906ff1-f896-474d-bc23-2f8a760cb810"></a>
                                                     <p class="rule-tags inline-tag">
                                                     </p>
 
@@ -496,6 +496,14 @@
                                                                     <p>Create user with username 'uid-a' and email 'uid-a@example.com'</p>
                                                                     <p>Create user with username 'uid-b' and email 'uid-b@example.com'</p>
                                                                     <p>Create user with username 'uid-c' and email 'uid-c@example.com'</p>
+                                                                    <p>Get user by ID 3 returns correct username</p>
+                                                                    <p>Get user by ID 1 returns correct username</p>
+                                                                    <p>Get user by ID 2 returns correct username</p>
+                                                                    <p>Verify user 3 has email 'uid-a@example.com'</p>
+                                                                    <p>Verify user 1 has email 'uid-b@example.com'</p>
+                                                                    <p>Delete user 3 returns 204 No Content</p>
+                                                                    <p>Delete user 1 returns 204 No Content</p>
+                                                                    <p>Delete user 2 returns 204 No Content</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -525,12 +533,12 @@
                                                                     <p>Create user with username 'bulk-a' and email 'bulk-a@example.com'</p>
                                                                     <p>Create user with username 'bulk-b' and email 'bulk-b@example.com'</p>
                                                                     <p>Create user with username 'bulk-c' and email 'bulk-c@example.com'</p>
-                                                                    <p>Get user by ID 5 returns correct username</p>
-                                                                    <p>Get user by ID 8 returns correct username</p>
+                                                                    <p>Get user by ID 4 returns correct username</p>
+                                                                    <p>Get user by ID 7 returns correct username</p>
                                                                     <p>Get user by ID 10 returns correct username</p>
                                                                     <p>Verify users list is not empty</p>
-                                                                    <p>Delete user 5 returns 204 No Content</p>
-                                                                    <p>Delete user 8 returns 204 No Content</p>
+                                                                    <p>Delete user 4 returns 204 No Content</p>
+                                                                    <p>Delete user 7 returns 204 No Content</p>
                                                                     <p>Delete user 10 returns 204 No Content</p>
                                                                 <div class="examples">
                                                                 </div>
@@ -560,14 +568,14 @@
                                                             <div class="scenario-docs card-body">
                                                                     <p>Create user with username 'upd-bulk-a' and email 'upd-bulk-a@example.com'</p>
                                                                     <p>Create user with username 'upd-bulk-b' and email 'upd-bulk-b@example.com'</p>
-                                                                    <p>Get user by ID 12 returns correct username</p>
-                                                                    <p>Get user by ID 14 returns correct username</p>
-                                                                    <p>Update user 12 and verify username is 'upd-bulk-a-v2'</p>
-                                                                    <p>Update user 14 and verify username is 'upd-bulk-b-v2'</p>
-                                                                    <p>Verify user 12 has username 'upd-bulk-a-v2' and email 'upd-bulk-a-v2@example.com'</p>
-                                                                    <p>Verify user 14 has username 'upd-bulk-b-v2' and email 'upd-bulk-b-v2@example.com'</p>
-                                                                    <p>Delete user 12 returns 204 No Content</p>
-                                                                    <p>Delete user 14 returns 204 No Content</p>
+                                                                    <p>Get user by ID 11 returns correct username</p>
+                                                                    <p>Get user by ID 15 returns correct username</p>
+                                                                    <p>Update user 11 and verify username is 'upd-bulk-a-v2'</p>
+                                                                    <p>Update user 15 and verify username is 'upd-bulk-b-v2'</p>
+                                                                    <p>Verify user 11 has username 'upd-bulk-a-v2' and email 'upd-bulk-a-v2@example.com'</p>
+                                                                    <p>Verify user 15 has username 'upd-bulk-b-v2' and email 'upd-bulk-b-v2@example.com'</p>
+                                                                    <p>Delete user 11 returns 204 No Content</p>
+                                                                    <p>Delete user 15 returns 204 No Content</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -596,14 +604,14 @@
                                                             <div class="scenario-docs card-body">
                                                                     <p>Create user with username 'grow-a' and email 'grow-a@example.com'</p>
                                                                     <p>Create user with username 'grow-b' and email 'grow-b@example.com'</p>
+                                                                    <p>Get user by ID 17 returns correct username</p>
                                                                     <p>Get user by ID 18 returns correct username</p>
-                                                                    <p>Get user by ID 19 returns correct username</p>
-                                                                    <p>Verify user 18 has email 'grow-a@example.com'</p>
-                                                                    <p>Verify user 19 has email 'grow-b@example.com'</p>
+                                                                    <p>Verify user 17 has email 'grow-a@example.com'</p>
+                                                                    <p>Verify user 18 has email 'grow-b@example.com'</p>
                                                                     <p>Get all users returns 200</p>
                                                                     <p>Verify users list is not empty</p>
+                                                                    <p>Delete user 17 returns 204 No Content</p>
                                                                     <p>Delete user 18 returns 204 No Content</p>
-                                                                    <p>Delete user 19 returns 204 No Content</p>
                                                                 <div class="examples">
                                                                 </div>
                                                             </div>
@@ -632,13 +640,13 @@
                                                             <div class="scenario-docs card-body">
                                                                     <p>Create user with username 'del-multi-a' and email 'del-multi-a@example.com'</p>
                                                                     <p>Create user with username 'del-multi-b' and email 'del-multi-b@example.com'</p>
+                                                                    <p>Get user by ID 21 returns correct username</p>
                                                                     <p>Get user by ID 22 returns correct username</p>
-                                                                    <p>Get user by ID 23 returns correct username</p>
                                                                     <p>Verify users list is not empty</p>
+                                                                    <p>Delete user 21 returns 204 No Content</p>
+                                                                    <p>Verify user with id 21 is not retrievable</p>
                                                                     <p>Delete user 22 returns 204 No Content</p>
                                                                     <p>Verify user with id 22 is not retrievable</p>
-                                                                    <p>Delete user 23 returns 204 No Content</p>
-                                                                    <p>Verify user with id 23 is not retrievable</p>
                                                                     <p>Get all users returns 200</p>
                                                                 <div class="examples">
                                                                 </div>
@@ -694,7 +702,7 @@
                         <i class="bi bi-stopwatch"></i> Total
                         Duration
                     </td>
-                    <td>10s</td>
+                    <td>9s</td>
                 </tr>
                 <tr scope="row">
                     <td>
@@ -704,7 +712,7 @@
                     <td>
                         <i class="bi bi-trophy"></i> Fastest Test
                     </td>
-                    <td>482ms</td>
+                    <td>550ms</td>
                 </tr>
                 <tr scope="row">
                     <td>
@@ -715,30 +723,30 @@
                         <i class="bi bi-skip-start"></i> Slowest
                         Test
                     </td>
-                    <td>7s</td>
+                    <td>5s</td>
                 </tr>
                 <tr scope="row">
                     <td>
                         <i class="bi bi-flag-fill"></i> Tests Started
                     </td>
-                    <td>Aug 02, 2026 15:06:31</td>
+                    <td>Aug 03, 2026 16:30:03</td>
                     <td>
                         <i class="bi bi-stopwatch"></i> Average
                         Execution Time
                     </td>
-                    <td>2s</td>
+                    <td>1s</td>
                 </tr>
                 <tr scope="row">
                     <td>
                         <i class="bi bi-stop-circle"></i> Tests
                         Finished
                     </td>
-                    <td>Aug 02, 2026 15:06:42</td>
+                    <td>Aug 03, 2026 16:30:12</td>
                     <td>
                         <i class="bi bi-stopwatch-fill"></i> Total
                         Execution Time
                     </td>
-                    <td>10s</td>
+                    <td>8s</td>
                 </tr>
                 </tbody>
             </table>
@@ -769,9 +777,9 @@
                                                                     </td>
                                                                     <td><span style="display:none"></span>
                                                                     </td>
-                                                                    <td>3</td>
-                                                                    <td>15:06:31</td>
-                                                                    <td>7s 004ms</td>
+                                                                    <td>11</td>
+                                                                    <td>16:30:03</td>
+                                                                    <td>5s 612ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-x-circle-fill failure-icon ' title='FAILURE'></i></a> <span style="display:none">FAILURE</span>
                                                                     </td>
                                                                 </tr>
@@ -785,8 +793,8 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>10</td>
-                                                                    <td>15:06:39</td>
-                                                                    <td>1s 530ms</td>
+                                                                    <td>16:30:09</td>
+                                                                    <td>1s 423ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
                                                                     </td>
                                                                 </tr>
@@ -800,8 +808,8 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>10</td>
-                                                                    <td>15:06:40</td>
-                                                                    <td>839ms</td>
+                                                                    <td>16:30:10</td>
+                                                                    <td>663ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
                                                                     </td>
                                                                 </tr>
@@ -815,8 +823,8 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>10</td>
-                                                                    <td>15:06:41</td>
-                                                                    <td>539ms</td>
+                                                                    <td>16:30:11</td>
+                                                                    <td>595ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
                                                                     </td>
                                                                 </tr>
@@ -830,8 +838,8 @@
                                                                     <td><span style="display:none"></span>
                                                                     </td>
                                                                     <td>10</td>
-                                                                    <td>15:06:42</td>
-                                                                    <td>482ms</td>
+                                                                    <td>16:30:12</td>
+                                                                    <td>550ms</td>
                                                                     <td><a href='##beforetable'><i class='bi bi-check-circle-fill success-icon ' title='SUCCESS'></i></a> <span style="display:none">SUCCESS</span>
                                                                     </td>
                                                                 </tr>
