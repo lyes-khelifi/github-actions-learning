@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserCrudRegressionTest" skipped="0" tests="1" time="3.21" timestamp="2026-08-04 04:14:19"><testcase classname="org.example.regression.UserCrudRegressionTest" name="User deletion removes from system"><failure message="&#10;expected: &quot;crud-dave&quot;&#10; but was: &quot;uid-b&quot;" type="org.opentest4j.AssertionFailedError">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserCrudRegressionTest" skipped="0" tests="1" time="5.13" timestamp="2026-08-05 04:02:51"><testcase classname="org.example.regression.UserCrudRegressionTest" name="User deletion removes from system"><failure message="&#10;expected: &quot;crud-dave&quot;&#10; but was: &quot;uid-b&quot;" type="org.opentest4j.AssertionFailedError">
 expected: "crud-dave"
  but was: "uid-b"</failure><system-err>
 expected: "crud-dave"
