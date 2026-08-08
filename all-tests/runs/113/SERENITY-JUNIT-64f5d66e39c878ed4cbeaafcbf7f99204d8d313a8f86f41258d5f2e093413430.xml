@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.integration.HealthIntegrationTest" skipped="0" tests="1" time="0.09" timestamp="2026-08-08 02:36:16"><testcase classname="org.example.integration.HealthIntegrationTest" name="Health service name and version are present"/></testsuite>
