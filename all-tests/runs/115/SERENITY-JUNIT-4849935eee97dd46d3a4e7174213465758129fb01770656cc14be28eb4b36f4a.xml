@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserBulkOperationsRegressionTest" skipped="0" tests="1" time="6.91" timestamp="2026-08-10 03:03:32"><testcase classname="org.example.regression.UserBulkOperationsRegressionTest" name="User ids are unique across creations"><failure message="&#10;expected: 200&#10; but was: 400" type="org.opentest4j.AssertionFailedError">
+expected: 200
+ but was: 400</failure><system-err>
+expected: 200
+ but was: 400
+org.example.steps.RegressionSteps.getUserByIdReturnsCorrectData(RegressionSteps.java:112)
+org.example.regression.UserBulkOperationsRegressionTest.userIdsAreUniqueAcrossCreations(UserBulkOperationsRegressionTest.java:113)
+</system-err></testcase></testsuite>
