@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.unit.SampleTest" skipped="0" tests="1" time="0.57" timestamp="2026-08-12 03:02:00"><testcase classname="org.example.unit.SampleTest" name="Sample api test2"><failure message="&#10;expected: 200&#10; but was: 503" type="org.opentest4j.AssertionFailedError">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.unit.SampleTest" skipped="0" tests="1" time="0.9" timestamp="2026-08-13 03:02:22"><testcase classname="org.example.unit.SampleTest" name="Sample api test2"><failure message="&#10;expected: 200&#10; but was: 503" type="org.opentest4j.AssertionFailedError">
 expected: 200
  but was: 503</failure><system-err>
 expected: 200
