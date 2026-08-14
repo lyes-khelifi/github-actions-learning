@@ -1,8 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserProfileRegressionTest" skipped="0" tests="1" time="6.75" timestamp="2026-08-13 03:02:07"><testcase classname="org.example.regression.UserProfileRegressionTest" name="Create and retrieve user profile"><failure message="&#10;expected: 200&#10; but was: 400" type="org.opentest4j.AssertionFailedError">
-expected: 200
- but was: 400</failure><system-err>
-expected: 200
- but was: 400
-org.example.steps.RegressionSteps.getUserByIdReturnsCorrectData(RegressionSteps.java:112)
-org.example.regression.UserProfileRegressionTest.createAndRetrieveUserProfile(UserProfileRegressionTest.java:38)
-</system-err></testcase></testsuite>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.UserProfileRegressionTest" skipped="0" tests="1" time="0.27" timestamp="2026-08-14 02:56:35"><testcase classname="org.example.regression.UserProfileRegressionTest" name="Create and retrieve user profile"/></testsuite>

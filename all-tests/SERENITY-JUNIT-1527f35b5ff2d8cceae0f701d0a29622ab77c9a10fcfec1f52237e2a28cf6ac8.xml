@@ -1,8 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="1" name="org.example.regression.UserCrudRegressionTest" skipped="0" tests="1" time="4.58" timestamp="2026-08-13 03:02:09"><testcase classname="org.example.regression.UserCrudRegressionTest" name="User deletion removes from system"><failure message="&#10;expected: &quot;crud-dave&quot;&#10; but was: &quot;uid-b&quot;" type="org.opentest4j.AssertionFailedError">
-expected: "crud-dave"
- but was: "uid-b"</failure><system-err>
-expected: "crud-dave"
- but was: "uid-b"
-org.example.steps.RegressionSteps.getUserByIdReturnsCorrectData(RegressionSteps.java:113)
-org.example.regression.UserCrudRegressionTest.userDeletionRemovesFromSystem(UserCrudRegressionTest.java:84)
-</system-err></testcase></testsuite>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.UserCrudRegressionTest" skipped="0" tests="1" time="0.42" timestamp="2026-08-14 02:56:32"><testcase classname="org.example.regression.UserCrudRegressionTest" name="User deletion removes from system"/></testsuite>
