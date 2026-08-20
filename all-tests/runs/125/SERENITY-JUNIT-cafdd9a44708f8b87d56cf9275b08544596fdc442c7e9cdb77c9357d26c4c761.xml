@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.MetricsExtendedRegressionTest" skipped="0" tests="1" time="0.16" timestamp="2026-08-20 02:40:27"><testcase classname="org.example.regression.MetricsExtendedRegressionTest" name="Metrics status and uptime regression"/></testsuite>
