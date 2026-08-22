@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.UserBulkOperationsRegressionTest" skipped="0" tests="1" time="0.37" timestamp="2026-08-22 12:51:47"><testcase classname="org.example.regression.UserBulkOperationsRegressionTest" name="Bulk update and verify"/></testsuite>
