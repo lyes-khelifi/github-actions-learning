@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.integration.UserCrudIntegrationTest" skipped="0" tests="1" time="0.11" timestamp="2026-08-25 02:51:15"><testcase classname="org.example.integration.UserCrudIntegrationTest" name="Full user lifecycle create get update get delete"/></testsuite>
