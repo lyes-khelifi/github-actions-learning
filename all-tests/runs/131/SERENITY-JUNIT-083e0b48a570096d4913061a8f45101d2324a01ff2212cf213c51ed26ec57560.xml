@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.unit.JwtUtilExtendedTest" skipped="0" tests="1" time="0.05" timestamp="2026-08-26 02:49:28"><testcase classname="org.example.unit.JwtUtilExtendedTest" name="Generated token has three parts"/></testsuite>
