@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.UserWorkflowRegressionTest" skipped="0" tests="1" time="0.18" timestamp="2026-08-27 10:08:41"><testcase classname="org.example.regression.UserWorkflowRegressionTest" name="Created user data is verifiable"/></testsuite>
