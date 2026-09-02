@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.regression.UserWorkflowRegressionTest" skipped="0" tests="1" time="0.2" timestamp="2026-09-02 04:24:45"><testcase classname="org.example.regression.UserWorkflowRegressionTest" name="Updated user data persists on retrieval"/></testsuite>
