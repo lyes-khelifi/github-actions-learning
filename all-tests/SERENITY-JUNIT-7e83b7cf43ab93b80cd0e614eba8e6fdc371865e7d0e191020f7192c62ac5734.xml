@@ -1,1 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.unit.ConstantsTest" skipped="0" tests="1" time="0.39" timestamp="2026-10-29 07:28:12"><testcase classname="org.example.unit.ConstantsTest" name="Test constants exist"/></testsuite>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><testsuite errors="0" failures="0" name="org.example.unit.ConstantsTest" skipped="0" tests="1" time="0.3" timestamp="2026-10-30 07:04:02"><testcase classname="org.example.unit.ConstantsTest" name="Test constants exist"/></testsuite>
